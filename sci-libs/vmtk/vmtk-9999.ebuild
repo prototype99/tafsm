@@ -87,6 +87,14 @@ src_install() {
 	find "Install/lib/vmtk/" -type f -maxdepth 1 -not -name "*.py" | while read f ; do
 		dolib $f
 	done
+	if use vtk ; then
+		:
+	else
+		find "Install/lib/vtk-5.10" -type f | while read f ; do
+		doins ${f}
+	done
+	
+	fi
 }
 
 
