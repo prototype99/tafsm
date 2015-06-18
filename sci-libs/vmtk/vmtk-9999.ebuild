@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 inherit eutils flag-o-matic toolchain-funcs python cmake-utils git-2 versionator
 
 DESCRIPTION="Segmentation of vascular segments (or other anatomical structures)
@@ -37,7 +37,7 @@ RDEPEND="
 "
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
 #EGIT_COMMIT="v${PV}"
-EGIT_MASTER="vtk6"
+EGIT_MASTER="master"
 PYTHON_MODNAME="vmtk"
 
 RDEPEND="${DEPEND}"
