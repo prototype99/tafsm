@@ -1,0 +1,2 @@
+/bin/ifconfig $1 dowon
+

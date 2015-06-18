@@ -1,0 +1,57 @@
+diff -Naur linux-3.17.6/drivers/hid/hid-core.c linux-3.17.6-surface/drivers/hid/hid-core.c
+--- linux-3.17.6/drivers/hid/hid-core.c	2014-12-07 14:48:01.000000000 -0500
++++ linux-3.17.6-surface/drivers/hid/hid-core.c	2014-12-13 18:37:00.902611695 -0500
+@@ -702,6 +702,11 @@
+ 	if (((parser->global.usage_page << 16) == HID_UP_SENSOR) &&
+ 	    type == HID_COLLECTION_PHYSICAL)
+ 		hid->group = HID_GROUP_SENSOR_HUB;
++
++	if (hid->vendor == USB_VENDOR_ID_MICROSOFT &&
++      hid->product == USB_DEVICE_ID_MS_TYPE_COVER_3 &&
++      hid->group == HID_GROUP_MULTITOUCH)
++	  hid->group = HID_GROUP_GENERIC;
+ }
+ 
+ static int hid_scan_main(struct hid_parser *parser, struct hid_item *item)
+@@ -1857,6 +1862,7 @@
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_DIGITAL_MEDIA_3K) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_WIRELESS_OPTICAL_DESKTOP_3_0) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_OFFICE_KB) },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_TYPE_COVER_3) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MONTEREY, USB_DEVICE_ID_GENIUS_KB29E) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MSI, USB_DEVICE_ID_MSI_GT683R_LED_PANEL) },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_NTRIG, USB_DEVICE_ID_NTRIG_TOUCH_SCREEN) },
+diff -Naur linux-3.17.6/drivers/hid/hid-ids.h linux-3.17.6-surface/drivers/hid/hid-ids.h
+--- linux-3.17.6/drivers/hid/hid-ids.h	2014-12-07 14:48:01.000000000 -0500
++++ linux-3.17.6-surface/drivers/hid/hid-ids.h	2014-12-13 18:35:17.262614087 -0500
+@@ -647,6 +647,7 @@
+ #define USB_DEVICE_ID_MS_SURFACE_PRO_2   0x0799
+ #define USB_DEVICE_ID_MS_TOUCH_COVER_2   0x07a7
+ #define USB_DEVICE_ID_MS_TYPE_COVER_2    0x07a9
++#define USB_DEVICE_ID_MS_TYPE_COVER_3    0x07dc
+ 
+ #define USB_VENDOR_ID_MOJO		0x8282
+ #define USB_DEVICE_ID_RETRO_ADAPTER	0x3201
+diff -Naur linux-3.17.6/drivers/hid/hid-microsoft.c linux-3.17.6-surface/drivers/hid/hid-microsoft.c
+--- linux-3.17.6/drivers/hid/hid-microsoft.c	2014-12-07 14:48:01.000000000 -0500
++++ linux-3.17.6-surface/drivers/hid/hid-microsoft.c	2014-12-13 18:39:28.386608291 -0500
+@@ -274,6 +274,8 @@
+ 		.driver_data = MS_NOGET },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_COMFORT_MOUSE_4500),
+ 		.driver_data = MS_DUPLICATE_USAGES },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_TYPE_COVER_3),
++    .driver_data = MS_HIDINPUT },
+ 
+ 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_PRESENTER_8K_BT),
+ 		.driver_data = MS_PRESENTER },
+diff -Naur linux-3.17.6/drivers/hid/usbhid/hid-quirks.c linux-3.17.6-surface/drivers/hid/usbhid/hid-quirks.c
+--- linux-3.17.6/drivers/hid/usbhid/hid-quirks.c	2014-12-07 14:48:01.000000000 -0500
++++ linux-3.17.6-surface/drivers/hid/usbhid/hid-quirks.c	2014-12-13 18:38:09.270610117 -0500
+@@ -77,6 +77,7 @@
+ 	{ USB_VENDOR_ID_FORMOSA, USB_DEVICE_ID_FORMOSA_IR_RECEIVER, HID_QUIRK_NO_INIT_REPORTS },
+ 	{ USB_VENDOR_ID_FREESCALE, USB_DEVICE_ID_FREESCALE_MX28, HID_QUIRK_NOGET },
+ 	{ USB_VENDOR_ID_MGE, USB_DEVICE_ID_MGE_UPS, HID_QUIRK_NOGET },
++	{ USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_TYPE_COVER_3, HID_QUIRK_NO_INIT_REPORTS },
+ 	{ USB_VENDOR_ID_MSI, USB_DEVICE_ID_MSI_GT683R_LED_PANEL, HID_QUIRK_NO_INIT_REPORTS },
+ 	{ USB_VENDOR_ID_NEXIO, USB_DEVICE_ID_NEXIO_MULTITOUCH_PTI0750, HID_QUIRK_NO_INIT_REPORTS },
+ 	{ USB_VENDOR_ID_NOVATEK, USB_DEVICE_ID_NOVATEK_MOUSE, HID_QUIRK_NO_INIT_REPORTS },

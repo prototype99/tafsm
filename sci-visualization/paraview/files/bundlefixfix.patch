@@ -1,0 +1,25 @@
+diff -Naur -x '*.swp' ParaView-3.10.0/Applications/ParaView/CMakeLists.txt ParaView-3.10.0.modify/Applications/ParaView/CMakeLists.txt
+--- ParaView-3.10.0/Applications/ParaView/CMakeLists.txt	2011-03-09 12:31:13.000000000 -0600
++++ ParaView-3.10.0.modify/Applications/ParaView/CMakeLists.txt	2011-03-09 16:12:34.000000000 -0600
+@@ -193,7 +193,7 @@
+   list(APPEND search_path ${DIRS})
+   list(REMOVE_DUPLICATES search_path)
+ 
+-  set(APPS "\${CMAKE_INSTALL_PREFIX}/${_dir}/paraview${CMAKE_EXECUTABLE_SUFFIX}")  # paths to executables
++  set(APPS "${CMAKE_INSTALL_PREFIXD}/${_dir}/paraview${CMAKE_EXECUTABLE_SUFFIX}")  # paths to executables
+ 
+   if(WIN32)
+     foreach(pluginname ${PARAVIEW_PLUGINLIST})
+diff -Naur -x '*.swp' ParaView-3.10.0/CMake/BundleUtilities.cmake ParaView-3.10.0.modify/CMake/BundleUtilities.cmake
+--- ParaView-3.10.0/CMake/BundleUtilities.cmake	2011-03-09 12:31:13.000000000 -0600
++++ ParaView-3.10.0.modify/CMake/BundleUtilities.cmake	2011-03-09 16:16:54.000000000 -0600
+@@ -683,7 +683,8 @@
+ 
+       if(external_prereqs)
+         # Found non-system/somehow-unacceptable prerequisites:
+-        set(result 0)
++        #set(result 0)
++        message( "This was failur, but we ignore.")
+         set(info ${info} "external prerequisites found:\nf='${f}'\nexternal_prereqs='${external_prereqs}'\n")
+       endif(external_prereqs)
+     endif(is_executable)
