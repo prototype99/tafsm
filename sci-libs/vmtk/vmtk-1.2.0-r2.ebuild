@@ -120,11 +120,13 @@ src_install() {
 			doins $f
 		done
 	cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
-	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/vtk"
+#jinsinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/vtk"
+	insinto "${EPREFIX}/usr/share/${P}/bin/Python"
 		find "vtk" -type f  | while read f ; do
 			d=`dirname $f`
 		elog "AA: ${f} -> ${d}"
-	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/$d"
+#insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/$d"
+	insinto "${EPREFIX}/usr/share/${P}/bin/Python/$d"
 		doins ${f}
 		done
 	fi
