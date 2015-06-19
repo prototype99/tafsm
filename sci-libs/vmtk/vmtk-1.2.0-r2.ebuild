@@ -114,7 +114,7 @@ src_install() {
 		:
 	else
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
-		find "lib/vtk-5.10"  -path -name "*" -not -name "*.cmake" | while read f ; do
+		find "lib/vtk-5.10" -not -type d -not -name "*.cmake" | while read f ; do
 		elog "Install: ${f}"
 			doins $f 
 		done
