@@ -38,12 +38,11 @@ RDEPEND="
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
 EGIT_COMMIT="v$(get_version_component_range 1-2 $PV)"
 PYTHON_MODNAME="vmtk"
-
 RDEPEND="${DEPEND}"
 src_unpack() {
 	git-2_src_unpack
 
-#	if use vtk; then
+	epatch "${FILESDIR}/vtk-path-${PV}.patch"
 #		v=$(best_version sci-libs/vtk)
 #		v=${v#sci-libs/vtk-}
 #		v=vtk-$(get_version_component_range 1-2 $v)
