@@ -28,13 +28,13 @@ IUSE="vtk"
 DEPEND="
 		>=dev-util/cmake-2.8
 		>=dev-lang/python-2.6
+		vtk? ( =sci-libs/vtk-5.10.0 )
 "
-#vtk? ( >=sci-libs/vtk-5.10.0 )
 
 RDEPEND="
 		>=dev-lang/python-2.7
+		vtk? ( =sci-libs/vtk-5.10.0 )
 "
-#		vtk? ( >=sci-libs/vtk-5.10.0 )
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
 EGIT_COMMIT="v$(get_version_component_range 1-2 $PV)"
 PYTHON_MODNAME="vmtk"
@@ -73,7 +73,7 @@ src_install() {
 
 
 #into /usr/$(get_libdir)/ITK
- 	insinto /usr/$(get_libdir)/ITK
+	insinto "${EPREFIX}/usr/share/${P}/lib/InsightToolkit"
 	find "lib" -type f -name "libITK*" | while read f ; do
 	elog "Install: ${f}"
 		doins $f 
@@ -113,7 +113,7 @@ src_install() {
 	if use vtk ; then
 		:
 	else
- 		insinto /usr/$(get_libdir)/vtk-5.10
+	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
 		find "lib/vtk-5.10" -type f -name "libvtk*" | while read f ; do
 		elog "Install: ${f}"
 			doins $f 
