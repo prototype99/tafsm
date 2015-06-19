@@ -91,7 +91,7 @@ src_install() {
 		:
 	else
 		find "Install/lib/vtk-5.10" -type f | while read f ; do
-		doins ${f}
+		dolib ${f}
 	done
 	
 	fi

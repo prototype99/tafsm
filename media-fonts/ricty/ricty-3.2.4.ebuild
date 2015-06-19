@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86 ~x86-fbsd"
 IUSE=""
 
-DEPEND="<media-fonts/inconsolata-20140821
+DEPEND="=media-fonts/inconsolata-20090222
 	>=media-fonts/mix-mplus-ipa-2011100
 	media-gfx/fontforge"
 RDEPEND=""
