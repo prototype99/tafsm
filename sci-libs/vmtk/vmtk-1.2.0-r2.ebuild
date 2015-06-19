@@ -114,10 +114,9 @@ src_install() {
 		:
 	else
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
-		find "lib/vtk-5.10" -type f -name "lib*" | while read f ; do
+		find "lib/vtk-5.10"  -path -name "*" -not -name "*.cmake" | while read f ; do
 		elog "Install: ${f}"
-			j=`basename $f .0`
-			newins $f $j
+			doins $f 
 		done
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/vtk"
 		find "bin/Python/vtk" -type f  | while read f ; do
@@ -125,7 +124,7 @@ src_install() {
 		doins ${f}
 		done
 	fi
-#	exit -1
+#exit -1
 
 }
 
