@@ -119,7 +119,13 @@ src_install() {
 			j=`basename $f .0`
 			newins $f $j
 		done
+	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/vtk"
+		find "bin/Python/vtk" -type f  | while read f ; do
+		elog "AA: ${f}"
+		doins ${f}
+		done
 	fi
+#	exit -1
 
 }
 
