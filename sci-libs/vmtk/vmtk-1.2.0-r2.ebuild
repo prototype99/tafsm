@@ -116,7 +116,8 @@ src_install() {
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
 		find "lib/vtk-5.10" -type f -name "libvtk*" | while read f ; do
 		elog "Install: ${f}"
-			doins $f 
+			j=`basename $f .0`
+			newins $f $j
 		done
 	fi
 
