@@ -115,12 +115,17 @@ src_install() {
 	else
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
 		find "lib/vtk-5.10" -not -type d -not -name "*.cmake" | while read f ; do
-		elog "Install: ${f}"
-			doins $f 
+#			d=`dirname $f`
+		elog "Install: ${f} -> ${d}"
+#insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/$d"
+			doins $f
 		done
+	cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/vtk"
-		find "bin/Python/vtk" -type f  | while read f ; do
-		elog "AA: ${f}"
+		find "vtk" -type f  | while read f ; do
+			d=`dirname $f`
+		elog "AA: ${f} -> ${d}"
+	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/$d"
 		doins ${f}
 		done
 	fi
