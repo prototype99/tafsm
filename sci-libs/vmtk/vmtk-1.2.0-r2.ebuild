@@ -103,7 +103,7 @@ src_install() {
 
 #dobin Install/bin/vmtk
 	exeinto "${EPREFIX}/usr/share/${P}/bin"
-	find "bin/" -type f -not -name "vmtk" | while read f ; do
+	find "bin/" -type f -not -name "vmtk" -maxdepth 1| while read f ; do
 		doexe ${f}
 	done
 	doexe bin/vmtk
