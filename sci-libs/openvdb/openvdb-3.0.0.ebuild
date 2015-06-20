@@ -20,7 +20,8 @@ DEPEND="
 	dev-libs/boost
 	dev-cpp/tbb
 	media-libs/openexr
-	media-libs/glfw
+	>=media-libs/glfw-3.1.1
+	dev-libs/jemalloc
 	dev-libs/log4cplus
 	dev-util/cppunit
 	media-libs/ilmbase
@@ -33,13 +34,15 @@ RDEPEND="${DEPEND}"
 S="${WORKDIR}"/"${PN}"
 
 src_configure(){
-	  sed -i "788s#/python/lib/python\$(PYTHON_VERSION);#/lib/python\$(PYTHON_VERSION)/site-packages;#" ${S}/Makefile
+	epatch "${FILESDIR}/gentoo-install.patch"
+#sed -i "788s#/python/lib/python\$(PYTHON_VERSION);#/lib/python\$(PYTHON_VERSION)/site-packages;#" ${S}/Makefile
 }
 mymakeargs=""
 src_compile() {
 	mymakeargs="
-		INSTALL_DIR=${D}usr
+		DESTDIR=${D}usr
 		BOOST_INCL_DIR=/usr/include
+		BOOST_LIB_DIR=/usr/$(get_libdir)
 		EXR_INCL_DIR=/usr/include/OpenEXR
 		EXR_LIB_DIR=/usr/$(get_libdir)
 		EXR_LIB=-lIlmImf
@@ -87,7 +90,19 @@ src_compile() {
 	emake $mymakeargs || die "emake failed"
 }
 src_install(){
-	emake $mymakeargs install || die "emake install failed"
+	emake ${mymakeargs} install || die "emake install failed"
+#	doexe vdb_print
+#	doexe vdb_render
+#	doexe vdb_view
+#	dolib.so libopenvdb.so
+#	dolib.so libopenvdb.so.3.0
+#	dolib.so libopenvdb.so.3.0.0
+#	if use python; then
+#		:
+#	fi
+#	if use doc; then
+#		:
+#	fi
 }
 distutils_pkg_postinst(){
 	:
