@@ -94,9 +94,14 @@ src_install() {
 	find "lib/vmtk/vmtk" -type f | while read f ; do
 		doins ${f}
 	done
-	find "lib/vmtk/" -type f -maxdepth 1 -not -name "*.py" | while read f ; do
+	find "lib/vmtk/" -type f -name "vtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
+		doins $f
+	done
+
+	find "lib/vmtk/" -type f -name "lib*" -maxdepth 1 -not -name "*.py" | while read f ; do
 		dolib $f
 	done
+
 
 #dobin Install/bin/vmtk
 	exeinto "${EPREFIX}/usr/share/${P}/bin"
@@ -110,11 +115,15 @@ src_install() {
 		:
 	else
 	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
-		find "lib/vtk-5.10" -not -type d -not -name "*.cmake" | while read f ; do
+		find "lib/vtk-5.10" -not -type d -name "lib*" | while read f ; do
 			doins $f
 		done
-	cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
-	insinto "${EPREFIX}/usr/share/${P}/bin/Python"
+		insinto "${EPREFIX}/usr/share/${P}/bin/Python"
+		find "lib/vtk-5.10" -not -type d -name "vtk*.so" | while read f ; do
+			doins $f
+		done
+		cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
+
 		find "vtk" -type f  | while read f ; do
 			d=`dirname $f`
 			insinto "${EPREFIX}/usr/share/${P}/bin/Python/$d"
