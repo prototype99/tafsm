@@ -68,33 +68,58 @@ src_configure() {
 	fi
 	cmake-utils_src_configure
 }
+
 src_install() {
 	elog "Install: ${PWD}"
-	cd ${CMAKE_BUILD_DIR}
+	cd "${CMAKE_BUILD_DIR}/Install"
+	elog "Install: ${CMAKE_BUILD_DIR}"
 
-	dobin Install/bin/vmtk
-	find "Install/lib/InsightToolkit/" -type f -not -name "*.cmake" | while read f ; do
-		dolib ${f}
+
+#into /usr/$(get_libdir)/ITK
+	insinto "${EPREFIX}/usr/share/${P}/lib/InsightToolkit"
+	find "lib" -type f -name "libITK*" | while read f ; do
+	elog "Install: ${f}"
+		doins $f 
 	done
-	find "Install/lib/InsightToolkit/" -type l | while read f ; do
-		dolib $f
+
+	find "lib" -type f -name "libitk*" | while read f ; do
+#dolib $f 
+	elog "Install: ${f}"
+		doins $f 
 	done
 
 	insinto $(python_get_sitedir)/vmtk
-	find "Install/lib/vmtk/vmtk" -type f | while read f ; do
+	find "lib/vmtk/vmtk" -type f | while read f ; do
 		doins ${f}
 	done
-	find "Install/lib/vmtk/" -type f -maxdepth 1 -not -name "*.py" | while read f ; do
+	find "lib/vmtk/" -type f -maxdepth 1 -not -name "*.py" | while read f ; do
 		dolib $f
 	done
+
+#dobin Install/bin/vmtk
+	exeinto "${EPREFIX}/usr/share/${P}/bin"
+	find "bin/" -type f -not -name "vmtk" -maxdepth 1| while read f ; do
+		doexe ${f}
+	done
+	doexe bin/vmtk
+	dosym ${EPREFIX}/usr/share/${P}/bin/vmtk ${EPREFIX}/usr/bin/vmtk
+
 	if use vtk ; then
 		:
 	else
-		find "Install/lib/vtk-5.10" -type f | while read f ; do
-		dolib ${f}
-	done
-	
+	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
+		find "lib/vtk-5.10" -not -type d -not -name "*.cmake" | while read f ; do
+			doins $f
+		done
+	cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
+	insinto "${EPREFIX}/usr/share/${P}/bin/Python"
+		find "vtk" -type f  | while read f ; do
+			d=`dirname $f`
+			insinto "${EPREFIX}/usr/share/${P}/bin/Python/$d"
+			doins ${f}
+		done
 	fi
-}
+#exit -1
 
+}
 
