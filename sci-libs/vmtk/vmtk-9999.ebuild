@@ -58,9 +58,11 @@ src_unpack() {
 src_configure() {
 	mycmakeargs=(
 		-DCMAKE_BUILD_TYPE=Release
-		-DCMAKE_INSTALL_LIBDIR=/opt/vmtk/lib64
-		-DCMAKE_INSTALL_PREFIX=/opt/vmtk
+		#-DCMAKE_INSTALL_LIBDIR=/opt/vmtk/lib64
+		#-DCMAKE_INSTALL_PREFIX=/opt/vmtk
 		-DUSE_SYSTEM_ITK=NO 
+		-DBUILD_SHARED_LIBS=ON
+		-DITK_USE_FLAT_DIRECTORY_INSTALL=OFF
 #-DVMTK_WITH_LIBRARY_VERSION=ON
 		)
 	if use vtk; then

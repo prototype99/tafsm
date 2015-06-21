@@ -42,7 +42,7 @@ RDEPEND="${DEPEND}"
 src_unpack() {
 	git-2_src_unpack
 
-	epatch "${FILESDIR}/vtk-path-${PV}.patch"
+	#epatch "${FILESDIR}/vtk-path-${PV}.patch"
 #		v=$(best_version sci-libs/vtk)
 #		v=${v#sci-libs/vtk-}
 #		v=vtk-$(get_version_component_range 1-2 $v)
@@ -54,11 +54,14 @@ src_unpack() {
 }
 
 src_configure() {
-	mycmakeargs=(
+#		-DCMAKE_INSTALL_LIBDIR=/opt/vmtk/lib64
+#		-DCMAKE_INSTALL_PREFIX=/opt/vmtk
+
+	local mycmakeargs=(
 		-DCMAKE_BUILD_TYPE=Release
-		-DCMAKE_INSTALL_LIBDIR=/opt/vmtk/lib64
-		-DCMAKE_INSTALL_PREFIX=/opt/vmtk
 		-DVMTK_WITH_LIBRARY_VERSION=ON
+		-DBUILD_SHARED_LIBS=ON
+		-DITK_USE_FLAT_DIRECTORY_INSTALL=OFF
 		)
 #	if use vtk; then
 #		mycmakeargs+=(-DUSE_SYSTEM_VTK=ON )
@@ -66,6 +69,7 @@ src_configure() {
 	cmake-utils_src_configure
 }
 src_install() {
+	cmake-utils_src_install
 	elog "Install: ${PWD}"
 	cd "${CMAKE_BUILD_DIR}/Install"
 	elog "Install: ${CMAKE_BUILD_DIR}"
@@ -86,6 +90,7 @@ src_install() {
 	find "lib/vmtk/vmtk" -type f | while read f ; do
 		doins ${f}
 	done
+	insinto $(python_get_sitedir)/
 	find "lib/vmtk/" -type f -maxdepth 1 -not -name "*.py" | while read f ; do
 		dolib $f
 	done
@@ -101,7 +106,7 @@ src_install() {
 	if use vtk ; then
 		:
 	else
-	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
+	    insinto "${EPREFIX}/usr/share/${P}/lib/"
 		find "lib/vtk-5.10" -not -type d -not -name "*.cmake" | while read f ; do
 			doins $f
 		done
@@ -109,11 +114,11 @@ src_install() {
 		cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
 		find "vtk" -type f  | while read f ; do
 			d=`dirname $f`
-			insinto "${EPREFIX}/usr/share/${P}/bin/vtk-5.10/$d"
+			insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10/$d"
 			doins ${f}
 		done
 	fi
-#exit -1
+exit -1
 
 }
 
