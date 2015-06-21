@@ -72,15 +72,13 @@ src_install() {
 
 
 #into /usr/$(get_libdir)/ITK
-	insinto "${EPREFIX}/usr/share/${P}/lib/InsightToolkit"
+	insinto "${EPREFIX}/usr/share/${P}/lib/"
 	find "lib" -type f -name "libITK*" | while read f ; do
-	elog "Install: ${f}"
 		doins $f 
 	done
 
 	find "lib" -type f -name "libitk*" | while read f ; do
 #dolib $f 
-	elog "Install: ${f}"
 		doins $f 
 	done
 
@@ -88,7 +86,7 @@ src_install() {
 	find "lib/vmtk/vmtk" -type f | while read f ; do
 		doins ${f}
 	done
-	find "lib/vmtk/" -type f -maxdepth 1 -not -name "*.py" | while read f ; do
+	find "lib/vmtk/" -type f -maxdepth 1 -name "*.so.*"  | while read f ; do
 		dolib $f
 	done
 
@@ -103,12 +101,16 @@ src_install() {
 	if use vtk ; then
 		:
 	else
-	    insinto "${EPREFIX}/usr/share/${P}/lib/vtk-5.10"
-		find "lib/vtk-5.10" -not -type d -not -name "*.cmake" | while read f ; do
+	    insinto "${EPREFIX}/usr/share/${P}/lib/"
+		find "lib/vtk-5.10" -name "*.so.*"  | while read f ; do
 			doins $f
 		done
-	cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
-	insinto "${EPREFIX}/usr/share/${P}/bin/Python"
+
+		insinto "${EPREFIX}/usr/share/${P}/bin/Python"
+		find "lib/vtk-5.10" -name "*.so"  | while read f ; do
+			doins $f
+		done
+		cd "${CMAKE_BUILD_DIR}/Install/bin/Python"
 		find "vtk" -type f  | while read f ; do
 			d=`dirname $f`
 			insinto "${EPREFIX}/usr/share/${P}/bin/Python/$d"
