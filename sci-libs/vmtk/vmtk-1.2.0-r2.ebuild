@@ -42,7 +42,7 @@ RDEPEND="${DEPEND}"
 src_unpack() {
 	git-2_src_unpack
 
-	#epatch "${FILESDIR}/vtk-path-${PV}.patch"
+	epatch "${FILESDIR}/vtk-path-${PV}.patch"
 	epatch "${FILESDIR}/ITK-shared-lib.patch"
 #		v=$(best_version sci-libs/vtk)
 #		v=${v#sci-libs/vtk-}
