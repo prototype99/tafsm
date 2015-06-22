@@ -28,16 +28,17 @@ IUSE="vtk"
 DEPEND="
 		>=dev-util/cmake-2.8
 		>=dev-lang/python-2.6
-		vtk? ( >=sci-libs/vtk-6.1.0 )
+		vtk? ( =sci-libs/vtk-6.2.0 )
 "
 
 RDEPEND="
 		>=dev-lang/python-2.6
-		vtk? ( >=sci-libs/vtk-6.1.0 )
+		vtk? ( =sci-libs/vtk-6.2.0 )
 "
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
 #EGIT_COMMIT="v${PV}"
-EGIT_MASTER="master"
+#EGIT_MASTER="master"
+EGIT_MASTER="vtk6"
 PYTHON_MODNAME="vmtk"
 
 RDEPEND="${DEPEND}"
@@ -50,6 +51,7 @@ src_unpack() {
 		v=vtk-$(get_version_component_range 1-2 $v)
 		elog "Setting vtk version: $v"
 #epatch "${FILESDIR}/vtk-path-1.0.1.patch"
+	epatch "${FILESDIR}/vtkvmtkFWHMFeatureImageFilter.patch"
 #		sed -i -e "s/vtk-5.10/$v/" ${S}/PypeS/pyperun.py || die "sed failed"
 #		sed -i -e "s/vtk-5.10/$v/" ${S}/vmtk.py || die "sed failed"
 	fi

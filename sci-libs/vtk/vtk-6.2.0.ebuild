@@ -117,13 +117,13 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}"/VTK-${PV}
 
 PATCHES=(
-#	"${FILESDIR}"/${P}-freetype.patch
-#	"${FILESDIR}"/${P}-install.patch
-#	"${FILESDIR}"/${P}-system.patch
-#	"${FILESDIR}"/${P}-netcdf.patch
-#	"${FILESDIR}"/${P}-web.patch
-#	"${FILESDIR}"/${P}-glext.patch
-#	"${FILESDIR}"/${P}-memset.patch
+	#"${FILESDIR}"/${P}-freetype.patch
+	#"${FILESDIR}"/${P}-install.patch
+	#"${FILESDIR}"/${P}-system.patch
+	#"${FILESDIR}"/${P}-netcdf.patch
+	#"${FILESDIR}"/${P}-web.patch
+	#"${FILESDIR}"/${P}-glext.patch
+	#"${FILESDIR}"/${P}-memset.patch
 	)
 
 RESTRICT=test
