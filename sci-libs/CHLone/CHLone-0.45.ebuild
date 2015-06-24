@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit scons-utils distutils multilib
+inherit scons-utils distutils 
 
 
 DESCRIPTION="CHLone is a CGNS/SIDS compliant mapping of SIDS-to-HDF5"
@@ -33,10 +33,10 @@ src_configure(){
 }
 
 src_compile(){
-	escons  NSTALL_ROOT="${D}"
+	escons  INSTALL_ROOT="${D}"
 }
 src_install(){
-	#escons  install NSTALL_ROOT="${D}"
+	#escons  install INSTALL_ROOT="${D}"
 	cd .scons.linux2.tmp/build
 	insinto "${EPREFIX}/usr/include/CHLone"
 	find "src/include/CHLone" -type f -name "*.h" | while read f ; do
