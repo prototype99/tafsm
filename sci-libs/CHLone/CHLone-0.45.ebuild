@@ -45,10 +45,15 @@ src_install(){
 	dolib src/libCHLone.so
 	insinto $(python_get_sitedir)/CHLone
 	doins pyx/CHLone.so
+	distutils_src_install
 }
 
 src_test(){
 	escons  tests
+}
+
+distutils_src_install(){
+	:
 }
 distutils_pkg_postinst(){
 	:
