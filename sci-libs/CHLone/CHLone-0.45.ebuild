@@ -40,7 +40,7 @@ src_install(){
 	#escons  install NSTALL_ROOT="${D}"
 	cd .scons.linux2.tmp/build
 	insinto "${EPREFIX}/usr/include/CHLone"
-	find "include/CHLone" -type f -name "*.h" | while read f ; do
+	find "src/include/CHLone" -type f -name "*.h" | while read f ; do
 		doins $f 
 	done
 	dolib src/libCHLone.so
