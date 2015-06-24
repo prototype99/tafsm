@@ -53,3 +53,6 @@ src_test(){
 distutils_pkg_postinst(){
 	:
 }
+distutils_pkg_postrm(){
+	:
+}
