@@ -19,7 +19,6 @@ IUSE="hdf5"
 DEPEND=""
 RDEPEND="${DEPEND}
 	dev-util/scons
-	dev-python/sphinx
 	hdf5? ( >=sci-libs/hdf5-1.8 )
 "
 S="${WORKDIR}/${MY_P}"
