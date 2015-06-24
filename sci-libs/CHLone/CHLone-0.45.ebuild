@@ -50,3 +50,6 @@ src_install(){
 src_test(){
 	escons  tests
 }
+distutils_pkg_postinst(){
+	:
+}
