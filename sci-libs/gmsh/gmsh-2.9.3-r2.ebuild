@@ -99,6 +99,9 @@ src_configure() {
 #	cmake-utils_src_install
 #}
 
+distutils_src_install(){
+	:
+}
 distutils_pkg_postinst(){
 	:
 }
