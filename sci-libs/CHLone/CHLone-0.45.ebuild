@@ -43,7 +43,7 @@ src_install(){
 		doins $f 
 	done
 	dolib src/libCHLone.so
-	insinto $(python_get_sitedir)/CHLone
+	insinto $(python_get_sitedir)/
 	doins pyx/CHLone.so
 	distutils_src_install
 }

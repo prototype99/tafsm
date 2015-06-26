@@ -53,7 +53,8 @@ src_configure(){
 		MYFLAG="${MYFLAG} --with-debugging=0 COPTFLAGS='${CFLAGS}' FOPTFLAGS='${FCFLAGS}' CXXOPTFLAGS='${CXXFLAGS}'"
 	fi
 
-	econf PETSC_ARCH=${PETSC_ARCH} --with-shared-libraries --without-dynamic-loading --with-mpi --prefix=${D}${PETSC_DIR} ${MYFLAG}
+	#econf PETSC_ARCH=${PETSC_ARCH} --with-shared-libraries --without-dynamic-loading --with-mpi --prefix=${D}${PETSC_DIR} ${MYFLAG}
+	econf PETSC_ARCH=${PETSC_ARCH} --with-shared-libraries --with-mpi --prefix=${D}${PETSC_DIR} ${MYFLAG}
 #--with-tetgen=
 #--with-parmetis
 #--with-petsc4py
@@ -65,7 +66,7 @@ src_compile(){
 }
 
 src_install(){
-	find "${PETSC_ARCH}/conf/" -type f  | while read f ; do
+	find "${PETSC_ARCH}/lib/pestc/conf/" -type f  | while read f ; do
 		elog $f
 		sed -i -e "s:${D}::" ${f}
 	done
