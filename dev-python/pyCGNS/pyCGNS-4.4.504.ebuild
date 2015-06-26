@@ -51,11 +51,14 @@ src_configure(){
 	echo "NUMPY_PATH_LIBRARIES=['/usr/$(get_libdir)']" >> $file
 	echo "MLL_PATH_LIBRARIES  =['/usr/$(get_libdir)']" >> $file
 	echo "MLL_PATH_INCLUDES   =['/usr/include']" >> $file
+	#cmake-utils_src_configure
 }
 
-#src_compile(){
-#	$(PYTHON) setup.py build 
-#}
-#src_install() {
-#	$(PYTHON) setup.py install  --prefix=${D}usr
-#}
+src_compile(){
+	##cmake-utils_src_compile
+	$(PYTHON) setup.py build 
+}
+src_install() {
+	$(PYTHON) setup.py install  --prefix=${D}usr
+	#cmake-utils_src_install
+}
