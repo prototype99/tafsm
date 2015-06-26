@@ -34,9 +34,9 @@ RDEPEND="${DEPEND}
 	>=dev-lang/python-2.4
 	>=dev-python/numpy-1.1
 	>=dev-python/cython-0.16
-	>=x11-libs/qt-core-4.7
+	>=dev-qt/qt-core-4.7
 	>=sci-libs/hdf5-1.8.5
-	>=sci-libs/CHLone-0.4
+	>=sci-libs/CHLone-0.45
 	dev-python/pyside
 "
 
