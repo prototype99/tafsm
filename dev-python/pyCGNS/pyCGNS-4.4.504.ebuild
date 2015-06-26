@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
 
 inherit distutils versionator distutils
 
@@ -18,10 +18,11 @@ is a parser engine for CGNS/Python tree compliance checking. The CGNS.VAL tool
 can analyze your CGNS/HDF5 file and returns you a list of diagnostics."
 HOMEPAGE="http://pycgns.sourceforge.net"
 
-MY_P="${PN}-v$(get_version_component_range 1-2).351"
+#MY_P="${PN}-v$(get_version_component_range 1-2).351"
+MY_P="${PN}-v${PV}"
 S="${WORKDIR}"/${MY_P}
 
-SRC_URI="http://sourceforge.net/projects/pycgns/files/pyCGNS/${MY_P}.tgz"
+SRC_URI="http://sourceforge.net/projects/pycgns/files/pyCGNS/${MY_P}.tar.gz"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -33,11 +34,11 @@ RDEPEND="${DEPEND}
 	>=dev-lang/python-2.4
 	>=dev-python/numpy-1.1
 	>=dev-python/cython-0.16
+	>=x11-libs/qt-core-4.7
 	>=sci-libs/hdf5-1.8.5
 	>=sci-libs/CHLone-0.4
 	dev-python/pyside
 "
-#>=x11-libs/qt-core-4.7
 
 src_configure(){
 	file="pyCGNSconfig_user.py"
@@ -52,9 +53,9 @@ src_configure(){
 	echo "MLL_PATH_INCLUDES   =['/usr/include']" >> $file
 }
 
-src_compile(){
-	$(PYTHON) setup.py build 
-}
-src_install() {
-	$(PYTHON) setup.py install  --prefix=${D}usr
-}
+#src_compile(){
+#	$(PYTHON) setup.py build 
+#}
+#src_install() {
+#	$(PYTHON) setup.py install  --prefix=${D}usr
+#}
