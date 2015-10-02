@@ -247,9 +247,10 @@ src_configure() {
 		$(cmake-utils_use plugins Module_vtkFiltersFlowPaths)
 		$(cmake-utils_use plugins Module_vtkPVServerManagerApplication)
 		)
-	mycmakeargs+=(
-		$(cmake-utils_use debug -DCMAKE_BUILD_TYPE=Debug)
-	)
+	#//mycmakeargs+=(
+	#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
+	#//)
+	use debug && CMAKE_BUILD_TYPE=Debug;
 	use debug && elog "DEBUG";
 	use debug || elog "NoDEBUG";
 
