@@ -251,8 +251,21 @@ src_configure() {
 	#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
 	#//)
 	use debug && CMAKE_BUILD_TYPE=Debug;
-	use debug && elog "DEBUG";
 	use debug || elog "NoDEBUG";
+
+	if use debug ; then
+	filter-flags -O1
+	filter-flags -O2
+	filter-flags -O3
+	append-flags -O0
+	 elog "DEBUG";
+	mycmakeargs+=(
+	 -DCMAKE_CXX_FLAGS_DEBUG=${CXXFLAGS}
+	 -DCMAKE_C_FLAGS_DEBUG=${CFLAGS}
+	 -DCMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=${CXXFLAGS}
+	 -DCMAKE_C_FLAGS_RELWITHDEBINFO:STRING=${CFLAGS}
+	 )
+	fi
 
 	cmake-utils_src_configure
 }
