@@ -45,7 +45,7 @@ RDEPEND="
 	x11-libs/libXext
 	x11-libs/libXmu
 	x11-libs/libXt
-	sci-libs/xdmf2[xdmf2]
+	xdmf2? ( sci-libs/xdmf2 )
 	coprocessing? (
 		plugins? (
 			dev-python/PyQt4
