@@ -19,10 +19,12 @@ EGIT_REPO_URI="git://public.kitware.com/Xdmf2.git"
 SLOT="0"
 LICENSE="VTK"
 KEYWORDS="amd64 ~arm x86 ~amd64-linux ~x86-linux"
-IUSE="doc python test debug"
+IUSE="mpi doc python test debug"
 
 RDEPEND="
 	sci-libs/hdf5:=
+	sci-libs/hdf5[mpi=]
+	mpi? ( virtual/mpi[cxx,romio] )
 	dev-libs/libxml2:2
 	python? ( ${PYTHON_DEPS} )
 	"
@@ -36,6 +38,7 @@ src_configure() {
 		$(cmake-utils_use doc XDMF_BUILD_DOCUMENTATION)
 		$(cmake-utils_use_build test TESTING)
 		$(cmake-utils_use python XDMF_WRAP_PYTHON)
+		$(cmake-utils_use mpi XDMF_BUILD_MPI)
 #		$(cmake-utils_use java XDMF_WRAP_JAVA)
 	)
 

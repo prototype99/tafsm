@@ -98,12 +98,15 @@ src_prepare() {
 		"${FILESDIR}"/${P}-removesqlite.patch
 
 	# lib64 fixes
+	if use xdmf2; then
 	sed -i \
 		-e "s:/usr/lib:${EPREFIX}/usr/$(get_libdir):g" \
 		 VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/CMakeLists.txt || die
 	sed -i \
 		-e "s:\/lib\/python:\/$(get_libdir)\/python:g" \
 		 VTK/ThirdParty/xdmf2/vtkxdmf2/CMake/setup_install_paths.py || die
+	fi
+
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
 		CMakeLists.txt \
@@ -183,8 +186,8 @@ src_configure() {
 		$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
 		$(cmake-utils_use mpi VTK_Group_MPI)
 		#$(usex xdmf2 "" "$(cmake-utils_use mpi VTK_XDMF_USE_MPI)")
-		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)"
-		$(cmake-utils_use mpi XDMF_BUILD_MPI)"
+		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
+		$(cmake-utils_use mpi XDMF_BUILD_MPI)
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
 		$(cmake-utils_use python VTK_Group_ParaViewPython)
 		$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
@@ -256,6 +259,7 @@ src_configure() {
 	use debug || elog "NoDEBUG";
 	if use xdmf2 ;then
 		mycmakeargs+=(
+		-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
 		-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
 		)
 	fi
