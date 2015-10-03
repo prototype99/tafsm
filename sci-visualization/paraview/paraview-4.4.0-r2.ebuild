@@ -182,11 +182,11 @@ src_configure() {
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
 		$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
 		$(cmake-utils_use mpi VTK_Group_MPI)
-		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
-		$(cmake-utils_use mpi XDMF_BUILD_MPI)
+		$(usex xdmf2 "" "$(cmake-utils_use mpi VTK_XDMF_USE_MPI)")
+		$(use xdmf2 "" "$(cmake-utils_use mpi XDMF_BUILD_MPI)")
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
 		$(cmake-utils_use python VTK_Group_ParaViewPython)
-		$(cmake-utils_use python XDMF_WRAP_PYTHON)
+		$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
 		$(cmake-utils_use python Module_vtkPython)
 		$(cmake-utils_use python Module_pqPython)
 		$(cmake-utils_use python Module_vtkWrappingPythonCore)
@@ -253,6 +253,11 @@ src_configure() {
 	#//)
 	use debug && CMAKE_BUILD_TYPE=Debug;
 	use debug || elog "NoDEBUG";
+	if use xdmf2 ;then
+	mycmakeargs+=(
+		-Dxdmf2_DIR:PATH=/usr/lib64/XdmfCMake/
+		)
+	fi
 
 	if use debug ; then
 	filter-flags -O1

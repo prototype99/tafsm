@@ -11,7 +11,8 @@ inherit cmake-utils multilib python-single-r1 git-2
 DESCRIPTION="eXtensible Data Model and Format"
 HOMEPAGE="http://xdmf.org/index.php/Main_Page"
 #SRC_URI="https://dev.gentoo.org/~jlec/distfiles/${P}.tar.xz"
-EGIT_REPO_URI="git://xdmf.org/Xdmf.git"
+#EGIT_REPO_URI="git://xdmf.org/Xdmf.git"
+EGIT_REPO_URI="git://public.kitware.com/Xdmf2.git"
 
 SLOT="0"
 LICENSE="VTK"

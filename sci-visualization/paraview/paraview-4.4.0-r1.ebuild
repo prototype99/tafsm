@@ -89,7 +89,7 @@ pkg_setup() {
 
 src_prepare() {
 	# see patch headers for description
-	epatch "${FILESDIR}"/${PN}-4.0.1-xdmf-cstring.patch \
+	epatch "use xdmf2 ${FILESDIR}"/${PN}-4.0.1-xdmf-cstring.patch \
 		"${FILESDIR}"/${PN}-4.0.1-gcc-4.7.patch \
 		"${FILESDIR}"/${PN}-4.2.0-protobuf.patch \
 		"${FILESDIR}"/${PN}-4.3.1-fix-development-install.patch \
