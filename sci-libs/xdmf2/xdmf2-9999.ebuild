@@ -13,6 +13,8 @@ HOMEPAGE="http://xdmf.org/index.php/Main_Page"
 #SRC_URI="https://dev.gentoo.org/~jlec/distfiles/${P}.tar.xz"
 #EGIT_REPO_URI="git://xdmf.org/Xdmf.git"
 EGIT_REPO_URI="git://public.kitware.com/Xdmf2.git"
+#EGIT_REPO_URI="https://github.com/cjh1/Xdmf2"
+#EGIT_BRANCH="vtk6"
 
 SLOT="0"
 LICENSE="VTK"
