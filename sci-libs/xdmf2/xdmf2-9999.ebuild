@@ -56,5 +56,7 @@ src_configure() {
 
 src_install() {
 	cmake-utils_src_install
-	dosym XdmfConfig.cmake /usr/share/cmake/Modules/${PN}Config.cmake
+	insinto usr/share/cmake/Modules/
+	elog ${S}
+	doins ${S}_build/XdmfConfig.cmake
 }

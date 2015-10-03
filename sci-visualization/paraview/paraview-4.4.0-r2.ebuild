@@ -255,7 +255,7 @@ src_configure() {
 	use debug || elog "NoDEBUG";
 	if use xdmf2 ;then
 	mycmakeargs+=(
-		-Dxdmf2_DIR:PATH=/usr/lib64/XdmfCMake/
+		-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
 		)
 	fi
 
