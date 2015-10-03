@@ -58,5 +58,5 @@ src_install() {
 	cmake-utils_src_install
 	insinto usr/share/cmake/Modules/
 	elog ${S}
-	doins ${S}_build/XdmfConfig.cmake
+	newins ${S}_build/XdmfConfig.cmake xdmf2Config.cmake
 }
