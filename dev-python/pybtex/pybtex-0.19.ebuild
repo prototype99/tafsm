@@ -20,6 +20,7 @@ IUSE="doc"
 
 
 RDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
+		>=dev-python/pyyaml-3.0.1[${PYTHON_USEDEP}]
 		dev-python/pip[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}"
 
