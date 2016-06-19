@@ -12,10 +12,39 @@ inherit rpm eutils
 
 
 
+
 LICENSE=""
 SLOT="0"
 KEYWORDS="~amd64"
 IUSE=""
 
-DEPEND=""
+DEPEND="
+  media-libs/tiff:3
+"
 RDEPEND="${DEPEND}"
+
+src_unpack() {
+	unpack ${A}
+	NUM=${PV}.0-2775
+	RPM="Maya${PV}_64-${NUM}.x86_64.rpm"
+	einfo ${WORKDIR}/${RPM}
+	#einfo ${D}
+	#mkdir ${D}
+	rpm2cpio ${WORKDIR}/${RPM} | cpio -idmv 
+	assert "Failed to unpack ${RPM}"
+}
+
+S="${WORKDIR}"
+
+src_install() {
+	maya=maya${PV}
+	cp -pPR ./usr ./var ./opt ${D} || die
+
+
+	mkdir -p ${D}usr/bin/
+	ln -s /usr/autodesk/${maya}/bin/${maya}  ${D}usr/bin/maya
+	ln -s /usr/autodesk/${maya}/bin/Render   ${D}usr/bin/Render
+	ln -s /usr/autodesk/${maya}/bin/fcheck   ${D}usr/bin/fcheck
+	ln -s /usr/autodesk/${maya}/bin/imgcvt   ${D}usr/bin/imgcvt
+
+}
