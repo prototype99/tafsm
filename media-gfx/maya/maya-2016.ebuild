@@ -33,6 +33,9 @@ src_unpack() {
 
 	RPM="adlmapps11-11.0.15-0.x86_64.rpm"
 	rpm2cpio ${WORKDIR}/${RPM} | cpio -idmv 
+
+	RPM="adlmflexnetclient-11.0.15-0.x86_64.rpm"
+	rpm2cpio ${WORKDIR}/${RPM} | cpio -idmv 
 }
 
 S="${WORKDIR}"
