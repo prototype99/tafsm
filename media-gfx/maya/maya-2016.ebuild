@@ -23,7 +23,9 @@ DEPEND="
   app-arch/cpio
   app-arch/rpm
 "
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+ app-shells/tcsh
+"
 
 src_unpack() {
 	unpack ${A}
@@ -58,8 +60,11 @@ src_install() {
 	ln -s /usr/lib64/libcrypto.so  ${D}usr/lib64/libcrypto.so.6
 	chmod -R og+Xr ${D}/var/opt/Autodesk
 
+
+
+}
+
+pkg_postinst() {
 	SERIAL_NUMBER="<YOUR SERIAL NUMBER>"
-
 	einfo "sudo env LD_LIBRARY_PATH=/opt/Autodesk/Adlm/R11/lib64  /usr/autodesk/maya2016/bin/adlmreg -i S 657H1 657H1 2016.0.0.F ${SERIAL_NUMBER} /var/opt/Autodesk/Adlm/Maya2016/MayaConfig.pit"
-
 }
