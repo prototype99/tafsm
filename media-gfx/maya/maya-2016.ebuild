@@ -20,6 +20,8 @@ IUSE=""
 
 DEPEND="
   media-libs/tiff:3
+  app-arch/cpio
+  app-arch/rpm
 "
 RDEPEND="${DEPEND}"
 
