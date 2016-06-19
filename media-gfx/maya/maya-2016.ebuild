@@ -27,9 +27,7 @@ src_unpack() {
 	unpack ${A}
 	NUM=${PV}.0-2775
 	RPM="Maya${PV}_64-${NUM}.x86_64.rpm"
-	einfo ${WORKDIR}/${RPM}
-	#einfo ${D}
-	#mkdir ${D}
+	#einfo ${WORKDIR}/${RPM}
 	rpm2cpio ${WORKDIR}/${RPM} | cpio -idmv 
 	assert "Failed to unpack ${RPM}"
 
@@ -53,5 +51,9 @@ src_install() {
 	mkdir -p ${D}usr/lib64/ ${D}usr/lib/
 	ln -s libssl.so     ${D}usr/lib64/libssl.so.6
 	ln -s libcrypto.so  ${D}usr/lib64/libcrypto.so.6
+
+	SERIAL_NUMBER="<YOUR SERIAL NUMBER>"
+
+	einfo "sudo env LD_LIBRARY_PATH=/opt/Autodesk/Adlm/R11/lib64  /usr/autodesk/maya2016/bin/adlmreg -i N 657H1 657H1 2016.0.0.F ${SERIAL_NUMBER} /var/opt/Autodesk/Adlm/Maya2016/MayaConfig.pi"
 
 }
