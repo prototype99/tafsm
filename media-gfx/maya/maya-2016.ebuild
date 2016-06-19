@@ -25,6 +25,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}
  app-shells/tcsh
+ dev-libs/openssl
 "
 
 src_unpack() {
@@ -48,6 +49,7 @@ src_install() {
 	maya=maya${PV}
 	cp -pPR ./usr ./var ./opt ${D} || die
 
+	chmod -R og+Xr ${D}/var/opt/Autodesk
 
 	mkdir -p ${D}usr/bin/
 	ln -s /usr/autodesk/${maya}/bin/${maya}  ${D}usr/bin/maya
@@ -55,10 +57,8 @@ src_install() {
 	ln -s /usr/autodesk/${maya}/bin/fcheck   ${D}usr/bin/fcheck
 	ln -s /usr/autodesk/${maya}/bin/imgcvt   ${D}usr/bin/imgcvt
 
-	mkdir -p ${D}usr/lib64/ ${D}usr/lib/
-	ln -s /usr/lib64/libssl.so     ${D}usr/lib64/libssl.so.6
-	ln -s /usr/lib64/libcrypto.so  ${D}usr/lib64/libcrypto.so.6
-	chmod -R og+Xr ${D}/var/opt/Autodesk
+	dosym /usr/${get_libdir}/libssl.so     /usr/lib64/libssl.so.6
+	dosym /usr/${get_libdir}/libcrypto.so  /usr/lib64/libcrypto.so.6
 
 
 
