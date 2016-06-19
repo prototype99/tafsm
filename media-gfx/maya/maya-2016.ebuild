@@ -32,6 +32,9 @@ src_unpack() {
 	#mkdir ${D}
 	rpm2cpio ${WORKDIR}/${RPM} | cpio -idmv 
 	assert "Failed to unpack ${RPM}"
+
+	RPM="adlmapps11-11.0.15-0.x86_64.rpm"
+	rpm2cpio ${WORKDIR}/${RPM} | cpio -idmv 
 }
 
 S="${WORKDIR}"
@@ -46,5 +49,9 @@ src_install() {
 	ln -s /usr/autodesk/${maya}/bin/Render   ${D}usr/bin/Render
 	ln -s /usr/autodesk/${maya}/bin/fcheck   ${D}usr/bin/fcheck
 	ln -s /usr/autodesk/${maya}/bin/imgcvt   ${D}usr/bin/imgcvt
+
+	mkdir -p ${D}usr/lib64/ ${D}usr/lib/
+	ln -s libssl.so     ${D}usr/lib64/libssl.so.6
+	ln -s libcrypto.so  ${D}usr/lib64/libcrypto.so.6
 
 }
