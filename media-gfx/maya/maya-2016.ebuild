@@ -54,6 +54,7 @@ src_install() {
 	mkdir -p ${D}usr/lib64/ ${D}usr/lib/
 	ln -s /usr/lib64/libssl.so     ${D}usr/lib64/libssl.so.6
 	ln -s /usr/lib64/libcrypto.so  ${D}usr/lib64/libcrypto.so.6
+	chmod -R og+Xr ${D}/var/opt/Autodesk
 
 	SERIAL_NUMBER="<YOUR SERIAL NUMBER>"
 
