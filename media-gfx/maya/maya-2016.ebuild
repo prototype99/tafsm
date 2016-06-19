@@ -56,9 +56,8 @@ src_install() {
 	ln -s /usr/autodesk/${maya}/bin/Render   ${D}usr/bin/Render
 	ln -s /usr/autodesk/${maya}/bin/fcheck   ${D}usr/bin/fcheck
 	ln -s /usr/autodesk/${maya}/bin/imgcvt   ${D}usr/bin/imgcvt
-
-	dosym /usr/${get_libdir}/libssl.so     /usr/lib64/libssl.so.6
-	dosym /usr/${get_libdir}/libcrypto.so  /usr/lib64/libcrypto.so.6
+	dosym /opt/Autodesk/Adlm/R11/lib64/libssl.so.6    /usr/lib64/libssl.so.6
+	dosym /opt/Autodesk/Adlm/R11/lib64/libcrypto.so.6  /usr/lib64/libcrypto.so.6
 
 
 
