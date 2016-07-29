@@ -9,7 +9,7 @@ inherit eutils multilib versionator python-single-r1 cmake-utils
 
 MAIN_PV=$(get_major_version)
 MAJOR_PV=$(get_version_component_range 1-2)
-MY_P="ParaView-v${PV}-source"
+MY_P="ParaView-v${PV}"
 
 DESCRIPTION="ParaView is a powerful scientific data visualization application"
 HOMEPAGE="http://www.paraview.org"
