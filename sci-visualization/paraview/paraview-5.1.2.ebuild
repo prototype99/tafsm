@@ -72,6 +72,7 @@ RDEPEND="
 		dev-qt/qthelp:4[compat]
 		dev-qt/qtsql:4
 		dev-qt/qtwebkit:4
+		lxqt-base/liblxqt
 	)
 	sqlite? ( dev-db/sqlite:3 )
 	tcl? ( dev-lang/tcl:0= )
