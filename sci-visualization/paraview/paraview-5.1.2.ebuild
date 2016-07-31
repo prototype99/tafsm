@@ -162,7 +162,8 @@ src_configure() {
 		-DVTK_USE_FFMPEG_ENCODER=OFF
 		-DPROTOC_LOCATION=$(type -P protoc)
 		-DVTK_Group_StandAlone=ON
-		-DPARAVIEW_ENABLE_XDMF3=ON
+		#-DPARAVIEW_ENABLE_XDMF3=ON
+		-DPARAVIEW_ENABLE_XDMF3=OFF
 		# force this module due to incorrect build system deps
 		# wrt bug 460528
 		-DModule_vtkUtilitiesProcessXML=ON
