@@ -150,7 +150,7 @@ src_configure() {
 		-DVTK_USE_SYSTEM_PNG=ON
 		-DVTK_USE_SYSTEM_PROTOBUF=ON
 		-DVTK_USE_SYSTEM_TIFF=ON
-		$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
+		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
 		-DVTK_USE_SYSTEM_ZLIB=ON
 		-DPARAVIEW_USE_SYSTEM_MPI4PY=ON
 		-DVTK_USE_SYSTEM_ZOPE=ON
@@ -194,11 +194,13 @@ src_configure() {
 		$(cmake-utils_use mpi VTK_Group_MPI)
 		#$(usex xdmf2 "" "$(cmake-utils_use mpi VTK_XDMF_USE_MPI)")
 		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
+		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
 		$(cmake-utils_use mpi XDMF_BUILD_MPI)
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
 		$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
 		$(cmake-utils_use python VTK_Group_ParaViewPython)
-		$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
+		#$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
+		$(cmake-utils_use python XDMF_WRAP_PYTHON)
 		$(cmake-utils_use python Module_vtkPython)
 		$(cmake-utils_use python Module_pqPython)
 		$(cmake-utils_use python Module_vtkWrappingPythonCore)
@@ -269,12 +271,13 @@ src_configure() {
 		#//)
 		use debug && CMAKE_BUILD_TYPE=Debug;
 		use debug || elog "NoDEBUG";
-		if use xdmf2 ;then
-			mycmakeargs+=(
-			-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
-			-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
-			)
-		fi
+
+		#if use xdmf2 ;then
+		#	mycmakeargs+=(
+		#	-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
+		#	-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
+		#	)
+		#fi
 
 		if use debug ; then
 			filter-flags -O1
