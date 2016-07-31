@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="boost cg coprocessing development doc examples ffmpeg mpi mysql nvcontrol plugins python qt4 sqlite tcl test tk debug xdmf2"
+IUSE="boost cg coprocessing development doc examples ffmpeg mpi mysql nvcontrol plugins python qt5 sqlite tcl test tk debug xdmf2 osmesa"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -48,8 +48,8 @@ RDEPEND="
 	xdmf2? ( sci-libs/xdmf2 )
 	coprocessing? (
 		plugins? (
-			dev-python/PyQt4
-			dev-qt/qtgui:4
+			dev-python/PyQt5
+			dev-qt/qtgui:5
 		)
 	)
 	ffmpeg? ( virtual/ffmpeg )
@@ -63,15 +63,15 @@ RDEPEND="
 		dev-python/twisted-core
 		dev-python/zope-interface[${PYTHON_USEDEP}]
 		mpi? ( dev-python/mpi4py )
-		qt4? ( dev-python/PyQt4[opengl,webkit,${PYTHON_USEDEP}] )
+		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}] )
 	)
-	qt4? (
-		dev-qt/designer:4
-		dev-qt/qtgui:4
-		dev-qt/qtopengl:4
-		dev-qt/qthelp:4[compat]
-		dev-qt/qtsql:4
-		dev-qt/qtwebkit:4
+	qt5? (
+		dev-qt/designer:5
+		dev-qt/qtgui:5
+		dev-qt/qtopengl:5
+		dev-qt/qthelp:5[compat]
+		dev-qt/qtsql:5
+		dev-qt/qtwebkit:5
 		lxqt-base/liblxqt
 	)
 	sqlite? ( dev-db/sqlite:3 )
@@ -142,11 +142,11 @@ src_configure() {
 		-DVTK_USE_SYSTEM_EXPAT=ON
 		-DVTK_USE_SYSTEM_FREETYPE=ON
 		-DVTK_USE_SYSTEM_GL2PS=ON
-		-DVTK_USE_SYSTEM_HDF5=ON
+		-DVTK_USE_SYSTEM_HDF5=OFF
 		-DVTK_USE_SYSTEM_JPEG=ON
 		-DVTK_USE_SYSTEM_JSONCPP=ON
 		-DVTK_USE_SYSTEM_LIBXML2=ON
-		-DVTK_USE_SYSTEM_NETCDF=ON
+		-DVTK_USE_SYSTEM_NETCDF=OFF
 		-DVTK_USE_SYSTEM_OGGTHEORA=ON
 		-DVTK_USE_SYSTEM_PNG=ON
 		-DVTK_USE_SYSTEM_PROTOBUF=ON
@@ -163,26 +163,32 @@ src_configure() {
 		-DVTK_USE_FFMPEG_ENCODER=OFF
 		-DPROTOC_LOCATION=$(type -P protoc)
 		-DVTK_Group_StandAlone=ON
+		-DPARAVIEW_ENABLE_XDMF3=ON
 		# force this module due to incorrect build system deps
 		# wrt bug 460528
 		-DModule_vtkUtilitiesProcessXML=ON
+		#-DVTK_PYTHON_VERSION=3
+		-DPARAVIEW_QT_VERSION=5
+		-DPARAVIEW_USE_OSPRAY=OFF
 		)
 
-	# TODO: XDMF_USE_MYSQL?
-	# VTK_WRAP_JAVA
-	mycmakeargs+=(
+		# TODO: XDMF_USE_MYSQL?
+		# VTK_WRAP_JAVA
+		mycmakeargs+=(
 		$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
-		$(cmake-utils_use qt4 PARAVIEW_BUILD_QT_GUI)
-		$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
-		$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
-		$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
-		$(cmake-utils_use qt4 Module_vtkRenderingQt)
-		$(cmake-utils_use qt4 Module_vtkViewsQt)
-		$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
-		$(cmake-utils_use qt4 VTK_Group_Qt)
-		$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
+		$(cmake-utils_use qt5 PARAVIEW_BUILD_QT_GUI)
+		#$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
+		#$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
+		#$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
+		#$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
+		#$(cmake-utils_use qt4 Module_vtkRenderingQt)
+		#$(cmake-utils_use qt4 Module_vtkViewsQt)
+		#$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
+		#$(cmake-utils_use qt4 VTK_Group_Qt)
+		#$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
 		$(cmake-utils_use boost Module_vtkInfovisBoost)
 		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
+		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI)
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
 		$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
@@ -191,6 +197,7 @@ src_configure() {
 		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
 		$(cmake-utils_use mpi XDMF_BUILD_MPI)
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
+		$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
 		$(cmake-utils_use python VTK_Group_ParaViewPython)
 		$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
 		$(cmake-utils_use python Module_vtkPython)
@@ -201,13 +208,13 @@ src_configure() {
 		$(cmake-utils_use python Module_Twisted)
 		$(cmake-utils_use python Module_ZopeInterface)
 		$(cmake-utils_use python Module_vtkmpi4py)
-		$(usex qt4 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
+		$(usex qt5 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
 		$(cmake-utils_use doc BUILD_DOCUMENTATION)
 		$(cmake-utils_use doc PARAVIEW_BUILD_WEB_DOCUMENTATION)
 		$(cmake-utils_use examples BUILD_EXAMPLES)
 		$(cmake-utils_use cg VTK_USE_CG_SHADERS)
-		$(cmake-utils_use mysql Module_vtkIOMySQL)
-		$(cmake-utils_use sqlite Module_vtksqlite)
+		#$(cmake-utils_use mysql Module_vtkIOMySQL)
+		#$(cmake-utils_use sqlite Module_vtksqlite)
 		$(cmake-utils_use coprocessing PARAVIEW_ENABLE_CATALYST)
 		$(cmake-utils_use ffmpeg PARAVIEW_ENABLE_FFMPEG)
 		$(cmake-utils_use ffmpeg VTK_USE_FFMPEG_ENCODER)
@@ -220,16 +227,16 @@ src_configure() {
 		$(cmake-utils_use test BUILD_TESTING)
 		)
 
-	if use qt4 ; then
-		mycmakeargs+=( -DVTK_INSTALL_QT_DIR=/${PVLIBDIR}/plugins/designer )
-		if use python ; then
-			# paraview cannot guess sip directory properly
-			mycmakeargs+=( -DSIP_INCLUDE_DIR="${EPREFIX}$(python_get_includedir)" )
-		fi
-	fi
+		#if use qt4 ; then
+		#	mycmakeargs+=( -DVTK_INSTALL_QT_DIR=/${PVLIBDIR}/plugins/designer )
+		#	if use python ; then
+		#		# paraview cannot guess sip directory properly
+		#		mycmakeargs+=( -DSIP_INCLUDE_DIR="${EPREFIX}$(python_get_includedir)" )
+		#	fi
+		#fi
 
-	# TODO: MantaView VaporPlugin VRPlugin
-	mycmakeargs+=(
+		# TODO: MantaView VaporPlugin VRPlugin
+		mycmakeargs+=(
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AdiosReader)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ArrowGlyph)
@@ -237,11 +244,12 @@ src_configure() {
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ForceTime)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_GMVReader)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_H5PartReader)
-		$(cmake-utils_use plugins RAVIEW_BUILD_PLUGIN_MobileRemoteControl)
+		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_MobileRemoteControl)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_Moments)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_NonOrthogonalSource)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PacMan)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PointSprite)
+		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PythonQtPlugin)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PrismPlugin)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_QuadView)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SLACTools)
@@ -249,70 +257,73 @@ src_configure() {
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SierraPlotTools)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_StreamingParticles)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SurfaceLIC)
+		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_TemporalParallelismScriptGenerator)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_UncertaintyRendering)
+		#$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VRPlugin)
+		#$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VaporPlugin)
 		# these are always needed for plugins
 		$(cmake-utils_use plugins Module_vtkFiltersFlowPaths)
 		$(cmake-utils_use plugins Module_vtkPVServerManagerApplication)
 		)
-	#//mycmakeargs+=(
-	#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
-	#//)
-	use debug && CMAKE_BUILD_TYPE=Debug;
-	use debug || elog "NoDEBUG";
-	if use xdmf2 ;then
-		mycmakeargs+=(
-		-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
-		-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
-		)
-	fi
+		#//mycmakeargs+=(
+		#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
+		#//)
+		use debug && CMAKE_BUILD_TYPE=Debug;
+		use debug || elog "NoDEBUG";
+		if use xdmf2 ;then
+			mycmakeargs+=(
+			-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
+			-Dxdmf2_DIR:PATH=/usr/share/cmake/Modules
+			)
+		fi
 
-	if use debug ; then
-	filter-flags -O1
-	filter-flags -O2
-	filter-flags -O3
-	append-flags -O0
-	 elog "DEBUG";
-	mycmakeargs+=(
-	 -DCMAKE_CXX_FLAGS_DEBUG=${CXXFLAGS}
-	 -DCMAKE_C_FLAGS_DEBUG=${CFLAGS}
-	 -DCMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=${CXXFLAGS}
-	 -DCMAKE_C_FLAGS_RELWITHDEBINFO:STRING=${CFLAGS}
-	 )
-	fi
+		if use debug ; then
+			filter-flags -O1
+			filter-flags -O2
+			filter-flags -O3
+			append-flags -O0
+			elog "DEBUG";
+			mycmakeargs+=(
+			-DCMAKE_CXX_FLAGS_DEBUG=${CXXFLAGS}
+			-DCMAKE_C_FLAGS_DEBUG=${CFLAGS}
+			-DCMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=${CXXFLAGS}
+			-DCMAKE_C_FLAGS_RELWITHDEBINFO:STRING=${CFLAGS}
+			)
+		fi
 
-	cmake-utils_src_configure
-}
+		cmake-utils_src_configure
+	}
 
-src_compile() {
-	cmake-utils_src_compile
-}
+	src_compile() {
+		cmake-utils_src_compile
+	}
 
-src_install() {
-	cmake-utils_src_install
+	src_install() {
+		cmake-utils_src_install
 
-	# set up the environment
-	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN}
+		# set up the environment
+		echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN}
 
-	newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
-	make_desktop_entry paraview "Paraview" paraview
+		newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
+		make_desktop_entry paraview "Paraview" paraview
 
-	use python && python_optimize "${D}"/usr/$(get_libdir)/${PN}-${MAJOR_PV}
-}
+		use python && python_optimize "${D}"/usr/$(get_libdir)/${PN}-${MAJOR_PV}
+	}
 
-pkg_postinst() {
-	# with Qt4.5 there seem to be issues reading data files
-	# under certain locales. Setting LC_ALL=C should fix these.
-	elog ""
-	elog "If you experience data corruption during parsing of"
-	elog "data files with paraview please try setting your"
-	elog "locale to LC_ALL=C."
-	elog "If you plan to use paraview component from an existing shell"
-	elog "you should run env-update and . /etc/profile first"
-	elog ""
-	elog "paraview no longer exports bundled python modules in PYTHONPATH"
-	elog "globally due to clashes of bundled packages with system-wide"
-	elog "site-packages. If you want to use paraview's python modules"
-	elog "export"
-	elog "  PYTHONPATH=${EPREFIX}/usr/${PVLIBDIR}:${EPREFIX}/usr/${PVLIBDIR}/site-packages"
-	elog "as needed."
-}
+	pkg_postinst() {
+		# with Qt4.5 there seem to be issues reading data files
+		# under certain locales. Setting LC_ALL=C should fix these.
+		elog ""
+		elog "If you experience data corruption during parsing of"
+		elog "data files with paraview please try setting your"
+		elog "locale to LC_ALL=C."
+		elog "If you plan to use paraview component from an existing shell"
+		elog "you should run env-update and . /etc/profile first"
+		elog ""
+		elog "paraview no longer exports bundled python modules in PYTHONPATH"
+		elog "globally due to clashes of bundled packages with system-wide"
+		elog "site-packages. If you want to use paraview's python modules"
+		elog "export"
+		elog "  PYTHONPATH=${EPREFIX}/usr/${PVLIBDIR}:${EPREFIX}/usr/${PVLIBDIR}/site-packages"
+		elog "as needed."
+	}
