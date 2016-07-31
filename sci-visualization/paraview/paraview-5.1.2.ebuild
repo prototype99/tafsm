@@ -69,7 +69,7 @@ RDEPEND="
 		dev-qt/designer:5
 		dev-qt/qtgui:5
 		dev-qt/qtopengl:5
-		dev-qt/qthelp:5[compat]
+		dev-qt/qthelp:5
 		dev-qt/qtsql:5
 		dev-qt/qtwebkit:5
 		lxqt-base/liblxqt
