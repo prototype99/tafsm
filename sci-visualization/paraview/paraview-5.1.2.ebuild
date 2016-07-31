@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="boost cg coprocessing development doc examples ffmpeg mpi mysql nvcontrol plugins python qt5 sqlite tcl test tk debug xdmf2 osmesa"
+IUSE="boost cg coprocessing development doc examples ffmpeg mpi mysql nvcontrol plugins python qt5 sqlite tcl test tk debug osmesa"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -45,7 +45,6 @@ RDEPEND="
 	x11-libs/libXext
 	x11-libs/libXmu
 	x11-libs/libXt
-	xdmf2? ( sci-libs/xdmf2 )
 	coprocessing? (
 		plugins? (
 			dev-python/PyQt5
@@ -99,15 +98,15 @@ src_prepare() {
 #		"${FILESDIR}"/${PN}-4.3.1-protobuf-2.6.patch \
 #		"${FILESDIR}"/${P}-removesqlite.patch
 
-	# lib64 fixes
-	if use xdmf2; then
-		sed -i \
-			-e "s:/usr/lib:${EPREFIX}/usr/$(get_libdir):g" \
-			 VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/CMakeLists.txt || die
-		sed -i \
-			-e "s:\/lib\/python:\/$(get_libdir)\/python:g" \
-			 VTK/ThirdParty/xdmf2/vtkxdmf2/CMake/setup_install_paths.py || die
-	fi
+	## lib64 fixes
+	#if use xdmf2; then
+	#	sed -i \
+	#		-e "s:/usr/lib:${EPREFIX}/usr/$(get_libdir):g" \
+	#		 VTK/ThirdParty/xdmf2/vtkxdmf2/libsrc/CMakeLists.txt || die
+	#	sed -i \
+	#		-e "s:\/lib\/python:\/$(get_libdir)\/python:g" \
+	#		 VTK/ThirdParty/xdmf2/vtkxdmf2/CMake/setup_install_paths.py || die
+	#fi
 
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
