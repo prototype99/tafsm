@@ -249,7 +249,7 @@ src_configure() {
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_NonOrthogonalSource)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PacMan)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PointSprite)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PythonQtPlugin)
+		#$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PythonQtPlugin)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PrismPlugin)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_QuadView)
 		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SLACTools)
