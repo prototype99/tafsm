@@ -34,7 +34,7 @@ RDEPEND="
 	media-libs/libpng:0
 	media-libs/libtheora
 	media-libs/tiff:0=
-	sci-libs/hdf5[mpi=]
+	#sci-libs/hdf5[mpi=]
 	>=sci-libs/netcdf-4.2[hdf5]
 	>=sci-libs/netcdf-cxx-4.2:3
 	sys-libs/zlib
@@ -143,7 +143,7 @@ src_configure() {
 		-DVTK_USE_SYSTEM_GL2PS=ON
 		-DVTK_USE_SYSTEM_HDF5=OFF
 		-DVTK_USE_SYSTEM_JPEG=ON
-		-DVTK_USE_SYSTEM_JSONCPP=ON
+		-DVTK_USE_SYSTEM_JSONCPP=OFF
 		-DVTK_USE_SYSTEM_LIBXML2=ON
 		-DVTK_USE_SYSTEM_NETCDF=OFF
 		-DVTK_USE_SYSTEM_OGGTHEORA=ON
