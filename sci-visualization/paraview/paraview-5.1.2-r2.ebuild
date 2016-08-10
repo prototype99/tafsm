@@ -187,17 +187,18 @@ src_configure() {
 		)
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
+			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
 		fi
 		if use qt5 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=5 )
+			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
 		fi
 
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
 		$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
-		$(cmake-utils_use qt4 PARAVIEW_BUILD_QT_GUI)
-		$(cmake-utils_use qt5 PARAVIEW_BUILD_QT_GUI)
+
 		$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
 		$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
 		$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
