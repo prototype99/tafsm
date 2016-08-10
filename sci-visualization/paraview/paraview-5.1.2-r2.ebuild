@@ -198,6 +198,7 @@ src_configure() {
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
 		$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
+		$(cmake-utils_use qt4 PARAVIEW_BUILD_QT_GUI)
 		$(cmake-utils_use qt5 PARAVIEW_BUILD_QT_GUI)
 		#$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
 		#$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
@@ -232,6 +233,7 @@ src_configure() {
 		$(cmake-utils_use python Module_ZopeInterface)
 		$(cmake-utils_use python Module_vtkmpi4py)
 		$(usex qt5 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
+		$(usex qt4 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
 		$(cmake-utils_use doc BUILD_DOCUMENTATION)
 		$(cmake-utils_use doc PARAVIEW_BUILD_WEB_DOCUMENTATION)
 		$(cmake-utils_use examples BUILD_EXAMPLES)
