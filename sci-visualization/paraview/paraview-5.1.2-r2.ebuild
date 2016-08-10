@@ -35,8 +35,6 @@ RDEPEND="
 	media-libs/libpng:0
 	media-libs/libtheora
 	media-libs/tiff:0=
-	>=sci-libs/netcdf-4.2[hdf5]
-	>=sci-libs/netcdf-cxx-4.2:3
 	sys-libs/zlib
 	virtual/jpeg:0
 	virtual/opengl
@@ -200,14 +198,14 @@ src_configure() {
 		$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
 		$(cmake-utils_use qt4 PARAVIEW_BUILD_QT_GUI)
 		$(cmake-utils_use qt5 PARAVIEW_BUILD_QT_GUI)
-		#$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
-		#$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
-		#$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
-		#$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
-		#$(cmake-utils_use qt4 Module_vtkRenderingQt)
-		#$(cmake-utils_use qt4 Module_vtkViewsQt)
-		#$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
-		#$(cmake-utils_use qt4 VTK_Group_Qt)
+		$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
+		$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
+		$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
+		$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
+		$(cmake-utils_use qt4 Module_vtkRenderingQt)
+		$(cmake-utils_use qt4 Module_vtkViewsQt)
+		$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
+		$(cmake-utils_use qt4 VTK_Group_Qt)
 		#$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
 		$(cmake-utils_use boost Module_vtkInfovisBoost)
 		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
