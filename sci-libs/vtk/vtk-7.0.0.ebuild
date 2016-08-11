@@ -339,7 +339,7 @@ src_test() {
 src_install() {
 	use web && webapp_src_preinst
 	# install docs
-	HTML_DOCS=( "${S}"/README.html )
+	#HTML_DOCS=( "${S}"/README.html )
 
 	cmake-utils_src_install
 
