@@ -34,7 +34,6 @@ RDEPEND="
 	media-libs/libpng:0
 	media-libs/libtheora
 	media-libs/tiff:0=
-	#sci-libs/hdf5[mpi=]
 	>=sci-libs/netcdf-4.2[hdf5]
 	>=sci-libs/netcdf-cxx-4.2:3
 	sys-libs/zlib
