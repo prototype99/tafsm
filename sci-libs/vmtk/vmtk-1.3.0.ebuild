@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=6
-inherit eutils flag-o-matic toolchain-funcs cmake-utils versionator git-r3
+inherit eutils flag-o-matic toolchain-funcs cmake-utils versionator git-r3 python-any-r1
 
 DESCRIPTION="Segmentation of vascular segments (or other anatomical structures)
 from medical images:
