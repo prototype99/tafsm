@@ -3,7 +3,10 @@
 # $Header: $
 
 EAPI=6
-inherit eutils flag-o-matic toolchain-funcs cmake-utils versionator git-r3 python-any-r1
+PYTHON_COMPAT=( python2_7 )
+
+#inherit eutils flag-o-matic toolchain-funcs cmake-utils versionator git-r3 python-r1
+inherit cmake-utils git-r3 python-r1
 
 DESCRIPTION="Segmentation of vascular segments (or other anatomical structures)
 from medical images:
@@ -25,14 +28,11 @@ SLOT="0"
 KEYWORDS="amd64"
 #IUSE="vtk"
 
-DEPEND="
+DEPEND="$(python_gen_cond_dep \
+	  'dev-python/unittest2[${PYTHON_USEDEP}]' python2_7 )
 		>=dev-util/cmake-2.8
-		>=dev-lang/python-2.7
 "
 
-RDEPEND="
-		>=dev-lang/python-2.7
-"
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
 EGIT_COMMIT="v$(get_version_component_range 1-2 $PV)"
 #EGIT_MASTER="vtk"
@@ -69,8 +69,9 @@ src_configure() {
 		-DVMTK_WITH_LIBRARY_VERSION=ON
 		-DBUILD_SHARED_LIBS=ON
 		-DUSE_SYSTEM_ITK=NO 
-		-DITK_USE_FLAT_DIRECTORY_INSTALL=OFF
+		-DUSE_SYSTEM_VTK=NO 
 		)
+		#-DITK_USE_FLAT_DIRECTORY_INSTALL=OFF
 	#if use vtk; then
 	#	mycmakeargs+=(-DUSE_SYSTEM_VTK=ON )
 	#fi
