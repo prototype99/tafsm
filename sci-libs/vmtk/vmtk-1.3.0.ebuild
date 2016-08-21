@@ -31,6 +31,7 @@ KEYWORDS="amd64"
 DEPEND="$(python_gen_cond_dep \
 	  'dev-python/unittest2[${PYTHON_USEDEP}]' python2_7 )
 		>=dev-util/cmake-2.8
+		>=sci-libs/vtk-7.0.0
 "
 
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
