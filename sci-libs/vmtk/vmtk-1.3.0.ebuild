@@ -36,7 +36,7 @@ DEPEND="$(python_gen_cond_dep \
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
 EGIT_COMMIT="v$(get_version_component_range 1-2 $PV)"
 #EGIT_MASTER="vtk"
-PYTHON_MODNAME="vmtk"
+#PYTHON_MODNAME="vmtk"
 RDEPEND="${DEPEND}"
 #src_prepare() {
 #	:
@@ -96,18 +96,6 @@ src_install() {
 		doins $f 
 	done
 
-	#python_foreach_impl installation
-	insinto $(python_get_sitedir)/vmtk
-	find "lib/vmtk/vmtk" -type f | while read f ; do
-		doins ${f}
-	done
-	find "lib/vmtk/" -type f -name "vtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
-		doins $f
-	done
-
-	find "lib/vmtk/" -type f -name "lib*" -maxdepth 1 -not -name "*.py" | while read f ; do
-		dolib $f
-	done
 
 
 #dobin Install/bin/vmtk
@@ -117,6 +105,20 @@ src_install() {
 	done
 	doexe bin/vmtk
 	dosym ${EPREFIX}/usr/share/${P}/bin/vmtk ${EPREFIX}/usr/bin/vmtk
+
+	#python_foreach_impl installation
+	#elog "$(python_get_sitedir)/vmtk"
+	insinto "/usr/lib/python2.7/site-packages/vmtk"
+	find "lib/python2.7/site-packages/vmtk" -type f | while read f ; do
+		doins ${f}
+	done
+	find "lib/python2.7/site-packages/vmtk/" -type f -name "vtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
+		doins $f
+	done
+
+	#find "lib/python2_7/site-packages/vmtk/" -type f -name "lib*" -maxdepth 1 -not -name "*.py" | while read f ; do
+	#	dolib $f
+	#done
 
 #	if use vtk ; then
 #		:
