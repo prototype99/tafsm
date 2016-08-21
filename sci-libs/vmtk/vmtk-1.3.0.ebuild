@@ -84,13 +84,20 @@ src_install() {
 
 
 #into /usr/$(get_libdir)/ITK
-	insinto "${EPREFIX}/usr/share/${P}/lib/InsightToolkit"
+	insinto "${EPREFIX}/usr/share/${P}/$(get_libdir)/InsightToolkit"
 	find "lib" -type f -name "libITK*" | while read f ; do
 	elog "Install: ${f}"
 		doins $f 
 	done
 
 	find "lib" -type f -name "libitk*" | while read f ; do
+#dolib $f 
+	elog "Install: ${f}"
+		doins $f 
+	done
+
+	insinto "${EPREFIX}/usr/$(get_libdir)"
+	find "lib" -type f -name "libvtkvmtk*" | while read f ; do
 #dolib $f 
 	elog "Install: ${f}"
 		doins $f 
@@ -108,11 +115,11 @@ src_install() {
 
 	#python_foreach_impl installation
 	#elog "$(python_get_sitedir)/vmtk"
-	insinto "/usr/lib/python2.7/site-packages/vmtk"
+	insinto "/usr/$(get_libdir)/python2.7/site-packages/vmtk"
 	find "lib/python2.7/site-packages/vmtk" -type f | while read f ; do
 		doins ${f}
 	done
-	find "lib/python2.7/site-packages/vmtk/" -type f -name "vtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
+	find "lib/python2.7/site-packages/vmtk/" -type f -name "vtkvmtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
 		doins $f
 	done
 
