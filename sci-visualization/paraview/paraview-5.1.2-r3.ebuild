@@ -38,7 +38,7 @@ RDEPEND="
 	sys-libs/zlib
 	virtual/jpeg:0
 	virtual/opengl
-	>=x11-libs/gl2ps-1.3.8
+	!opengl2? (>=x11-libs/gl2ps-1.3.8)
 	x11-libs/libX11
 	x11-libs/libXext
 	x11-libs/libXmu
@@ -154,7 +154,6 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=ON
 		-DVTK_USE_SYSTEM_EXPAT=ON
 		-DVTK_USE_SYSTEM_FREETYPE=ON
-		-DVTK_USE_SYSTEM_GL2PS=ON
 		-DVTK_USE_SYSTEM_HDF5=OFF
 		-DVTK_USE_SYSTEM_JPEG=ON
 		-DVTK_USE_SYSTEM_JSONCPP=OFF
@@ -195,8 +194,10 @@ src_configure() {
 		fi
 		if use opengl2; then
 			mycmakeargs+=( -DVTK_RENDERING_BACKEND:STRING=OpenGL2 )
+			mycmakeargs+=( -DVTK_USE_SYSTEM_GL2PS=OFF )
 		else
 			mycmakeargs+=( -DVTK_RENDERING_BACKEND:STRING=OpenGL )
+			mycmakeargs+=( -DVTK_USE_SYSTEM_GL2PS=ON )
 		fi
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
