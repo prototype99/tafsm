@@ -38,7 +38,7 @@ RDEPEND="
 	sys-libs/zlib
 	virtual/jpeg:0
 	virtual/opengl
-	!opengl2? (>=x11-libs/gl2ps-1.3.8)
+	!opengl2? ( >=x11-libs/gl2ps-1.3.8 )
 	x11-libs/libX11
 	x11-libs/libXext
 	x11-libs/libXmu
