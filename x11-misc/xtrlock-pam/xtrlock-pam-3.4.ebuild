@@ -5,7 +5,7 @@
 EAPI=6
 inherit git-r3
 
-DESCRIPTION=""
+DESCRIPTION="xtrlock-pam is PAM based X11 screen locker that hides desktop content."
 HOMEPAGE="http://aanatoly.github.io/xtrlock-pam"
 EGIT_REPO_URI="https://github.com/aanatoly/xtrlock-pam"
 EGIT_TAG="3.4"
