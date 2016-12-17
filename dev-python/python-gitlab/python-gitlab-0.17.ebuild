@@ -11,9 +11,9 @@ DESCRIPTION="python-gitlab is a Python package providing access to the GitLab se
 It supports the v3 api of GitLab, and provides a CLI tool (gitlab)."
 
 HOMEPAGE="https://github.com/gpocentek/python-gitlab"
-SRC_URI=""
+SRC_URI="https://github.com/gpocentek/python-gitlab/archive/${PV}.tar.gz"
 
-LICENSE=""
+LICENSE="LGPL-3.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
