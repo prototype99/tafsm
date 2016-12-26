@@ -83,7 +83,7 @@ src_cross_configure(){
 
 	CFLAGS="$CFLAGS -m32"
 	CXXFLAGS="$CXXFLAGS -m32"
-	LDFLAGS="$LDFLAGS -m32 -L/usr/lib32/qt4 -L/usr/lib32"
+	#LDFLAGS="$LDFLAGS -m32 -L/usr/lib32/qt4 -L/usr/lib32"
 
 	local mycmakeargs="
 		-DSYSCONFDIR=/etc
