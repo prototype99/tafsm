@@ -21,7 +21,9 @@ KEYWORDS="amd64"
 IUSE="doc"
 
 
-RDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]"
+RDEPEND="dev-python/setuptools[${PYTHON_USEDEP}]
+	x11-misc/xclip
+"
 DEPEND="${RDEPEND}"
 S="${WORKDIR}/${PN}-${SHA}"
 
