@@ -3,13 +3,15 @@
 # $Header: $
 
 EAPI=5
+#inherit distutils versionator git-r3
 inherit distutils versionator
 
 DESCRIPTION=""
 HOMEPAGE="http://www.openvdb.org/"
-MY_PV=$(replace_all_version_separators  '_')
-MY_P="${PN}_${MY_PV}"
-SRC_URI="http://www.openvdb.org/download/${MY_P}_library.zip"
+#MY_PV=$(replace_all_version_separators  '_')
+#MY_P="${PN}_${MY_PV}"
+SRC_URI="https://github.com/dreamworksanimation/openvdb/archive/v${PV}.tar.gz"
+#EGIT_REPO_URI="https://github.com/dreamworksanimation/openvdb"
 
 LICENSE="Mozilla Public License Version 2.0"
 SLOT="0"
@@ -31,7 +33,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-S="${WORKDIR}"/"${P}"
+S="${WORKDIR}"/"${P}/${PN}"
 
 src_configure(){
 	epatch "${FILESDIR}/gentoo-install.patch"
