@@ -3,9 +3,10 @@
 # $Header: $
 
 EAPI=5
-PYTHON_COMPAT=( python2_7 python3_4 )
 
-inherit distutils
+PYTHON_COMPAT=( python2_7 python3_{4,5} )
+
+inherit distutils-r1
 
 DESCRIPTION="Read, modify and write DICOM files with python code"
 HOMEPAGE="https://github.com/darcymason/pydicom"
@@ -15,15 +16,11 @@ LICENSE="MIT"
 SLOT="0"
 KEYWORDS="amd64"
 IUSE=""
-REQUIRED_USE="                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 "
 RDEPEND="
-	${PYTHON_DEPS}
+	dev-python/setuptools[${PYTHON_USEDEP}]
 "
-
-DEPEND=""
-
-#src_install() {
-#	distutils_src_install
-#}
+DEPEND="${RDEPEND}
+"
