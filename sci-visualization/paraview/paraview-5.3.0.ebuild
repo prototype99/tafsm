@@ -77,6 +77,7 @@ RDEPEND="
 		dev-qt/qtsql:5
 		dev-qt/qtwebkit:5
 		dev-qt/qttest:5
+		dev-qt/qtxmlpatterns:5
 		lxqt-base/liblxqt
 	)
 	qt4? (
@@ -188,10 +189,14 @@ src_configure() {
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
+			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:PATH=/usr/lib/qt4/bin/qmake )
 		fi
 		if use qt5 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=5 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
+			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:PATH=/usr/lib/qt5/bin/qmake )
+			mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:PATH=/usr/lib/qt5/bin/xmlpatterns )
+			mycmakeargs+=( -DQT_HELP_GENERATOR:PATH=/usr/lib/qt5/bin/qhelpconverter )
 		fi
 
 		# TODO: XDMF_USE_MYSQL?
