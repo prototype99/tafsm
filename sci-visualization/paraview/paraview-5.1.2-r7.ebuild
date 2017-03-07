@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="boost cg coprocessing development doc examples mpi mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa opengl2"
+IUSE="cg coprocessing development doc examples mpi mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa opengl2"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -64,7 +64,6 @@ RDEPEND="
 		dev-python/sip[${PYTHON_USEDEP}]
 		dev-python/twisted-core
 		dev-python/zope-interface[${PYTHON_USEDEP}]
-		mpi? ( dev-python/mpi4py )
 		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}] )
 		qt4? ( dev-python/PyQt4[opengl,webkit,${PYTHON_USEDEP}] )
 	)
@@ -93,7 +92,6 @@ RDEPEND="
 	tk? ( dev-lang/tk:0= )"
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
-	boost? ( >=dev-libs/boost-1.40.0[${PYTHON_USEDEP}] )
 	doc? ( app-doc/doxygen )"
 
 S="${WORKDIR}/${MY_P}"
@@ -166,7 +164,7 @@ src_configure() {
 		-DVTK_USE_SYSTEM_TIFF=ON
 		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
 		-DVTK_USE_SYSTEM_ZLIB=ON
-		-DPARAVIEW_USE_SYSTEM_MPI4PY=ON
+		-DPARAVIEW_USE_SYSTEM_MPI4PY=NO
 		-DVTK_USE_SYSTEM_ZOPE=ON
 		-DVTK_USE_SYSTEM_TWISTED=ON
 		-DCMAKE_VERBOSE_MAKEFILE=ON
@@ -214,9 +212,9 @@ src_configure() {
 		$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
 		$(cmake-utils_use qt4 VTK_Group_Qt)
 		#$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
-		$(cmake-utils_use boost Module_vtkInfovisBoost)
-		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
-		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
+		#$(cmake-utils_use boost Module_vtkInfovisBoost)
+		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
+		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI)
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
 		$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)

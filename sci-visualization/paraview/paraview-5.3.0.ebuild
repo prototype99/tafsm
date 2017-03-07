@@ -66,7 +66,6 @@ RDEPEND="
 		dev-python/sip[${PYTHON_USEDEP}]
 		dev-python/twisted-core
 		dev-python/zope-interface[${PYTHON_USEDEP}]
-		mpi? ( dev-python/mpi4py )
 		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}] )
 		qt4? ( dev-python/PyQt4[opengl,webkit,${PYTHON_USEDEP}] )
 	)
@@ -100,6 +99,7 @@ DEPEND="${RDEPEND}
 #OLDUSE
 #ffmpeg? ( virtual/ffmpeg )
 #boost? ( >=dev-libs/boost-1.40.0[${PYTHON_USEDEP}] )
+#mpi? ( dev-python/mpi4py )
 
 S="${WORKDIR}/${MY_P}"
 
@@ -162,11 +162,11 @@ src_configure() {
 		-DVTK_USE_SYSTEM_NETCDF=OFF
 		#-DVTK_USE_SYSTEM_OGGTHEORA=ON
 		#-DVTK_USE_SYSTEM_PNG=ON
-		#-DVTK_USE_SYSTEM_PROTOBUF=ON
+		-DVTK_USE_SYSTEM_PROTOBUF=OFF
 		#-DVTK_USE_SYSTEM_TIFF=ON
 		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
 		#-DVTK_USE_SYSTEM_ZLIB=ON
-		#-DPARAVIEW_USE_SYSTEM_MPI4PY=ON
+		-DPARAVIEW_USE_SYSTEM_MPI4PY=OFF
 		#-DVTK_USE_SYSTEM_ZOPE=ON
 		#-DVTK_USE_SYSTEM_TWISTED=ON
 		-DCMAKE_VERBOSE_MAKEFILE=ON
