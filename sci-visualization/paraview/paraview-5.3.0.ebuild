@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="boost cg coprocessing development doc examples ffmpeg mpi mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
+IUSE="cg coprocessing development doc examples mpi mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -46,17 +46,17 @@ RDEPEND="
 	x11-libs/libXt
 	coprocessing? (
 		plugins? (
-		qt4? (
-			dev-python/PyQt4
-			dev-qt/qtgui:4
-			)
-		qt5? (
-			dev-python/PyQt5
-			dev-qt/qtgui:5
+			qt4? (
+				dev-python/PyQt4
+				dev-qt/qtgui:4
+				
+			qt5? (
+				dev-python/PyQt5
+				dev-qt/qtgui:5
+				)
 			)
 		)
 	)
-	ffmpeg? ( virtual/ffmpeg )
 	mpi? ( virtual/mpi[cxx,romio] )
 	mysql? ( virtual/mysql )
 	python? (
@@ -95,8 +95,11 @@ RDEPEND="
 	tk? ( dev-lang/tk:0= )"
 DEPEND="${RDEPEND}
 	${PYTHON_DEPS}
-	boost? ( >=dev-libs/boost-1.40.0[${PYTHON_USEDEP}] )
 	doc? ( app-doc/doxygen )"
+
+#OLDUSE
+#ffmpeg? ( virtual/ffmpeg )
+#boost? ( >=dev-libs/boost-1.40.0[${PYTHON_USEDEP}] )
 
 S="${WORKDIR}/${MY_P}"
 
@@ -149,23 +152,23 @@ src_configure() {
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		-DBUILD_SHARED_LIBS=ON
-		-DVTK_USE_SYSTEM_EXPAT=ON
-		-DVTK_USE_SYSTEM_FREETYPE=ON
+		#-DVTK_USE_SYSTEM_EXPAT=ON
+		#-DVTK_USE_SYSTEM_FREETYPE=ON
 		#-DVTK_USE_SYSTEM_GL2PS=ON
 		-DVTK_USE_SYSTEM_HDF5=OFF
-		-DVTK_USE_SYSTEM_JPEG=ON
+		#-DVTK_USE_SYSTEM_JPEG=ON
 		-DVTK_USE_SYSTEM_JSONCPP=OFF
-		-DVTK_USE_SYSTEM_LIBXML2=ON
+		#-DVTK_USE_SYSTEM_LIBXML2=ON
 		-DVTK_USE_SYSTEM_NETCDF=OFF
-		-DVTK_USE_SYSTEM_OGGTHEORA=ON
-		-DVTK_USE_SYSTEM_PNG=ON
-		-DVTK_USE_SYSTEM_PROTOBUF=ON
-		-DVTK_USE_SYSTEM_TIFF=ON
+		#-DVTK_USE_SYSTEM_OGGTHEORA=ON
+		#-DVTK_USE_SYSTEM_PNG=ON
+		#-DVTK_USE_SYSTEM_PROTOBUF=ON
+		#-DVTK_USE_SYSTEM_TIFF=ON
 		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
-		-DVTK_USE_SYSTEM_ZLIB=ON
-		-DPARAVIEW_USE_SYSTEM_MPI4PY=ON
-		-DVTK_USE_SYSTEM_ZOPE=ON
-		-DVTK_USE_SYSTEM_TWISTED=ON
+		#-DVTK_USE_SYSTEM_ZLIB=ON
+		#-DPARAVIEW_USE_SYSTEM_MPI4PY=ON
+		#-DVTK_USE_SYSTEM_ZOPE=ON
+		#-DVTK_USE_SYSTEM_TWISTED=ON
 		-DCMAKE_VERBOSE_MAKEFILE=ON
 		-DCMAKE_COLOR_MAKEFILE=TRUE
 		-DVTK_USE_OFFSCREEN=TRUE
@@ -205,9 +208,9 @@ src_configure() {
 		$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
 		$(cmake-utils_use qt4 VTK_Group_Qt)
 		#$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
-		$(cmake-utils_use boost Module_vtkInfovisBoost)
-		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
-		$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
+		#$(cmake-utils_use boost Module_vtkInfovisBoost)
+		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
+		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI)
 		$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
 		$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
@@ -237,9 +240,9 @@ src_configure() {
 		#$(cmake-utils_use mysql Module_vtkIOMySQL)
 		#$(cmake-utils_use sqlite Module_vtksqlite)
 		$(cmake-utils_use coprocessing PARAVIEW_ENABLE_CATALYST)
-		$(cmake-utils_use ffmpeg PARAVIEW_ENABLE_FFMPEG)
-		$(cmake-utils_use ffmpeg VTK_USE_FFMPEG_ENCODER)
-		$(cmake-utils_use ffmpeg Module_vtkIOFFMPEG)
+		#$(cmake-utils_use ffmpeg PARAVIEW_ENABLE_FFMPEG)
+		#$(cmake-utils_use ffmpeg VTK_USE_FFMPEG_ENCODER)
+		#$(cmake-utils_use ffmpeg Module_vtkIOFFMPEG)
 		$(cmake-utils_use tk VTK_Group_Tk)
 		$(cmake-utils_use tk VTK_USE_TK)
 		$(cmake-utils_use tk Module_vtkRenderingTk)
@@ -313,6 +316,7 @@ src_configure() {
 			)
 		fi
 
+		cmake-utils_src_configure
 		cmake-utils_src_configure
 	}
 
