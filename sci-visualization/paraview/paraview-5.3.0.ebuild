@@ -65,7 +65,6 @@ RDEPEND="
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/sip[${PYTHON_USEDEP}]
 		dev-python/twisted-core
-		dev-python/zope-interface[${PYTHON_USEDEP}]
 		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}] )
 		qt4? ( dev-python/PyQt4[opengl,webkit,${PYTHON_USEDEP}] )
 	)
@@ -101,6 +100,7 @@ DEPEND="${RDEPEND}
 #ffmpeg? ( virtual/ffmpeg )
 #boost? ( >=dev-libs/boost-1.40.0[${PYTHON_USEDEP}] )
 #mpi? ( dev-python/mpi4py )
+#dev-python/zope-interface[${PYTHON_USEDEP}]
 
 S="${WORKDIR}/${MY_P}"
 
@@ -169,6 +169,7 @@ src_configure() {
 		#-DVTK_USE_SYSTEM_ZLIB=ON
 		-DPARAVIEW_USE_SYSTEM_MPI4PY=OFF
 		#-DVTK_USE_SYSTEM_ZOPE=ON
+		-DVTK_USE_SYSTEM_ZOPE=OFF
 		#-DVTK_USE_SYSTEM_TWISTED=ON
 		-DCMAKE_VERBOSE_MAKEFILE=ON
 		-DCMAKE_COLOR_MAKEFILE=TRUE
@@ -181,7 +182,7 @@ src_configure() {
 		-DPARAVIEW_ENABLE_XDMF3=OFF
 		# force this module due to incorrect build system deps
 		# wrt bug 460528
-		-DModule_vtkUtilitiesProcessXML=ON
+		#-DModule_vtkUtilitiesProcessXML=ON
 		#-DVTK_PYTHON_VERSION=3
 		#-DPARAVIEW_QT_VERSION=5
 		-DPARAVIEW_USE_OSPRAY=OFF
@@ -189,71 +190,71 @@ src_configure() {
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
-			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:PATH=/usr/lib/qt4/bin/qmake )
+			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:FILEPATH=/usr/lib/qt4/bin/qmake )
 		fi
 		if use qt5 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=5 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
-			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:PATH=/usr/lib/qt5/bin/qmake )
-			mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:PATH=/usr/lib/qt5/bin/xmlpatterns )
-			mycmakeargs+=( -DQT_HELP_GENERATOR:PATH=/usr/lib/qt5/bin/qhelpconverter )
+			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:FILEPATH=/usr/lib/qt5/bin/qmake )
+			mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:FILEPATH=/usr/lib/qt5/bin/xmlpatterns )
+			mycmakeargs+=( -DQT_HELP_GENERATOR:FILEPATH=/usr/lib/qt5/bin/qhelpgenerator)
 		fi
 
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
-		$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
+		#$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
 
-		$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
-		$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
-		$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
-		$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
-		$(cmake-utils_use qt4 Module_vtkRenderingQt)
-		$(cmake-utils_use qt4 Module_vtkViewsQt)
-		$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
-		$(cmake-utils_use qt4 VTK_Group_Qt)
+		#$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
+		#$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
+		#$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
+		#$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
+		#$(cmake-utils_use qt4 Module_vtkRenderingQt)
+		#$(cmake-utils_use qt4 Module_vtkViewsQt)
+		#$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
+		#$(cmake-utils_use qt4 VTK_Group_Qt)
 		#$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
 		#$(cmake-utils_use boost Module_vtkInfovisBoost)
 		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
 		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
-		$(cmake-utils_use mpi PARAVIEW_USE_MPI)
-		$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
-		$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
-		$(cmake-utils_use mpi VTK_Group_MPI)
+		#$(cmake-utils_use mpi PARAVIEW_USE_MPI)
+		#$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
+		#$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
+		#$(cmake-utils_use mpi VTK_Group_MPI)
 		#$(usex xdmf2 "" "$(cmake-utils_use mpi VTK_XDMF_USE_MPI)")
-		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
-		$(cmake-utils_use mpi XDMF_BUILD_MPI)
+		#$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
+		#$(cmake-utils_use mpi XDMF_BUILD_MPI)
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
-		$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
-		$(cmake-utils_use python VTK_Group_ParaViewPython)
+		#$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
+		#$(cmake-utils_use python VTK_Group_ParaViewPython)
 		#$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
-		$(cmake-utils_use python XDMF_WRAP_PYTHON)
+		#$(cmake-utils_use python XDMF_WRAP_PYTHON) #??
 		$(cmake-utils_use python Module_vtkPython)
 		$(cmake-utils_use python Module_pqPython)
 		$(cmake-utils_use python Module_vtkWrappingPythonCore)
 		$(cmake-utils_use python Module_vtkPVPythonSupport)
-		$(cmake-utils_use python Module_AutobahnPython)
-		$(cmake-utils_use python Module_Twisted)
-		$(cmake-utils_use python Module_ZopeInterface)
-		$(cmake-utils_use python Module_vtkmpi4py)
-		$(usex qt5 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
-		$(usex qt4 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
+		#$(cmake-utils_use python Module_AutobahnPython)
+		#$(cmake-utils_use python Module_Twisted)
+		#$(cmake-utils_use python Module_ZopeInterface)
+		#$(cmake-utils_use python Module_vtkmpi4py)
+		#$(usex qt5 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
+		#$(usex qt4 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
 		$(cmake-utils_use doc BUILD_DOCUMENTATION)
 		$(cmake-utils_use doc PARAVIEW_BUILD_WEB_DOCUMENTATION)
 		$(cmake-utils_use examples BUILD_EXAMPLES)
-		$(cmake-utils_use cg VTK_USE_CG_SHADERS)
+		#$(cmake-utils_use cg VTK_USE_CG_SHADERS)
 		#$(cmake-utils_use mysql Module_vtkIOMySQL)
 		#$(cmake-utils_use sqlite Module_vtksqlite)
-		$(cmake-utils_use coprocessing PARAVIEW_ENABLE_CATALYST)
+		#$(cmake-utils_use coprocessing PARAVIEW_ENABLE_CATALYST)
 		#$(cmake-utils_use ffmpeg PARAVIEW_ENABLE_FFMPEG)
 		#$(cmake-utils_use ffmpeg VTK_USE_FFMPEG_ENCODER)
 		#$(cmake-utils_use ffmpeg Module_vtkIOFFMPEG)
-		$(cmake-utils_use tk VTK_Group_Tk)
-		$(cmake-utils_use tk VTK_USE_TK)
-		$(cmake-utils_use tk Module_vtkRenderingTk)
-		$(cmake-utils_use tcl Module_vtkTclTk)
-		$(cmake-utils_use tcl Module_vtkWrappingTcl)
-		$(cmake-utils_use test BUILD_TESTING)
+		#$(cmake-utils_use tk VTK_Group_Tk)
+		#$(cmake-utils_use tk VTK_USE_TK)
+		#$(cmake-utils_use tk Module_vtkRenderingTk)
+		#$(cmake-utils_use tcl Module_vtkTclTk)
+		#$(cmake-utils_use tcl Module_vtkWrappingTcl)
+		#$(cmake-utils_use test BUILD_TESTING)
 		)
 
 		#if use qt4 ; then
@@ -266,33 +267,33 @@ src_configure() {
 
 		# TODO: MantaView VaporPlugin VRPlugin
 		mycmakeargs+=(
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AdiosReader)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ArrowGlyph)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_EyeDomeLighting)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ForceTime)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_GMVReader)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_H5PartReader)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_MobileRemoteControl)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_Moments)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_NonOrthogonalSource)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PacMan)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PointSprite)
-		#$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PythonQtPlugin)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PrismPlugin)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_QuadView)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SLACTools)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SciberQuestToolKit)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SierraPlotTools)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_StreamingParticles)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SurfaceLIC)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_TemporalParallelismScriptGenerator)
-		$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_UncertaintyRendering)
-		#$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VRPlugin)
-		#$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VaporPlugin)
-		# these are always needed for plugins
-		$(cmake-utils_use plugins Module_vtkFiltersFlowPaths)
-		$(cmake-utils_use plugins Module_vtkPVServerManagerApplication)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AdiosReader)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ArrowGlyph)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_EyeDomeLighting)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ForceTime)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_GMVReader)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_H5PartReader)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_MobileRemoteControl)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_Moments)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_NonOrthogonalSource)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PacMan)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PointSprite)
+		## #$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PythonQtPlugin)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PrismPlugin)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_QuadView)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SLACTools)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SciberQuestToolKit)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SierraPlotTools)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_StreamingParticles)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SurfaceLIC)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_TemporalParallelismScriptGenerator)
+		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_UncertaintyRendering)
+		## #$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VRPlugin)
+		## #$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VaporPlugin)
+		## # these are always needed for plugins
+		## $(cmake-utils_use plugins Module_vtkFiltersFlowPaths)
+		## $(cmake-utils_use plugins Module_vtkPVServerManagerApplication)
 		)
 		#//mycmakeargs+=(
 		#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
@@ -321,7 +322,6 @@ src_configure() {
 			)
 		fi
 
-		cmake-utils_src_configure
 		cmake-utils_src_configure
 	}
 
