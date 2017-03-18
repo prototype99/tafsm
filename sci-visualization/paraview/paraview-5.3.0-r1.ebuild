@@ -190,11 +190,11 @@ src_configure() {
 		#-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
 		-DModule_vtkDICOM:BOOL=ON
 		-DModule_vtkFiltersImaging:BOOL=ON
-		-DModule_vtkFiltersParallelImaging:BOOL=ON 
-		-DModule_vtkFiltersParallelMPI:BOOL=ON 
-		-DModule_vtkFiltersSMP:BOOL=ON
+		#-DModule_vtkFiltersParallelImaging:BOOL=ON 
+		#-DModule_vtkFiltersParallelMPI:BOOL=ON 
+		#-DModule_vtkFiltersSMP:BOOL=ON
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
-		-DModule_vtkIOMPIImage:BOOL=ON
+		#-DModule_vtkIOMPIImage:BOOL=ON
 		)
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
