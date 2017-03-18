@@ -234,7 +234,7 @@ src_configure() {
 		#$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
 		#$(cmake-utils_use mpi XDMF_BUILD_MPI)
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
-		$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
+		#$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
 		#$(cmake-utils_use python VTK_Group_ParaViewPython)
 		#$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
 		#$(cmake-utils_use python XDMF_WRAP_PYTHON) #??
