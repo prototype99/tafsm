@@ -194,6 +194,7 @@ src_configure() {
 
 		#-DHDF5_BUILD_STATIC_EXECS:BOOL=ON
 		-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
+		-DBUILD_DICOM_PROGRAMS:BOOL=ON
 		-DModule_vtkDICOM:BOOL=ON
 		-DModule_vtkFiltersImaging:BOOL=ON
 		-DModule_vtkFiltersParallelImaging:BOOL=ON 
