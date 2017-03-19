@@ -187,14 +187,14 @@ src_configure() {
 		#-DPARAVIEW_QT_VERSION=5
 		-DPARAVIEW_USE_OSPRAY=OFF
 		#-DHDF5_BUILD_STATIC_EXECS:BOOL=ON
-		#-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
-		#-DModule_vtkDICOM:BOOL=ON
-		#-DModule_vtkFiltersImaging:BOOL=ON
-		#-DModule_vtkFiltersParallelImaging:BOOL=ON 
-		#-DModule_vtkFiltersParallelMPI:BOOL=ON 
-		#-DModule_vtkFiltersSMP:BOOL=ON
-		#-DModule_vtkGUISupportQtOpenGL:BOOL=ON
-		#-DModule_vtkIOMPIImage:BOOL=ON
+		-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
+		-DModule_vtkDICOM:BOOL=ON
+		-DModule_vtkFiltersImaging:BOOL=ON
+		-DModule_vtkFiltersParallelImaging:BOOL=ON 
+		-DModule_vtkFiltersParallelMPI:BOOL=ON 
+		-DModule_vtkFiltersSMP:BOOL=ON
+		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
+		-DModule_vtkIOMPIImage:BOOL=ON
 		)
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
@@ -234,7 +234,7 @@ src_configure() {
 		#$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
 		#$(cmake-utils_use mpi XDMF_BUILD_MPI)
 		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
-		#$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA)
+		#$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA) #<============== BAD
 		#$(cmake-utils_use python VTK_Group_ParaViewPython)
 		#$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
 		#$(cmake-utils_use python XDMF_WRAP_PYTHON) #??
