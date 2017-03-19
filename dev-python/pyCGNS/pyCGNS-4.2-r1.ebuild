@@ -2,9 +2,10 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=4
+EAPI=5
+PYTHON_COMPAT=( python2_7 )
 
-inherit distutils versionator distutils
+inherit versionator python-single-r1
 
 DESCRIPTION="The package gathers various tools and libraries for CGNS end-users
 and Python application developpers. The main object of pyCGNS is to provide the
@@ -53,8 +54,8 @@ src_configure(){
 }
 
 src_compile(){
-	$(PYTHON) setup.py build 
+	"${PYTHON}" setup.py build  || die
 }
 src_install() {
-	$(PYTHON) setup.py install  --prefix=${D}usr
+	${PYTHON} setup.py install  --prefix=${D}usr || die
 }
