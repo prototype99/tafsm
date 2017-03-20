@@ -4,7 +4,7 @@
 
 EAPI=5
 #inherit distutils eutils flag-o-matic toolchain-funcs python mercurial
-inherit distutils eutils flag-o-matic toolchain-funcs
+inherit eutils flag-o-matic toolchain-funcs
 #python
 DESCRIPTION=""
 HOMEPAGE="http://www.mcs.anl.gov/petsc/"
