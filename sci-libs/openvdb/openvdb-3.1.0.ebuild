@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit distutils versionator
+inherit versionator
 
 DESCRIPTION=""
 HOMEPAGE="http://www.openvdb.org/"

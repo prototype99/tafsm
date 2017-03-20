@@ -4,7 +4,7 @@
 
 EAPI=5
 #inherit distutils versionator git-r3
-inherit distutils versionator
+inherit versionator
 
 DESCRIPTION=""
 HOMEPAGE="http://www.openvdb.org/"
