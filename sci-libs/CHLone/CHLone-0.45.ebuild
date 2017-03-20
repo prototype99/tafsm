@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=5
-inherit scons-utils distutils 
+inherit scons-utils 
 
 
 DESCRIPTION="CHLone is a CGNS/SIDS compliant mapping of SIDS-to-HDF5"
