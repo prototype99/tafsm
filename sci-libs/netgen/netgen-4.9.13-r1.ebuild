@@ -3,7 +3,7 @@
 # $Header: $
 
 EAPI=4
-inherit distutils eutils libtool flag-o-matic toolchain-funcs versionator
+inherit eutils libtool toolchain-funcs versionator
 
 DESCRIPTION="Netgen is a multi-platform automatic mesh generation tool written
 in C++ capable of generating meshes in two and three dimensions."
