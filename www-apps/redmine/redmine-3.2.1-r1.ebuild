@@ -14,7 +14,7 @@ SRC_URI="http://www.redmine.org/releases/${P}.tar.gz"
 KEYWORDS="~amd64 ~x86"
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="bazaar cvs darcs fastcgi git imagemagick mercurial mysql passenger postgres sqlite3 subversion ldap"
+IUSE="bazaar cvs darcs fastcgi git imagemagick mercurial mysql passenger postgres sqlite3 subversion ldap ruby23"
 
 RDEPEND="|| ( $(ruby_implementation_depend ruby20)[ssl] $(ruby_implementation_depend ruby21)[ssl] $(ruby_implementation_depend ruby22)[ssl] )"
 
