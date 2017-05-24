@@ -30,7 +30,6 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
 
 RDEPEND="
 	dev-libs/expat
-	>=dev-libs/jsoncpp-0.10.1
 	dev-libs/libxml2:2
 	dev-libs/protobuf
 	media-libs/freetype
