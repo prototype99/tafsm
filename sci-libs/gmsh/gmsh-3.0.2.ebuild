@@ -4,7 +4,7 @@
 
 EAPI=5
 #inherit distutils eutils flag-o-matic toolchain-funcs versionator qt4 cmake-utils
-inherit distutils flag-o-matic toolchain-funcs versionator cmake-utils
+inherit  flag-o-matic toolchain-funcs versionator cmake-utils
 
 
 DESCRIPTION="Gmsh is a 3D finite element grid generator with a build-in CAD
@@ -15,7 +15,7 @@ post-processing. The specification of any input to these modules is done either
 interactively using the graphical user interface or in ASCII text files using
 Gmsh's own scripting language."
 HOMEPAGE="http://geuz.org/gmsh/"
-SRC_URI="http://geuz.org/gmsh/src/${P}-source.tgz"
+SRC_URI="http://gmsh.info/src/${P}-source.tgz"
 
 LICENSE=""
 SLOT="0"
@@ -99,12 +99,3 @@ src_configure() {
 #	cmake-utils_src_install
 #}
 
-distutils_src_install(){
-	:
-}
-distutils_pkg_postinst(){
-	:
-}
-distutils_pkg_postrm(){
-	:
-}
