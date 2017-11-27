@@ -18,7 +18,9 @@ KEYWORDS="amd64 ~x86"
 IUSE=""
 
 DEPEND=""
-RDEPEND="${DEPEND}"
+RDEPEND="${DEPEND}
+	dev-python/pyaes
+"
 S="${WORKDIR}/${PN}-${SHA}"
 
 src_install() {
