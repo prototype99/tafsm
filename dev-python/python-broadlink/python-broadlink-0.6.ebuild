@@ -14,7 +14,7 @@ SRC_URI="https://github.com/mjg59/python-broadlink/archive/${SHA}.zip"
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 ~x86"
 IUSE=""
 
 DEPEND=""
