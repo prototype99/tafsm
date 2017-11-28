@@ -13,7 +13,7 @@ SRC_URI="https://github.com/axiros/terminal_markdown_viewer/archive/${PV}.tar.gz
 
 LICENSE=""
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 ~x86"
 IUSE=""
 S="${WORKDIR}/terminal_markdown_viewer-${PV}"
 DEPEND="
