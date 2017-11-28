@@ -18,7 +18,7 @@ KEYWORDS="amd64 ~x86"
 IUSE=""
 
 DEPEND="
-	dev-python/pyaes
+	dev-python/pyaes[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 S="${WORKDIR}/${PN}-${SHA}"
