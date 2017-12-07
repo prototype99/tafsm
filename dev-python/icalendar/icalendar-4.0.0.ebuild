@@ -19,7 +19,9 @@ KEYWORDS="amd64 x86 ~x86-fbsd"
 IUSE="doc test"
 DOCS="README.rst"
 
-RDEPEND="dev-python/pytz[${PYTHON_USEDEP}]
+RDEPEND="
+		dev-python/pytz[${PYTHON_USEDEP}]
+		dev-python/python-dateutil[${PYTHON_USEDEP}]
 		dev-python/setuptools[${PYTHON_USEDEP}]"
 DEPEND="${RDEPEND}
 	doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
