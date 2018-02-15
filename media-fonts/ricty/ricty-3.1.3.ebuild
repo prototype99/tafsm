@@ -6,10 +6,11 @@ EAPI=5
 inherit font
 
 MY_PN="Ricty"
+GITHUB_NAME="kudryavka"
 DESCRIPTION="A beautiful sans-serif monotype Japanese font designed for code listings"
 HOMEPAGE="http://save.sys.t.u-tokyo.ac.jp/~yusa/fonts/ricty.html"
 #SRC_URI="http://save.sys.t.u-tokyo.ac.jp/~yusa/fonts/ricty/${MY_PN}-${PV}.tar.gz"
-SRC_URI="https://github.com/yascentur/${MY_PN}/tarball/${PV} -> ${MY_PN}-${PV}.tar.gz"
+SRC_URI="https://github.com/${GITHUB_NAME}/${MY_PN}/archives/${PV} -> ${MY_PN}-${PV}.tar.gz"
 
 LICENSE="public-domain"
 SLOT="0"
@@ -22,7 +23,7 @@ DEPEND=">=media-fonts/inconsolata-20140821
 RDEPEND=""
 
 #S="${WORKDIR}/yascentur-${MY_PN}-*"
-S="${WORKDIR}/yascentur-${MY_PN}-c22daa9"
+S="${WORKDIR}/${GITHUB_NAME}-${MY_PN}-fe68161"
 
 FONT_SUFFIX="ttf"
 FONT_S="${S}"
