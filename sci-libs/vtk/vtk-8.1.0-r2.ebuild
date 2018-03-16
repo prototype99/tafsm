@@ -207,7 +207,7 @@ src_configure() {
 		-DModule_vtkIOODBC=$(usex odbc)
 		-DVTK_USE_OFFSCREEN=$(usex offscreen)
 		-DVTK_OPENGL_HAS_OSMESA=$(usex offscreen)
-		-DVTK_RENDERING_BACKEND="OpenGL2"
+		-DVTK_RENDERING_BACKEND="OpenGL"
 		-DVTK_USE_OGGTHEORA_ENCODER=$(usex theora)
 		#-DVTK_USE_NVCONTROL=$(usex video_cards_nvidia)
 		-DModule_vtkFiltersStatisticsGnuR=$(usex R)
