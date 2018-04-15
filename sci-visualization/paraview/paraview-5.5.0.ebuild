@@ -103,6 +103,7 @@ S="${WORKDIR}/${MY_P}"
 pkg_setup() {
 	python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
+	PARAVIEW_VERSION="${MAJOR_PV}"
 }
 
 src_prepare() {
@@ -127,7 +128,16 @@ src_configure() {
 	# VTK_USE_SYSTEM_QTTESTING
 	# PARAVIEW_USE_SYSTEM_AUTOBAHN
 	CMAKE_BUILD_TYPE="Release"
+	#CMAKE_LIBRARY_OUTPUT_DIRECTORY=${CMAKE_BINARY_DIR}
+	#-DVTK_INSTALL_ARCHIVE_DIR="$(get_libdir)"
+	#-Dverdict_INSTALL_LIBRARY_DIR="$(get_libdir)"
+	#-DMETAIO_INSTALL_LIBRARY_DIR="$(get_libdir)"
+	#-DKWSYS_INSTALL_LIB_DIR=$(get_libdir)"
+
 	local mycmakeargs=(
+		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
+		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
+		-DVTK_INSTALL_PACKAGE_DIR "$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 		-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
