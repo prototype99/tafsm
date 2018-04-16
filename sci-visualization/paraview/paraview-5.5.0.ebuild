@@ -58,6 +58,7 @@ RDEPEND="
 	)
 	mpi? ( virtual/mpi[cxx,romio] )
 	mysql? ( virtual/mysql )
+	dev-python/pygments[${PYTHON_USEDEP}]
 	python? (
 		${PYTHON_DEPS}
 		dev-python/matplotlib[${PYTHON_USEDEP}]
@@ -167,6 +168,7 @@ src_configure() {
 		#-DVTK_USE_SYSTEM_OGGTHEORA=ON
 		#-DVTK_USE_SYSTEM_PNG=ON
 		-DVTK_USE_SYSTEM_PROTOBUF=OFF
+		-DVTK_USE_SYSTEM_PYGMENTS=ON
 		#-DVTK_USE_SYSTEM_TIFF=ON
 		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
 		#-DVTK_USE_SYSTEM_ZLIB=ON
