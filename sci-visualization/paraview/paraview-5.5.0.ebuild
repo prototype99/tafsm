@@ -134,6 +134,16 @@ src_configure() {
 	#-Dverdict_INSTALL_LIBRARY_DIR="$(get_libdir)"
 	#-DMETAIO_INSTALL_LIBRARY_DIR="$(get_libdir)"
 	#-DKWSYS_INSTALL_LIB_DIR=$(get_libdir)"
+	elog "	-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=${ParaView_BINARY_DIR}/$(get_libdir)""
+	elog "	-DVTK_INSTALL_LIBRARY_DIR=$(get_libdir)"
+	elog "	-DVTK_INSTALL_PACKAGE_DIR=$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+	elog "	-DPV_INSTALL_LIB_DIR=${PVLIBDIR}"
+	elog "	-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+	elog "	-DEXPAT_INCLUDE_DIR=${EPREFIX}/usr/include"
+	elog "	-DEXPAT_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libexpat.so"
+	elog "	-DOPENGL_gl_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGL.so"
+	elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
+	elog "	-DBUILD_SHARED_LIBS=ON"
 
 	local mycmakeargs=(
 		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
