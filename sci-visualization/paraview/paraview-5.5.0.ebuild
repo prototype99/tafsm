@@ -104,7 +104,7 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
 	PARAVIEW_VERSION="${MAJOR_PV}"
-	ParaView_BINARY_DIR="${MY_P}_build"
+	ParaView_BINARY_DIR="${PV}_build"
 }
 
 src_prepare() {
