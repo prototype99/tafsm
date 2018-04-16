@@ -104,13 +104,13 @@ pkg_setup() {
 	python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
 	PARAVIEW_VERSION="${MAJOR_PV}"
-	ParaView_BINARY_DIR=${MY_P}
+	ParaView_BINARY_DIR="${MY_P}_build"
 }
 
 src_prepare() {
-	#default
-	#cmake-utils_src_prepare
-	epatch "${FILESDIR}/${P}_all_protected.patch"
+	default
+	cmake-utils_src_prepare
+	#epatch "${FILESDIR}/${P}_all_protected.patch"
 	
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
@@ -138,7 +138,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
 		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
-		-DVTK_INSTALL_PACKAGE_DIR "$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 		-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
