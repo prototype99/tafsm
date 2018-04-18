@@ -137,6 +137,7 @@ src_configure() {
 	#-DKWSYS_INSTALL_LIB_DIR=$(get_libdir)"
 	elog "	-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=${ParaView_BINARY_DIR}/$(get_libdir)""
 	elog "	-DVTK_INSTALL_LIBRARY_DIR=$(get_libdir)"
+	elog "	-DVTK_INSTALL_ARCHIVE_DIR=$(get_libdir)"
 	elog "	-DVTK_INSTALL_PACKAGE_DIR=$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 	elog "	-DPV_INSTALL_LIB_DIR=${PVLIBDIR}"
 	elog "	-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
@@ -145,6 +146,7 @@ src_configure() {
 	elog "	-DOPENGL_gl_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGL.so"
 	elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
 	elog "	-DBUILD_SHARED_LIBS=ON"
+	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
 
 	local mycmakeargs=(
 		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
@@ -152,7 +154,7 @@ src_configure() {
 		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 		-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
+		-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
 		-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
@@ -193,7 +195,7 @@ src_configure() {
 		-DVTK_PYTHON_VERSION=3
 		-DVTK_USE_SYSTEM_SIX:BOOL=ON
 		#-DPARAVIEW_QT_VERSION=5
-		-DPARAVIEW_USE_OSPRAY=OFF
+		-DPARAVIEW_USE_OSPRAY=ON
 		-DVTK_ALL_NEW_OBJECT_FACTORY:BOOL=ON
 
 		-DVTK_DISPATCH_AOS_ARRAYS:BOOL=ON
