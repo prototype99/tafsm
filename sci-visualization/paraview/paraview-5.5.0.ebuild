@@ -149,9 +149,10 @@ src_configure() {
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
 
 	local mycmakeargs=(
-		#-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
-		#-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
-		#-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+		-DCMAKE_INSTALL_RPATH_USE_LINK_PATH
+		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
+		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
+		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 		-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
