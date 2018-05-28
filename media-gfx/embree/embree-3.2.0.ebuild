@@ -21,6 +21,7 @@ RDEPEND="${DEPEND}"
 src_configure() {
 	local mycmakeargs=(
 	-DEMBREE_ISPC_SUPPORT=OFF
+	-EMBREE_MAX_ISA=NONE
 	)
 	cmake-utils_src_configure
 }

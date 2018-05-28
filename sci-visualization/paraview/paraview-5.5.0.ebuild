@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI=5
+EAPI=6
 
 PYTHON_COMPAT=( python3_4 python3_5 python3_6)
 inherit eutils multilib versionator python-single-r1 cmake-utils
