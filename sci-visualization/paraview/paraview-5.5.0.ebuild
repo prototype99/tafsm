@@ -98,9 +98,9 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-PATCHES=(
-	"${FILESDIR}/${P}_all_protected.patch"
-)
+#PATCHES=(
+#	"${FILESDIR}/${P}_all_protected.patch"
+#)
 pkg_setup() {
 	python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
@@ -111,7 +111,7 @@ pkg_setup() {
 src_prepare() {
 	default
 	cmake-utils_src_prepare
-	#epatch "${FILESDIR}/${P}_all_protected.patch"
+	epatch "${FILESDIR}/${P}_all_protected.patch"
 	
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
