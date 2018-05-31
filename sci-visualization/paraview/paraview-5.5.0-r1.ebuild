@@ -136,17 +136,17 @@ src_configure() {
 	#-Dverdict_INSTALL_LIBRARY_DIR="$(get_libdir)"
 	#-DMETAIO_INSTALL_LIBRARY_DIR="$(get_libdir)"
 	#-DKWSYS_INSTALL_LIB_DIR=$(get_libdir)"
-	elog "	-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=${ParaView_BINARY_DIR}/$(get_libdir)""
-	elog "	-DVTK_INSTALL_LIBRARY_DIR=$(get_libdir)"
-	elog "	-DVTK_INSTALL_ARCHIVE_DIR=$(get_libdir)"
-	elog "	-DVTK_INSTALL_PACKAGE_DIR=$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
-	elog "	-DPV_INSTALL_LIB_DIR=${PVLIBDIR}"
-	elog "	-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
-	elog "	-DEXPAT_INCLUDE_DIR=${EPREFIX}/usr/include"
-	elog "	-DEXPAT_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libexpat.so"
-	elog "	-DOPENGL_gl_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGL.so"
-	elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
-	elog "	-DBUILD_SHARED_LIBS=ON"
+	#elog "	-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=${ParaView_BINARY_DIR}/$(get_libdir)""
+	#elog "	-DVTK_INSTALL_LIBRARY_DIR=$(get_libdir)"
+	#elog "	-DVTK_INSTALL_ARCHIVE_DIR=$(get_libdir)"
+	#elog "	-DVTK_INSTALL_PACKAGE_DIR=$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+	#elog "	-DPV_INSTALL_LIB_DIR=${PVLIBDIR}"
+	#elog "	-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
+	#elog "	-DEXPAT_INCLUDE_DIR=${EPREFIX}/usr/include"
+	#elog "	-DEXPAT_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libexpat.so"
+	#elog "	-DOPENGL_gl_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGL.so"
+	#elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
+	#elog "	-DBUILD_SHARED_LIBS=ON"
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
 
 	local mycmakeargs=(
@@ -189,11 +189,12 @@ src_configure() {
 		-DPROTOC_LOCATION=$(type -P protoc)
 		-DVTK_Group_StandAlone=ON
 		#-DPARAVIEW_ENABLE_XDMF3=ON
-		$(cmake-utils_useno xmdf3 PARAVIEW_ENABLE_XDMF2)
-		$(cmake-utils_useno xmdf3 Module_vtkIOXdmf2)
-		$(cmake-utils_useno xmdf3 Module_vtkxdmf2)
-		$(cmake-utils_use xmdf3 PARAVIEW_ENABLE_XDMF3)
-		$(cmake-utils_use xdmf3 Module_vtkIOParallelXdmf3)
+		-DPARAVIEW_ENABLE_XDMF2=$(usex xdmf3 OFF ON)
+		-DPARAVIEW_ENABLE_XDMF3=$(usex xdmf3 ON OFF)
+		-DModule_vtkIOXdmf2=$(usex xdmf3 OFF ON)
+		-DModule_vtkxdmf2=$(usex xdmf3 OFF ON)
+		-DPARAVIEW_ENABLE_XDMF3=$(usex xdmf3 ON OFF)
+		-DModule_vtkIOParallelXdmf3=$(usex xdmf3 ON OFF)
 		-DVTK_USE_SYSTEM_XDMF2=OFF
 		-DVTK_USE_SYSTEM_XDMF3=OFF
 			# force this module due to incorrect build system deps
