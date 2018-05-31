@@ -65,6 +65,7 @@ RDEPEND="
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/sip[${PYTHON_USEDEP}]
 		dev-python/six[${PYTHON_USEDEP}]
+		mpi? ( dev-python/mpi4ph[${PYTHON_USEDEP}] )
 		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}] )
 		qt4? ( dev-python/PyQt4[opengl,webkit,${PYTHON_USEDEP}] )
 	)
@@ -175,7 +176,6 @@ src_configure() {
 		#-DVTK_USE_SYSTEM_TIFF=ON
 		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
 		#-DVTK_USE_SYSTEM_ZLIB=ON
-		-DPARAVIEW_USE_SYSTEM_MPI4PY=OFF
 		#-DVTK_USE_SYSTEM_ZOPE=ON
 		-DVTK_USE_SYSTEM_ZOPE=OFF
 		#-DVTK_USE_SYSTEM_TWISTED=ON
@@ -190,7 +190,7 @@ src_configure() {
 		-DVTK_Group_StandAlone=ON
 		#-DPARAVIEW_ENABLE_XDMF3=ON
 		-DPARAVIEW_ENABLE_XDMF3=OFF
-		# force this module due to incorrect build system deps
+			# force this module due to incorrect build system deps
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
 		-DVTK_PYTHON_VERSION=3
@@ -208,13 +208,17 @@ src_configure() {
 		-DBUILD_DICOM_PROGRAMS:BOOL=ON
 		-DModule_vtkDICOM:BOOL=ON
 		-DModule_vtkFiltersImaging:BOOL=ON
-		-DModule_vtkFiltersParallelImaging:BOOL=ON 
-		-DModule_vtkFiltersParallelMPI:BOOL=ON 
-		-DModule_vtkFiltersSMP:BOOL=ON
+				-DModule_vtkFiltersSMP:BOOL=ON
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
-		-DModule_vtkIOMPIImage:BOOL=ON
+
 		-DVTK_OPENGL_HAS_OSMESA:BOOL=OFF
 		)
+		if use python ; then
+			if use mpi ; then
+				mycmakeargs+=( -DPARAVIEW_USE_SYSTEM_MPI4PY=ON )
+			fi
+		fi
+
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
@@ -231,12 +235,14 @@ src_configure() {
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
-		
 		-DPARAVIEW_USE_MPI=$(usex mpi)
 		-DPARAVIEW_USE_MPI_SSEND=$(usex mpi)
 		-DVTK_Group_MPI=$(usex mpi)
 		-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DXDMF_BUILD_MPI=$(usex mpi)
+		-DModule_vtkFiltersParallelImaging=$(usex mpi)
+		-DModule_vtkFiltersParallelMPI=$(usex mpi)
+		-DModule_vtkIOMPIImage=$(usex mpi)
 		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
 		-DModule_vtkPython=$(usex python)
 		-DModule_pqPython=$(usex python)
@@ -246,48 +252,6 @@ src_configure() {
 		-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
 		-DBUILD_EXAMPLES=$(usex examples)
 		)
-
-		#if use qt4 ; then
-		#	mycmakeargs+=( -DVTK_INSTALL_QT_DIR=/${PVLIBDIR}/plugins/designer )
-		#	if use python ; then
-		#		# paraview cannot guess sip directory properly
-		#		mycmakeargs+=( -DSIP_INCLUDE_DIR="${EPREFIX}$(python_get_includedir)" )
-		#	fi
-		#fi
-
-		# TODO: MantaView VaporPlugin VRPlugin
-		##mycmakeargs+=(
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AdiosReader)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ArrowGlyph)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_EyeDomeLighting)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ForceTime)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_GMVReader)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_H5PartReader)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_MobileRemoteControl)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_Moments)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_NonOrthogonalSource)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PacMan)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PointSprite)
-		## #$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PythonQtPlugin)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_PrismPlugin)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_QuadView)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SLACTools)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SciberQuestToolKit)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SierraPlotTools)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_StreamingParticles)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_SurfaceLIC)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_TemporalParallelismScriptGenerator)
-		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_UncertaintyRendering)
-		## #$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VRPlugin)
-		## #$(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_VaporPlugin)
-		## # these are always needed for plugins
-		## $(cmake-utils_use plugins Module_vtkFiltersFlowPaths)
-		## $(cmake-utils_use plugins Module_vtkPVServerManagerApplication)
-		##)
-		#//mycmakeargs+=(
-		#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
-		#//)
 		use debug && CMAKE_BUILD_TYPE=Debug;
 		use debug || elog "NoDEBUG";
 
