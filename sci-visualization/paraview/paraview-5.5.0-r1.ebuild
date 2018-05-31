@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="cg coprocessing development doc examples mpi mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
+IUSE="cg coprocessing development doc examples mpi xdmf3 mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -189,7 +189,13 @@ src_configure() {
 		-DPROTOC_LOCATION=$(type -P protoc)
 		-DVTK_Group_StandAlone=ON
 		#-DPARAVIEW_ENABLE_XDMF3=ON
-		-DPARAVIEW_ENABLE_XDMF3=OFF
+		$(cmake-utils_useno xmdf3 PARAVIEW_ENABLE_XDMF2)
+		$(cmake-utils_useno xmdf3 Module_vtkIOXdmf2)
+		$(cmake-utils_useno xmdf3 Module_vtkxdmf2)
+		$(cmake-utils_use xmdf3 PARAVIEW_ENABLE_XDMF3)
+		$(cmake-utils_use xdmf3 Module_vtkIOParallelXdmf3)
+		-DVTK_USE_SYSTEM_XDMF2=OFF
+		-DVTK_USE_SYSTEM_XDMF3=OFF
 			# force this module due to incorrect build system deps
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
@@ -208,10 +214,11 @@ src_configure() {
 		-DBUILD_DICOM_PROGRAMS:BOOL=ON
 		-DModule_vtkDICOM:BOOL=ON
 		-DModule_vtkFiltersImaging:BOOL=ON
-				-DModule_vtkFiltersSMP:BOOL=ON
+		-DModule_vtkFiltersSMP:BOOL=ON
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
-
 		-DVTK_OPENGL_HAS_OSMESA:BOOL=OFF
+		-DPARAVIEW_USE_VTKM=ON
+		-DVTKm_ENABLE_OSMESA=ON
 		)
 		if use python ; then
 			if use mpi ; then
@@ -243,6 +250,9 @@ src_configure() {
 		-DModule_vtkFiltersParallelImaging=$(usex mpi)
 		-DModule_vtkFiltersParallelMPI=$(usex mpi)
 		-DModule_vtkIOMPIImage=$(usex mpi)
+		-DXDMF_BUILD_MPI=$(usex mpi)
+		-DVTKm_ENABLE_MPI=$(usex mpi)
+		-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
 		-DModule_vtkPython=$(usex python)
 		-DModule_pqPython=$(usex python)
