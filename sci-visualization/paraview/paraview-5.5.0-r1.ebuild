@@ -175,6 +175,7 @@ src_configure() {
 		-DBUILD_SHARED_LIBS=ON
 		-DVTK_Group_StandAlone=ON
 		-DVTK_RENDERING_BACKEND=OpenGL2
+		-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF
 		#-DVTK_USE_SYSTEM_EXPAT=ON
 		#-DVTK_USE_SYSTEM_FREETYPE=ON
 		#-DVTK_USE_SYSTEM_GL2PS=ON
@@ -207,6 +208,7 @@ src_configure() {
 		-DPARAVIEW_ENABLE_XDMF3=$(usex xdmf3 ON OFF)
 		-DModule_vtkIOXdmf2=$(usex xdmf3 OFF ON)
 		-DModule_vtkxdmf2=$(usex xdmf3 OFF ON)
+		-DModule_vtkxdmf3=$(usex xdmf3 ON OFF)
 		-DPARAVIEW_ENABLE_XDMF3=$(usex xdmf3 ON OFF)
 		-DModule_vtkIOParallelXdmf3=$(usex xdmf3 ON OFF)
 		-DVTK_USE_SYSTEM_XDMF2=OFF
@@ -260,7 +262,8 @@ src_configure() {
 		mycmakeargs+=(
 		-DVTK_Group_ParaViewQt="$(usex qt5)"
 		-DVTK_Group_Qt="$(usex qt5)"
-		-DModule_vtkGUISupportQtWebkit="$(usex qt5)"
+		#-DModule_vtkGUISupportQtWebkit="$(usex qt5)"
+		-DModule_vtkGUISupportQtWebkit=OFF
 		-DModule_vtkRenderingQt="$(usex qt5)"
 		-DModule_vtkViewsQt="$(usex qt5)"
 		-DPARAVIEW_USE_MPI=$(usex mpi)
@@ -276,7 +279,7 @@ src_configure() {
 		-DModule_pqPython=$(usex python)
 		-DModule_vtkWrappingPythonCore=$(usex python)
 		-DModule_vtkPVPythonSupport=$(usex python)
-		-DXDMF_WRAP_PYTHON="$(usex python)"
+		#-DXDMF_WRAP_PYTHON="$(usex python)"
 		-DBUILD_DOCUMENTATION=$(usex doc)
 		-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
 		-DBUILD_EXAMPLES=$(usex examples)
