@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="cg coprocessing development doc examples mpi xdmf3 mysql nvcontrol plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
+IUSE="cg coprocessing development doc examples mpi xdmf3 mysql nvcontrol openmp plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -105,8 +105,8 @@ S="${WORKDIR}/${MY_P}"
 pkg_setup() {
 	python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
-	PARAVIEW_VERSION="${MAJOR_PV}"
-	ParaView_BINARY_DIR="${WORKDIR}/paraview-${PV}_build"
+	#PARAVIEW_VERSION="${MAJOR_PV}"
+	#ParaView_BINARY_DIR="${WORKDIR}/paraview-${PV}_build"
 }
 
 src_prepare() {
@@ -125,9 +125,19 @@ src_prepare() {
 			-e '/VTK_USE_NVCONTROL/s#1#0#' \
 			VTK/Rendering/OpenGL/CMakeLists.txt || die
 	}
+	# lib64 fixes
+	sed -i \
+		-e "s:/lib/python:/$(get_libdir)/python:g" \
+		VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
+	sed -i \
+		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
+		ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.cxx || die
 }
 
 src_configure() {
+	if use qt5; then
+		export QT_SELECT=qt5
+	fi
 	# VTK_USE_SYSTEM_QTTESTING
 	# PARAVIEW_USE_SYSTEM_AUTOBAHN
 	CMAKE_BUILD_TYPE="Release"
@@ -150,17 +160,21 @@ src_configure() {
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
 
 	local mycmakeargs=(
-		-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
-		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
-		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
-		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
-		-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
+		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
+		#-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
+		#-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
+		#-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+		#-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
+		#-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
+		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
+		-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
 		-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		-DBUILD_SHARED_LIBS=ON
+		-DVTK_Group_StandAlone=ON
+		-DVTK_RENDERING_BACKEND=OpenGL2
 		#-DVTK_USE_SYSTEM_EXPAT=ON
 		#-DVTK_USE_SYSTEM_FREETYPE=ON
 		#-DVTK_USE_SYSTEM_GL2PS=ON
@@ -218,6 +232,7 @@ src_configure() {
 		-DVTK_OPENGL_HAS_OSMESA:BOOL=OFF
 		-DPARAVIEW_USE_VTKM=ON
 		-DVTKm_ENABLE_OSMESA=ON
+		-DModule_vtkUtilitiesProcessXML=ON
 		)
 		if use python ; then
 			if use mpi ; then
@@ -233,19 +248,23 @@ src_configure() {
 		if use qt5 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=5 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
+
 			mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/qmake )
 			mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/xmlpatterns )
 			mycmakeargs+=( -DQT_HELP_GENERATOR:FILEPATH=/usr/$(get_libdir)/qt5/bin/qhelpgenerator)
 		fi
- #Module_vtkParallelMPI4Py 
- #PARAVIEW_USE_MPI
+		#Module_vtkParallelMPI4Py 
+		#PARAVIEW_USE_MPI
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
+		-DVTK_Group_ParaViewQt="$(usex qt5)"
+		-DVTK_Group_Qt="$(usex qt5)"
+		-DModule_vtkGUISupportQtWebkit="$(usex qt5)"
+		-DModule_vtkRenderingQt="$(usex qt5)"
+		-DModule_vtkViewsQt="$(usex qt5)"
 		-DPARAVIEW_USE_MPI=$(usex mpi)
 		-DVTK_Group_MPI=$(usex mpi)
-		-DVTK_XDMF_USE_MPI=$(usex mpi)
-		-DXDMF_BUILD_MPI=$(usex mpi)
 		-DModule_vtkFiltersParallelImaging=$(usex mpi)
 		-DModule_vtkFiltersParallelMPI=$(usex mpi)
 		-DModule_vtkIOMPIImage=$(usex mpi)
@@ -257,6 +276,7 @@ src_configure() {
 		-DModule_pqPython=$(usex python)
 		-DModule_vtkWrappingPythonCore=$(usex python)
 		-DModule_vtkPVPythonSupport=$(usex python)
+		-DXDMF_WRAP_PYTHON="$(usex python)"
 		-DBUILD_DOCUMENTATION=$(usex doc)
 		-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
 		-DBUILD_EXAMPLES=$(usex examples)
@@ -284,6 +304,9 @@ src_configure() {
 			-DCMAKE_C_FLAGS_RELWITHDEBINFO:STRING=${CFLAGS}
 			)
 		fi
+		if use openmp; then
+			mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP )
+		fi
 
 		cmake-utils_src_configure
 	}
@@ -291,12 +314,23 @@ src_configure() {
 	src_compile() {
 		cmake-utils_src_compile
 	}
-
 	src_install() {
 		cmake-utils_src_install
 
+		# remove wrapper binaries and put the actual executable in place
+		for i in "${ED}"/usr/bin/*; do
+			mv "${ED}"/usr/lib/"$(basename $i)" "$i" || die
+		done
+
+		# install libraries into correct directory respecting get_libdir:
+		mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
+		mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
+		mv "${ED}"/usr/lib_tmp/* "${ED}"/usr/"${PVLIBDIR}" || die
+		rmdir "${ED}"/usr/lib_tmp || die
+
 		# set up the environment
-		echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN}
+		echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
+		doenvd "${T}"/40${PN}
 
 		newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
 		make_desktop_entry paraview "Paraview" paraview
@@ -304,20 +338,3 @@ src_configure() {
 		use python && python_optimize "${D}"/usr/$(get_libdir)/${PN}-${MAJOR_PV}
 	}
 
-	pkg_postinst() {
-		# with Qt4.5 there seem to be issues reading data files
-		# under certain locales. Setting LC_ALL=C should fix these.
-		elog ""
-		elog "If you experience data corruption during parsing of"
-		elog "data files with paraview please try setting your"
-		elog "locale to LC_ALL=C."
-		elog "If you plan to use paraview component from an existing shell"
-		elog "you should run env-update and . /etc/profile first"
-		elog ""
-		elog "paraview no longer exports bundled python modules in PYTHONPATH"
-		elog "globally due to clashes of bundled packages with system-wide"
-		elog "site-packages. If you want to use paraview's python modules"
-		elog "export"
-		elog "  PYTHONPATH=${EPREFIX}/usr/${PVLIBDIR}:${EPREFIX}/usr/${PVLIBDIR}/site-packages"
-		elog "as needed."
-	}
