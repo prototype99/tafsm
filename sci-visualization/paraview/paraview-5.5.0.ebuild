@@ -231,58 +231,20 @@ src_configure() {
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
-		#$(cmake-utils_use development PARAVIEW_INSTALL_DEVELOPMENT_FILES)
-
-		#$(cmake-utils_use qt4 PARAVIEW_USE_QTWEBK)
-		#$(cmake-utils_use qt4 Module_vtkGUISupportQtOpenGL)
-		#$(cmake-utils_use qt4 Module_vtkGUISupportQtSQL)
-		#$(cmake-utils_use qt4 Module_vtkGUISupportQtWebkit)
-		#$(cmake-utils_use qt4 Module_vtkRenderingQt)
-		#$(cmake-utils_use qt4 Module_vtkViewsQt)
-		#$(cmake-utils_use qt4 VTK_Group_ParaViewQt)
-		#$(cmake-utils_use qt4 VTK_Group_Qt)
-		#$(cmake-utils_use !qt4 PQWIDGETS_DISABLE_QTWEBKIT)
-		#$(cmake-utils_use boost Module_vtkInfovisBoost)
-		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlg)
-		#$(cmake-utils_use boost Module_vtkInfovisBoostGraphAlgorithms)
-		$(cmake-utils_use mpi PARAVIEW_USE_MPI)
-		$(cmake-utils_use mpi PARAVIEW_USE_MPI_SSEND)
-		#$(cmake-utils_use mpi PARAVIEW_USE_ICE_T)
-		$(cmake-utils_use mpi VTK_Group_MPI)
-		#$(usex xdmf2 "" "$(cmake-utils_use mpi VTK_XDMF_USE_MPI)")
-		$(cmake-utils_use mpi VTK_XDMF_USE_MPI)
-		$(cmake-utils_use mpi XDMF_BUILD_MPI)
-		$(cmake-utils_use python PARAVIEW_ENABLE_PYTHON)
-		#$(cmake-utils_use osmesa VTK_OPENGL_HAS_OSMESA) #<============== BAD
-		#$(cmake-utils_use python VTK_Group_ParaViewPython)
-		#$(use xdmf2 "" "$(cmake-utils_use python XDMF_WRAP_PYTHON)")
-		#$(cmake-utils_use python XDMF_WRAP_PYTHON) #??
-		$(cmake-utils_use python Module_vtkPython)
-		$(cmake-utils_use python Module_pqPython)
-		$(cmake-utils_use python Module_vtkWrappingPythonCore)
-		$(cmake-utils_use python Module_vtkPVPythonSupport)
-		#$(cmake-utils_use python Module_AutobahnPython)
-		#$(cmake-utils_use python Module_Twisted)
-		#$(cmake-utils_use python Module_ZopeInterface)
-		#$(cmake-utils_use python Module_vtkmpi4py)
-		#$(usex qt5 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
-		#$(usex qt4 "$(cmake-utils_use python Module_pqPython)" "-DModule_pqPython=OFF")
-		$(cmake-utils_use doc BUILD_DOCUMENTATION)
-		$(cmake-utils_use doc PARAVIEW_BUILD_WEB_DOCUMENTATION)
-		$(cmake-utils_use examples BUILD_EXAMPLES)
-		#$(cmake-utils_use cg VTK_USE_CG_SHADERS)
-		#$(cmake-utils_use mysql Module_vtkIOMySQL)
-		#$(cmake-utils_use sqlite Module_vtksqlite)
-		#$(cmake-utils_use coprocessing PARAVIEW_ENABLE_CATALYST)
-		#$(cmake-utils_use ffmpeg PARAVIEW_ENABLE_FFMPEG)
-		#$(cmake-utils_use ffmpeg VTK_USE_FFMPEG_ENCODER)
-		#$(cmake-utils_use ffmpeg Module_vtkIOFFMPEG)
-		#$(cmake-utils_use tk VTK_Group_Tk)
-		#$(cmake-utils_use tk VTK_USE_TK)
-		#$(cmake-utils_use tk Module_vtkRenderingTk)
-		#$(cmake-utils_use tcl Module_vtkTclTk)
-		#$(cmake-utils_use tcl Module_vtkWrappingTcl)
-		#$(cmake-utils_use test BUILD_TESTING)
+		
+		-DPARAVIEW_USE_MPI=$(usex mpi)
+		-DPARAVIEW_USE_MPI_SSEND=$(usex mpi)
+		-DVTK_Group_MPI=$(usex mpi)
+		-DVTK_XDMF_USE_MPI=$(usex mpi)
+		-DXDMF_BUILD_MPI=$(usex mpi)
+		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
+		-DModule_vtkPython=$(usex python)
+		-DModule_pqPython=$(usex python)
+		-DModule_vtkWrappingPythonCore=$(usex python)
+		-DModule_vtkPVPythonSupport=$(usex python)
+		-DBUILD_DOCUMENTATION=$(usex doc)
+		-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
+		-DBUILD_EXAMPLES=$(usex examples)
 		)
 
 		#if use qt4 ; then
@@ -294,7 +256,7 @@ src_configure() {
 		#fi
 
 		# TODO: MantaView VaporPlugin VRPlugin
-		mycmakeargs+=(
+		##mycmakeargs+=(
 		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AdiosReader)
 		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_AnalyzeNIfTIIO)
 		## $(cmake-utils_use plugins PARAVIEW_BUILD_PLUGIN_ArrowGlyph)
@@ -322,7 +284,7 @@ src_configure() {
 		## # these are always needed for plugins
 		## $(cmake-utils_use plugins Module_vtkFiltersFlowPaths)
 		## $(cmake-utils_use plugins Module_vtkPVServerManagerApplication)
-		)
+		##)
 		#//mycmakeargs+=(
 		#//	$(cmake-utils_use debug CMAKE_BUILD_TYPE:STRING=Debug)
 		#//)
