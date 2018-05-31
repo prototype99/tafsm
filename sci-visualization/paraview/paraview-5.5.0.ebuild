@@ -213,6 +213,7 @@ src_configure() {
 		-DModule_vtkFiltersSMP:BOOL=ON
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
 		-DModule_vtkIOMPIImage:BOOL=ON
+		-DVTK_OPENGL_HAS_OSMESA:BOOL=OFF
 		)
 		if use qt4 ; then
 			mycmakeargs+=( -DPARAVIEW_QT_VERSION=4 )
