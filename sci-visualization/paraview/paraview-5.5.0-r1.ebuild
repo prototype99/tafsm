@@ -215,7 +215,7 @@ src_configure() {
 		)
 		if use python ; then
 			if use mpi ; then
-				mycmakeargs+=( -DPARAVIEW_USE_SYSTEM_MPI4PY=ON )
+				mycmakeargs+=( -DVTK_USE_SYSTEM_MPI4PY=ON )
 			fi
 		fi
 
@@ -231,12 +231,12 @@ src_configure() {
 			mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/xmlpatterns )
 			mycmakeargs+=( -DQT_HELP_GENERATOR:FILEPATH=/usr/$(get_libdir)/qt5/bin/qhelpgenerator)
 		fi
-
+ #Module_vtkParallelMPI4Py 
+ #PARAVIEW_USE_MPI
 		# TODO: XDMF_USE_MYSQL?
 		# VTK_WRAP_JAVA
 		mycmakeargs+=(
 		-DPARAVIEW_USE_MPI=$(usex mpi)
-		-DPARAVIEW_USE_MPI_SSEND=$(usex mpi)
 		-DVTK_Group_MPI=$(usex mpi)
 		-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DXDMF_BUILD_MPI=$(usex mpi)
