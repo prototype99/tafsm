@@ -126,9 +126,13 @@ src_prepare() {
 			VTK/Rendering/OpenGL/CMakeLists.txt || die
 	}
 	# lib64 fixes
+	#sed -i \
+	#	-e "s:/lib/python:/$(get_libdir)/python:g" \
+	#	VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
 	sed -i \
-		-e "s:/lib/python:/$(get_libdir)/python:g" \
-		VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
+		-e "s:VTK_INSTALL_PREFIX}/lib:VTK_INSTALL_PREFIX}/$(get_libdir):g" \
+		VTK/ThirdParty/xdmf3/CMakeFiles/vtkxdfm3.cmake || die
+
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
 		ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.cxx || die
