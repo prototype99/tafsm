@@ -160,20 +160,17 @@ src_configure() {
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
 
 	local mycmakeargs=(
-		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
-		#-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
-		#-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
-		#-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
-		#-DPV_INSTALL_LIB_DIR="${PVLIBDIR}"
-		#-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
-		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
+		-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
+		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
+		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
+		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+		-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
+		-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
 		-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		-DBUILD_SHARED_LIBS=ON
-		-DVTK_Group_StandAlone=ON
 		-DVTK_RENDERING_BACKEND=OpenGL2
 		-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF
 		#-DVTK_USE_SYSTEM_EXPAT=ON
@@ -319,21 +316,8 @@ src_configure() {
 	}
 	src_install() {
 		cmake-utils_src_install
-
-		# remove wrapper binaries and put the actual executable in place
-		for i in "${ED}"/usr/bin/*; do
-			mv "${ED}"/usr/lib/"$(basename $i)" "$i" || die
-		done
-
-		# install libraries into correct directory respecting get_libdir:
-		mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
-		mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
-		mv "${ED}"/usr/lib_tmp/* "${ED}"/usr/"${PVLIBDIR}" || die
-		rmdir "${ED}"/usr/lib_tmp || die
-
 		# set up the environment
 		echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
-		doenvd "${T}"/40${PN}
 
 		newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
 		make_desktop_entry paraview "Paraview" paraview
