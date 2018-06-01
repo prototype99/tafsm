@@ -130,9 +130,8 @@ src_prepare() {
 	#	-e "s:/lib/python:/$(get_libdir)/python:g" \
 	#	VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
 	sed -i \
-		-e "s:VTK_INSTALL_PREFIX}/lib:VTK_INSTALL_PREFIX}/$(get_libdir):g" \
-		VTK/ThirdParty/xdmf3/CMakeFiles/vtkxdfm3.cmake || die
-
+		-e "s:CMAKE_INSTALL_PREFIX}/lib:CMAKE_INSTALL_PREFIX}/$(get_libdir):g" \
+		VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
 		ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.cxx || die
