@@ -204,6 +204,7 @@ src_configure() {
 		-DPROTOC_LOCATION=$(type -P protoc)
 		-DVTK_Group_StandAlone=ON
 		#-DPARAVIEW_ENABLE_XDMF3=ON
+		-DXDMF_SET_RPATH=ON
 		-DPARAVIEW_ENABLE_XDMF2=$(usex xdmf3 OFF ON)
 		-DPARAVIEW_ENABLE_XDMF3=$(usex xdmf3 ON OFF)
 		-DModule_vtkIOXdmf2=$(usex xdmf3 OFF ON)
