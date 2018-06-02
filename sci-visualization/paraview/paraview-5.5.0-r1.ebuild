@@ -218,6 +218,8 @@ src_configure() {
 		-DModule_vtkIOParallelXdmf3=$(usex xdmf3 ON OFF)
 		-DVTK_USE_SYSTEM_XDMF2=OFF
 		-DVTK_USE_SYSTEM_XDMF3=OFF
+		-DBUILD_TESTING=ON
+		-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON
 			# force this module due to incorrect build system deps
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
@@ -271,6 +273,7 @@ src_configure() {
 		-DModule_vtkGUISupportQtWebkit=OFF
 		-DModule_vtkRenderingQt="$(usex qt5)"
 		-DModule_vtkViewsQt="$(usex qt5)"
+		-DPARAVIEW_USE_ICE_T=OFF
 		-DPARAVIEW_USE_MPI=$(usex mpi)
 		-DVTK_Group_MPI=$(usex mpi)
 		-DModule_vtkFiltersParallelImaging=$(usex mpi)
