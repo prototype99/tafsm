@@ -5,7 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python3_4 python3_5 python3_6)
-inherit eutils multilib versionator python-single-r1 cmake-utils
+inherit eutils multilib versionator python-single-r1 cmake-utils gnome2-utils
 
 MAIN_PV=$(get_major_version)
 MAJOR_PV=$(get_version_component_range 1-2)
@@ -169,8 +169,8 @@ src_configure() {
 		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 		-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
-		-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
+		#-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
+		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		-DBUILD_SHARED_LIBS=ON
@@ -178,7 +178,8 @@ src_configure() {
 		-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF
 		-DVTK_USE_SYSTEM_GLEW:BOOL=ON
 		-DVTK_USE_SYSTEM_NVPIPE:BOOL=ON
-		-DVTK_USE_SYSTEM_PROTOBUF:BOOL=ON
+		#-DVTK_USE_SYSTEM_PROTOBUF:BOOL=ON
+		-DVTK_USE_SYSTEM_PROTOBUF:BOOL=OFF
 		-DVTK_USE_CXX11_FEATURES:BOOL=ON
 		#-DVTK_USE_SYSTEM_EXPAT=ON
 		#-DVTK_USE_SYSTEM_FREETYPE=ON
@@ -190,7 +191,6 @@ src_configure() {
 		-DVTK_USE_SYSTEM_NETCDF=OFF
 		#-DVTK_USE_SYSTEM_OGGTHEORA=ON
 		#-DVTK_USE_SYSTEM_PNG=ON
-		-DVTK_USE_SYSTEM_PROTOBUF=ON
 		-DVTK_USE_SYSTEM_PYGMENTS=ON
 		#-DVTK_USE_SYSTEM_TIFF=ON
 		#$(usex xdmf2 "-DVTK_USE_SYSTEM_XDMF2=ON" "-DVTK_USE_SYSTEM_XDMF2=OFF")
@@ -232,7 +232,8 @@ src_configure() {
 		-DVTK_DISPATCH_SOA_ARRAYS:BOOL=ON
 		-DVTK_DISPATCH_TYPED_ARRAYS:BOOL=ON
 		#-DHDF5_BUILD_STATIC_EXECS:BOOL=ON
-		-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
+		#-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
+		-DVTK_PYTHON_FULL_THREADSAFE:BOOL=OFF
 		-DBUILD_DICOM_PROGRAMS:BOOL=OFF
 		-DModule_vtkDICOM:BOOL=ON
 		-DModule_vtkFiltersImaging:BOOL=ON
@@ -240,7 +241,8 @@ src_configure() {
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
 		-DVTK_OPENGL_HAS_OSMESA:BOOL=OFF
 		-DPARAVIEW_USE_VTKM=ON
-		-DVTKm_ENABLE_OSMESA=ON
+		#-DVTKm_ENABLE_OSMESA=ON
+		-DVTKm_ENABLE_OSMESA=OFF
 		-DModule_vtkUtilitiesProcessXML=ON
 		)
 		if use python ; then
@@ -271,8 +273,9 @@ src_configure() {
 		-DVTK_Group_Qt="$(usex qt5)"
 		#-DModule_vtkGUISupportQtWebkit="$(usex qt5)"
 		-DModule_vtkGUISupportQtWebkit=OFF
-		-DModule_vtkRenderingQt="$(usex qt5)"
-		-DModule_vtkViewsQt="$(usex qt5)"
+		-DModule_vtkRenderingQt=OFF
+		-DModule_vtkViewsQt=OFF
+		-DModule_vtkRenderingSceneGraph=OFF
 		-DPARAVIEW_USE_ICE_T=OFF
 		-DPARAVIEW_USE_MPI=$(usex mpi)
 		-DVTK_Group_MPI=$(usex mpi)
@@ -320,19 +323,23 @@ src_configure() {
 		fi
 
 		cmake-utils_src_configure
-	}
+}
 
-	src_compile() {
-		cmake-utils_src_compile
-	}
-	src_install() {
-		cmake-utils_src_install
-		# set up the environment
-		echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
+src_compile() {
+	cmake-utils_src_compile
+}
+src_install() {
+	cmake-utils_src_install
+	# set up the environment
+	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
 
-		newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
-		make_desktop_entry paraview "Paraview" paraview
+	newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
+	make_desktop_entry paraview "Paraview" paraview
 
-		use python && python_optimize "${D}"/usr/$(get_libdir)/${PN}-${MAJOR_PV}
-	}
+	use python && python_optimize "${D}"/usr/$(get_libdir)/${PN}-${MAJOR_PV}
+#	gnome2_icon_cache_update
+}
+pkg_postinst() {
+	gnome2_icon_cache_update
+}
 
