@@ -120,11 +120,11 @@ src_prepare() {
 		CMake/ParaViewPlugins.cmake || die
 
 	# no proper switch
-	use nvcontrol || {
-		sed -i \
-			-e '/VTK_USE_NVCONTROL/s#1#0#' \
-			VTK/Rendering/OpenGL/CMakeLists.txt || die
-	}
+	#use nvcontrol || {
+	#	sed -i \
+	#		-e '/VTK_USE_NVCONTROL/s#1#0#' \
+	#		VTK/Rendering/OpenGL/CMakeLists.txt || die
+	#}
 	# lib64 fixes
 	#sed -i \
 	#	-e "s:/lib/python:/$(get_libdir)/python:g" \
