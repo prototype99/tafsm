@@ -347,6 +347,11 @@ src_install() {
 		then
 			mv "${file}" "$i" || die
 		fi
+		file="${ED}"/usr/$(get_libdir)/"$(basename $i)" 
+		if [ -f ${file} ];
+		then
+			mv "${file}" "$i" || die
+		fi
 	done
 
 	# install libraries into correct directory respecting get_libdir:
