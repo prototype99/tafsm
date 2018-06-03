@@ -24,6 +24,6 @@ src_compile() {
 }
 src_install() {
 	dodir /opt/ospray-1.6
-	cp -aR "${S}"ospray-1.6.0.x86_64.linux "${ED}"/opt/ospray-1.6
+	cp -aR "${S}"/ospray-1.6.0.x86_64.linux "${ED}"/opt/ospray-1.6
 }
 
