@@ -6,7 +6,7 @@ EAPI=6
 PYTHON_COMPAT=( python2_7 python3_4 python3_5 python3_6 )
 
 #inherit eutils flag-o-matic toolchain-funcs cmake-utils versionator git-r3 python-r1
-inherit cmake-utils git-r3 python-r1 versionator 
+inherit cmake-utils git-r3  versionator python-single-r1 
 
 DESCRIPTION="Segmentation of vascular segments (or other anatomical structures)
 from medical images:
@@ -78,6 +78,13 @@ src_configure() {
 	#fi
 	cmake-utils_src_configure
 }
+pkg_setup() {
+	python-single-r1_pkg_setup
+	PYSITE=$(python_get_sitedir)
+	SITE="${EPYTHON}/site-packages"
+}
+
+
 src_install() {
 	elog "Install: ${PWD}"
 	cd "${CMAKE_BUILD_DIR}/Install"
@@ -116,11 +123,11 @@ src_install() {
 
 	#python_foreach_impl installation
 	#elog "$(python_get_sitedir)/vmtk"
-	insinto "/usr/$(get_libdir)/python2.7/site-packages/vmtk"
-	find "lib/python2.7/site-packages/vmtk" -type f | while read f ; do
+	insinto "${PYSITE}/vmtk"
+	find "lib/${SITE}/vmtk" -type f | while read f ; do
 		doins ${f}
 	done
-	find "lib/python2.7/site-packages/vmtk/" -type f -name "vtkvmtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
+	find "lib/${SITE}/vmtk/" -type f -name "vtkvmtk*.so" -maxdepth 1 -not -name "*.py" | while read f ; do
 		doins $f
 	done
 
