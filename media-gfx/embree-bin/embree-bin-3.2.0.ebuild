@@ -23,8 +23,7 @@ src_compile() {
 	:
 }
 src_install() {
-	elog "cp -aR ${S}/embree-3.2.0.x86_64.linux/* ${ED}/opt/embree-3"
-	dodir /opt/embree-3
+	dodir /opt/embree-3.2
 	cp -aR "${S}"/embree-3.2.0.x86_64.linux/* "${ED}"/opt/embree-3
 }
 
