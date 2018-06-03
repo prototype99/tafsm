@@ -14,7 +14,6 @@ IUSE=""
 
 DEPEND="
 	dev-cpp/tbb
-	media-gfx/embree-bin
 "
 RDEPEND="${DEPEND}"
 

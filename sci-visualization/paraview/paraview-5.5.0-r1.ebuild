@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="cg coprocessing development doc examples mpi xdmf3 mysql nvcontrol openmp plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
+IUSE="cg coprocessing development doc examples mpi xdmf3 ospray mysql nvcontrol openmp plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -43,6 +43,9 @@ RDEPEND="
 	x11-libs/libXext
 	x11-libs/libXmu
 	x11-libs/libXt
+	ospray? (
+		media-gfx/ospray-bin
+		)
 	coprocessing? (
 		plugins? (
 			qt4? (
@@ -113,12 +116,6 @@ src_prepare() {
 	default
 	cmake-utils_src_prepare
 	epatch "${FILESDIR}/${P}_all_protected.patch"
-	
-	sed -i \
-		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
-		ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.cxx \
-		CMake/ParaViewPlugins.cmake || die
-
 	# no proper switch
 	#use nvcontrol || {
 	#	sed -i \
@@ -161,24 +158,30 @@ src_configure() {
 	#elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
 	#elog "	-DBUILD_SHARED_LIBS=ON"
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
-
+	local python_with_version="$(get_version_component_range 1-2 ${EPYTHON})"
+	PYTHON_VERSION="${python_with_version/python/}"
 	local mycmakeargs=(
-		-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
+		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
+		#-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
+		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
+		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
+		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
+		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
 		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
 		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
 		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
 		-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
-		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		#-DEXPAT_INCLUDE_DIR="include/paraview-${PARAVIEW_VERSION}"
-		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
-		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
-		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		-DBUILD_SHARED_LIBS=ON
+		-DCMAKE_COLOR_MAKEFILE=TRUE
+		-DCMAKE_VERBOSE_MAKEFILE=ON
+		-DVTK_Group_StandAlone=ON
 		-DVTK_RENDERING_BACKEND=OpenGL2
 		-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF
 		-DVTK_USE_SYSTEM_GLEW:BOOL=ON
 		-DVTK_USE_SYSTEM_NVPIPE:BOOL=ON
 		-DVTK_USE_SYSTEM_PROTOBUF:BOOL=ON
+		#-DVTK_USE_OFFSCREEN=TRUE
 		#-DVTK_USE_SYSTEM_PROTOBUF:BOOL=OFF
 		-DVTK_USE_CXX11_FEATURES:BOOL=ON
 		#-DVTK_USE_SYSTEM_EXPAT=ON
@@ -199,14 +202,10 @@ src_configure() {
 		-DVTK_USE_SYSTEM_ZOPE=OFF
 		#-DVTK_USE_SYSTEM_TWISTED=ON
 		-DVTK_USE_SYSTEM_TWISTED=OFF
-		-DCMAKE_VERBOSE_MAKEFILE=ON
-		-DCMAKE_COLOR_MAKEFILE=TRUE
-		#-DVTK_USE_OFFSCREEN=TRUE
 		-DVTK_DEFAULT_RENDER_WINDOW_OFFSCREEN=TRUE
 		-DCMAKE_USE_PTHREADS=ON
 		-DVTK_USE_FFMPEG_ENCODER=OFF
 		-DPROTOC_LOCATION=$(type -P protoc)
-		-DVTK_Group_StandAlone=ON
 		#-DPARAVIEW_ENABLE_XDMF3=ON
 		-DXDMF_SET_RPATH=ON
 		-DPARAVIEW_ENABLE_XDMF2=$(usex xdmf3 OFF ON)
@@ -223,10 +222,9 @@ src_configure() {
 			# force this module due to incorrect build system deps
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
-		-DVTK_PYTHON_VERSION=3
+		-DVTK_PYTHON_VERSION="${PYTHON_VERSION}"
 		-DVTK_USE_SYSTEM_SIX:BOOL=OFF
 		#-DPARAVIEW_QT_VERSION=5
-		-DPARAVIEW_USE_OSPRAY=OFF
 		-DVTK_ALL_NEW_OBJECT_FACTORY:BOOL=ON
 		-DVTK_DISPATCH_AOS_ARRAYS:BOOL=ON
 		-DVTK_DISPATCH_SOA_ARRAYS:BOOL=ON
@@ -245,6 +243,16 @@ src_configure() {
 		-DVTKm_ENABLE_OSMESA=OFF
 		-DModule_vtkUtilitiesProcessXML=ON
 		)
+		if use ospray ; then
+			local ospray=$(best_version media-gfx/ospray-bin)
+			ospray=${ospray#media-gfx/}
+			ospray=$(get_version_component_range 3-4 ${ospray})
+			mycmakeargs+=( 
+			-DPARAVIEW_USE_OSPRAY=ON
+			-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
+			)
+			elog "OSPRay path: /opt/ospray-${ospray}"
+		fi
 		if use python ; then
 			if use mpi ; then
 				mycmakeargs+=( -DVTK_USE_SYSTEM_MPI4PY=ON )
