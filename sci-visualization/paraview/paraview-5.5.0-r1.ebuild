@@ -168,10 +168,10 @@ src_configure() {
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
-		-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
-		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
-		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
-		-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
+		#-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
+		#-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
+		#-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+		#-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
 		-DBUILD_SHARED_LIBS=ON
 		-DCMAKE_COLOR_MAKEFILE=TRUE
 		-DCMAKE_VERBOSE_MAKEFILE=ON
@@ -295,7 +295,7 @@ src_configure() {
 		-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
 		-DModule_vtkPython=$(usex python)
-		-DModule_pqPython=$(usex python)
+		-DModule_pqPython="$(usex qt5 "$(usex python)" "off")"
 		-DModule_vtkWrappingPythonCore=$(usex python)
 		-DModule_vtkPVPythonSupport=$(usex python)
 		#-DXDMF_WRAP_PYTHON="$(usex python)"
@@ -340,6 +340,20 @@ src_install() {
 	cmake-utils_src_install
 	# set up the environment
 	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
+	# remove wrapper binaries and put the actual executable in place
+	for i in "${ED}"/usr/bin/*; do
+		file="${ED}"/usr/lib/"$(basename $i)" 
+		if [ -f ${file} ];
+		then
+			mv "${file}" "$i" || die
+		fi
+	done
+
+	# install libraries into correct directory respecting get_libdir:
+	mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
+	mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
+	mv "${ED}"/usr/lib_tmp/* "${ED}"/usr/"${PVLIBDIR}" || die
+	rmdir "${ED}"/usr/lib_tmp || die
 
 	newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
 	make_desktop_entry paraview "Paraview" paraview

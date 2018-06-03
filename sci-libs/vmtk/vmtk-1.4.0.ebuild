@@ -34,7 +34,7 @@ DEPEND="\
 "
 
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
-EGIT_COMMIT="v$(get_version_component_range 1-2 $PV)"
+EGIT_COMMIT="v$(get_version_component_range 1-3 $PV)"
 #EGIT_MASTER="vtk"
 #PYTHON_MODNAME="vmtk"
 RDEPEND="${DEPEND}"
@@ -67,6 +67,7 @@ src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_BUILD_TYPE=Release
 		-DVMTK_WITH_LIBRARY_VERSION=ON
+		-DVMTK_USE_X=ON
 		-DBUILD_SHARED_LIBS=ON
 		-DUSE_SYSTEM_ITK=NO 
 		-DUSE_SYSTEM_VTK=YES
