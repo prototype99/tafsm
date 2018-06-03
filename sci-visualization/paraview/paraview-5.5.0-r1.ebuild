@@ -218,7 +218,7 @@ src_configure() {
 		-DModule_vtkIOParallelXdmf3=$(usex xdmf3 ON OFF)
 		-DVTK_USE_SYSTEM_XDMF2=OFF
 		-DVTK_USE_SYSTEM_XDMF3=OFF
-		-DBUILD_TESTING=ON
+		#-DBUILD_TESTING=ON
 		-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON
 			# force this module due to incorrect build system deps
 		# wrt bug 460528
