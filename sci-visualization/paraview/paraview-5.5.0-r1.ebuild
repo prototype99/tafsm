@@ -5,7 +5,7 @@
 EAPI=6
 
 PYTHON_COMPAT=( python3_4 python3_5 python3_6)
-inherit eutils multilib versionator python-single-r1 cmake-utils gnome2-utils
+inherit eutils versionator python-single-r1 cmake-multilib gnome2-utils
 
 MAIN_PV=$(get_major_version)
 MAJOR_PV=$(get_version_component_range 1-2)
@@ -127,8 +127,25 @@ src_prepare() {
 	#	-e "s:/lib/python:/$(get_libdir)/python:g" \
 	#	VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
 	sed -i \
+		-e "s:lib/cmake:$(get_libdir)/cmake:g" \
+		CMakeLists.txt || die
+	sed -i \
+		-e "s:ParaView_BINARY_DIR}/lib:ParaView_BINARY_DIR}/$(get_libdir):g"\
+		CMakeLists.txt || die
+
+	sed -i \
 		-e "s:CMAKE_INSTALL_PREFIX}/lib:CMAKE_INSTALL_PREFIX}/$(get_libdir):g" \
 		VTK/ThirdParty/xdmf3/vtkxdmf3/CMakeLists.txt || die
+	sed -i \
+		-e "s:CMAKE_INSTALL_PREFIX}/lib:CMAKE_INSTALL_PREFIX}/$(get_libdir):g" \
+		VTK/ThirdParty/xdmf3/vtkxdmf3/core/CMakeLists.txt || die
+	sed -i \
+		-e "s:CMAKE_INSTALL_PREFIX}/lib:CMAKE_INSTALL_PREFIX}/$(get_libdir):g" \
+		VTK/ThirdParty/xdmf3/vtkxdmf3/core/dsm/CMakeLists.txt || die
+	sed -i \
+		-e "s:lib/site-packages:$(get_libdir)/site-packages:g" \
+		VTK/ThirdParty/mpi4py/vtkmpi4py/CMakeLists.txt || die
+
 	sed -i \
 		-e "s:lib/paraview-:$(get_libdir)/paraview-:g" \
 		ParaViewCore/ServerManager/SMApplication/vtkInitializationHelper.cxx || die
@@ -167,14 +184,22 @@ src_configure() {
 		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
 		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
 		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
+		#-DCMAKE_SKIP_RPATH=ON
+		#-DCMAKE_SKIP_INSLL_RPATH=OFF
+		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
 		#-DCMAKE_LIBRARY_OUTPUT_DIRECTORY="${ParaView_BINARY_DIR}/$(get_libdir)"
-		#-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
-		#-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
-		#-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
+		-DVTK_INSTALL_LIBRARY_DIR="$(get_libdir)"
+		-DVTK_INSTALL_PACKAGE_DIR="$(get_libdir)/cmake/paraview-${PARAVIEW_VERSION}"
+		-DVTK_INSTALL_ARCHIVE_DIR="$(get_libdir)"
+		-DINSTALL_LIBDIR="${PVLIBDIR}"
+		-DPV_INSTALL_LIBDIR="${PVLIBDIR}"
+		-Dlibdir="${EPREFIX}/usr/$(get_libdir)"
+		-DQtTesting_INSTALL_LIB_DIR="$(get_libdir)"
+		-DQtTesting_INSTALL_CMAKE_DIR="$(get_libdir)/cmake/qttesting"
 		-DBUILD_SHARED_LIBS=ON
 		-DCMAKE_COLOR_MAKEFILE=TRUE
-		-DCMAKE_VERBOSE_MAKEFILE=ON
+		-utils DCMAKE_VERBOSE_MAKEFILE=ON
 		-DVTK_Group_StandAlone=ON
 		-DVTK_RENDERING_BACKEND=OpenGL2
 		-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF
@@ -223,6 +248,7 @@ src_configure() {
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
 		-DVTK_PYTHON_VERSION="${PYTHON_VERSION}"
+		#-DPYTHON_LIBRARY="${PYTHON_LIBRARY}"
 		-DVTK_USE_SYSTEM_SIX:BOOL=OFF
 		#-DPARAVIEW_QT_VERSION=5
 		#-DVTK_ALL_NEW_OBJECT_FACTORY:BOOL=ON
@@ -239,6 +265,8 @@ src_configure() {
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
 		-DVTK_OPENGL_HAS_OSMESA:BOOL=OFF
 		-DPARAVIEW_USE_VTKM=ON
+		-DPI4PY_INSTALL_PACKAGE_DIR="$(get_libdir)/site-packages"
+		#-DVTKm_INSTALL_CONFIG_DIR
 		#-DVTKm_ENABLE_OSMESA=ON
 		-DVTKm_ENABLE_OSMESA=OFF
 		-DModule_vtkUtilitiesProcessXML=ON
@@ -341,25 +369,24 @@ src_install() {
 	# set up the environment
 	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
 	# remove wrapper binaries and put the actual executable in place
-	for i in "${ED}"/usr/bin/*; do
-		file="${ED}"/usr/lib/"$(basename $i)" 
-		if [ -f ${file} ];
-		then
-			mv "${file}" "$i" || die
-		fi
-		file="${ED}"/usr/$(get_libdir)/"$(basename $i)" 
-		if [ -f ${file} ];
-		then
-			mv "${file}" "$i" || die
-		fi
-	done
+	#for i in "${ED}"/usr/bin/*; do
+	#	file="${ED}"/usr/lib/"$(basename $i)" 
+	#	if [ -f ${file} ];
+	#	then
+	#		mv "${file}" "$i" || die
+	#	fi
+	#	file="${ED}"/usr/$(get_libdir)/"$(basename $i)" 
+	#	if [ -f ${file} ];
+	#	then
+	#		mv "${file}" "$i" || die
+	#	fi
+	#done
 
-	# install libraries into correct directory respecting get_libdir:
-	mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
-	mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
-	mv "${ED}"/usr/lib_tmp/* "${ED}"/usr/"${PVLIBDIR}" || die
-	rmdir "${ED}"/usr/lib_tmp || die
-
+	## install libraries into correct directory respecting get_libdir:
+	#mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
+	#mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
+	#mv "${ED}"/usr/$(get_libdir)/* "${ED}"/usr/"${PVLIBDIR}" || die
+	#rmdir "${ED}"/usr/lib_tmp || die
 	newicon "${S}"/Applications/ParaView/pvIcon-32x32.png paraview.png
 	make_desktop_entry paraview "Paraview" paraview
 
