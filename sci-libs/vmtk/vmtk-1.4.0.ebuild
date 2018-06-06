@@ -30,7 +30,7 @@ KEYWORDS="amd64"
 
 DEPEND="\
 		>=dev-util/cmake-2.8
-		>=sci-libs/vtk-8.1.0
+		>=sci-libs/vtk-8.1.1
 "
 
 EGIT_REPO_URI="https://github.com/vmtk/vmtk.git"
@@ -70,7 +70,8 @@ src_configure() {
 		-DVMTK_USE_X=ON
 		-DBUILD_SHARED_LIBS=ON
 		-DUSE_SYSTEM_ITK=NO 
-		-DUSE_SYSTEM_VTK=YES
+		#-DUSE_SYSTEM_VTK=YES
+		-DUSE_SYSTEM_VTK=NO
 		)
 		#-DITK_USE_FLAT_DIRECTORY_INSTALL=OFF
 	#if use vtk; then
