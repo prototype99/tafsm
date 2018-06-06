@@ -51,8 +51,8 @@ FONT_S="${S}"
 RESTRICT="strip binchecks"
 
 src_compile() {
-	sh ${PN}_generator.sh  auto
-		Inconsolata-{Regular,Bold}.ttf migu-1m-{regular,bold}.ttf||die
-	# sh ${PN}_generator.sh  \
+	# sh ${PN}_generator.sh  auto
 	# 	Inconsolata-{Regular,Bold}.ttf migu-1m-{regular,bold}.ttf||die
+	sh ${PN}_generator.sh  \
+		Inconsolata-{Regular,Bold}.ttf migu-1m-{regular,bold}.ttf||die
 }
