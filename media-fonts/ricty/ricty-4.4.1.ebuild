@@ -14,8 +14,8 @@ HOMEPAGE="http://save.sys.t.u-tokyo.ac.jp/~yusa/fonts/ricty.html"
 #SRC_URI="http://save.sys.t.u-tokyo.ac.jp/~yusa/fonts/ricty/${MY_PN}-${PV}.tar.gz"
 # SRC_URI="https://github.com/yascentur/${MY_PN}/tarball/${PV} -> ${MY_PN}-${PV}.tar.gz"
 SRC_URI="http://www.rs.tus.ac.jp/yyusa/${PN}/${PN}_generator.sh
-https://github.com/google/fonts/tree/master/ofl/inconsolata/${MY_PA1}-Bold.ttf
-https://github.com/google/fonts/tree/master/ofl/inconsolata/${MY_PA1}-Regular.ttf
+https://github.com/google/fonts/raw/master/ofl/inconsolata/${MY_PA1}-Bold.ttf
+https://github.com/google/fonts/raw/master/ofl/inconsolata/${MY_PA1}-Regular.ttf
 https://osdn.jp/projects/mix-mplus-ipa/downloads/63545/${MY_PA2}.zip
 "
 
@@ -47,8 +47,8 @@ FONT_S="${S}"
 RESTRICT="strip binchecks"
 
 src_compile() {
-	sh ${PN}_generator.sh  auto
+	# sh ${PN}_generator.sh  auto
 		# Inconsolata-{Regular,Bold}.ttf migu-1m-{regular,bold}.ttf||die
-	# sh ${PN}_generator.sh  \
-		# Inconsolata-{Regular,Bold}.ttf migu-1m-{regular,bold}.ttf||die
+	sh ${PN}_generator.sh  \
+		Inconsolata-{Regular,Bold}.ttf migu-1m-{regular,bold}.ttf||die
 }
