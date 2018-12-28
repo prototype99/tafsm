@@ -31,7 +31,7 @@ x11-libs/libXxf86vm
 x11-libs/libXi
 media-libs/mesa
 x11-misc/xclip
-dev-util/cargo
+>=virtual/cargo-1.31.1
 "
 DEPEND="${RDEPEND}
 dev-util/cmake
