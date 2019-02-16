@@ -265,7 +265,7 @@ src_configure() {
 		#-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
 		-DVTK_PYTHON_FULL_THREADSAFE:BOOL=OFF
 		-DBUILD_DICOM_PROGRAMS:BOOL=OFF
-		-DModule_vtkDICOM:BOOL=ON
+		-DModule_vtkDICOM:BOOL=OFF
 		-DModule_vtkFiltersImaging:BOOL=ON
 		-DModule_vtkFiltersSMP:BOOL=ON
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
