@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="cg coprocessing development doc examples mpi xdmf3 ospray mysql nvcontrol openmp plugins python qt4 qt5 sqlite tcl test tk debug osmesa"
+IUSE="cg coprocessing development doc examples mpi xdmf3 ospray mysql nvcontrol openmp plugins python qt4 qt5 sqlite tcl test tk debug osmesa dicom"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -260,7 +260,7 @@ src_configure() {
 		#-DVTK_PYTHON_FULL_THREADSAFE:BOOL=ON
 		-DVTK_PYTHON_FULL_THREADSAFE:BOOL=OFF
 		-DBUILD_DICOM_PROGRAMS:BOOL=OFF
-		-DModule_vtkDICOM:BOOL=ON
+		-DModule_vtkDICOM:BOOL=$(usex dicom ON OFF)
 		-DModule_vtkFiltersImaging:BOOL=ON
 		-DModule_vtkFiltersSMP:BOOL=ON
 		-DModule_vtkGUISupportQtOpenGL:BOOL=ON
