@@ -22,7 +22,7 @@ src_compile() {
 	:
 }
 src_install() {
-	dodir /opt/ospray-1.7
-	cp -aR "${S}"/ospray-${PV}.x86_64.linux/* "${ED}"/opt/ospray-1.7
+	dodir /opt/ospray-1.8
+	cp -aR "${S}"/ospray-${PV}.x86_64.linux/* "${ED}"/opt/ospray-1.8
 }
 
