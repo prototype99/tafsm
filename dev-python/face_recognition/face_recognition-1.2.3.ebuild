@@ -24,7 +24,7 @@ dev-python/pillow
 >=dev-python/face_recognition_models-0.3.0
 >=dev-python/click-6.0
 >=sci-libs/dlib-19.7
-sci-python/numpy
+dev-python/numpy
 "
 DEPEND="${RDEPEND}"
 
