@@ -19,6 +19,12 @@ SLOT="0"
 KEYWORDS="amd64 ~x86"
 IUSE="doc test"
 
-RDEPEND="dev-python/pillow"
+RDEPEND="\
+dev-python/pillow
+sci-libs/dlib
+>=dev-python/face_recognition_models-0.3.0
+>=sci-python/numpy-19.7
+>=dev-python/click-6.0
+"
 DEPEND="${RDEPEND}"
 
