@@ -1,0 +1,11 @@
+--- parmetis-4.0.3/metis/include/metis.h	2013-03-31 01:24:50.000000000 +0900
++++ /tmp/metis.h	2019-06-09 11:13:18.676882234 +0900
+@@ -40,7 +40,7 @@
+    32 : single precission floating point (float)
+    64 : double precission floating point (double)
+ --------------------------------------------------------------------------*/
+-#define REALTYPEWIDTH 32
++#define REALTYPEWIDTH 64
+ 
+ 
+ 
