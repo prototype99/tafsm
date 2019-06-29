@@ -23,6 +23,7 @@ dev-python/pyyaml[${PYTHON_USEDEP}]
 dev-python/pygments[${PYTHON_USEDEP}]
 dev-python/markdown[${PYTHON_USEDEP}]
 dev-python/docopt[${PYTHON_USEDEP}]
+dev-python/tabulate[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
 
