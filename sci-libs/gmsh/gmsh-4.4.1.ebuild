@@ -4,7 +4,8 @@
 
 EAPI=7
 #inherit distutils eutils flag-o-matic toolchain-funcs versionator qt4 cmake-utils
-inherit  flag-o-matic toolchain-funcs cmake-utils
+PYTHON_COMPAT=( python3_4 python3_5 python3_6 python3_7)
+inherit  flag-o-matic toolchain-funcs cmake-utils python-single-r1
 
 
 DESCRIPTION="Gmsh is a 3D finite element grid generator with a build-in CAD
@@ -20,15 +21,18 @@ SRC_URI="http://gmsh.info/src/${P}-source.tgz"
 LICENSE=""
 SLOT="0"
 KEYWORDS="amd64"
-IUSE="gui netgen tetgen occ petsc"
+
+REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
+
+IUSE="gui netgen occ petsc python"
 
 DEPEND="
 		dev-util/cmake
 	gui? ( x11-libs/fltk[opengl] )
 	netgen? ( sci-libs/netgen )
-	tetgen? ( sci-libs/tetgen )
 	occ?  ( sci-libs/opencascade )
 	petsc?  ( >=sci-libs/petsc-3.4.4 >=sci-libs/slepc-3.4.4 )
+	python? ( ${PYTHON_DEPS} )
 "
 	#petsc?  ( <sci-libs/petsc-3.3 <sci-libs/slepc-3.3 )
 RDEPEND="${DEPEND}"
@@ -64,26 +68,12 @@ src_configure() {
 	else
 		mycmakeargs+=( ENABLE_PETS:BOOL=OFF )
 	fi
-	if use gui; then
-		mycmakeargs+=( ENABLE_FLTK:BOOL=ON )
-	else
-		mycmakeargs+=( ENABLE_FLTK:BOOL=OFF )
-	fi
-	if use occ; then
-		mycmakeargs+=( ENABLE_OCC:BOOL=ON )
-	else
-		mycmakeargs+=( ENABLE_OCC:BOOL=OFF )
-	fi
-	if use netgen; then
-		mycmakeargs+=( ENABLE_NETGEN:BOOL=ON )
-	else
-		mycmakeargs+=( ENABLE_NETGEN:BOOL=OFF )
-	fi
-	if use tetgen; then
-		mycmakeargs+=( ENABLE_TETGEN:BOOL=ON )
-	else
-		mycmakeargs+=( ENABLE_TETGEN:BOOL=OFF )
-	fi
+	mycmakeargs+=(
+	-DENABLE_FLTK=$(usex gui ON OF)
+	-DENABLE_OCC=$(usex occ ON OF)
+	-DENABLE_NETGEN=$(usex netgen ON OF)
+	-DENABLE_WRAP_PYTHON=$(usex python ON OF)
+	)
 	cmake-utils_src_configure
 	unset PYTHON_MODNAME
 }
