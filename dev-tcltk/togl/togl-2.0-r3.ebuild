@@ -38,7 +38,7 @@ src_configure() {
 	econf \
 		$(use_enable debug symbols) \
 		$(use_enable threads) \
-		--enable-shared 
+		--enable-shared
 }
 
 src_install() {
