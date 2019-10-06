@@ -176,7 +176,7 @@ src_configure() {
 	#elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
 	#elog "	-DBUILD_SHARED_LIBS=ON"
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
-	local python_with_version="$(get_version_component_range 1-2 ${EPYTHON})"
+	local python_with_version="$(ver_cut 1-2 ${EPYTHON})"
 	PYTHON_VERSION="${python_with_version/python/}"
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
