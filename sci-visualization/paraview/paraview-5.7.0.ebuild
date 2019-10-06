@@ -43,6 +43,7 @@ RDEPEND="
 	x11-libs/libXext
 	x11-libs/libXmu
 	x11-libs/libXt
+	>=dev-util/ninja-1.9.0
 	ospray? (
 		media-gfx/ospray-bin
 		)
