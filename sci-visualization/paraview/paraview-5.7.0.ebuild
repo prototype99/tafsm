@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="cg coprocessing development doc examples mpi xdmf3 ospray mysql nvcontrol openmp plugins python qt5 sqlite tcl test tk debug osmesa dicom"
+IUSE="cg development doc examples mpi xdmf3 ospray mysql nvcontrol openmp plugins python qt5 sqlite tcl test tk debug osmesa dicom"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -47,12 +47,9 @@ RDEPEND="
 	x11-libs/libXmu
 	x11-libs/libXt
 	>=dev-util/ninja-1.9.0
-		coprocessing? (
-			qt5? (
-				dev-python/PyQt5
-				dev-qt/qtgui:5
-				)
-		)
+	ospray? (
+		=media-gfx/oidn-0.8.2
+	)
 	mpi? ( virtual/mpi[cxx,romio] )
 	mysql? ( virtual/mysql )
 	dev-python/pygments[${PYTHON_USEDEP}]
