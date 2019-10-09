@@ -19,6 +19,7 @@ DEPEND="
 RDEPEND="${DEPEND}"
 
 src_configure() {
+	#OIDN_STATIC_LIB
 	#local mycmakeargs=(
 	#-DEMBREE_ISPC_SUPPORT=OFF
 	#)

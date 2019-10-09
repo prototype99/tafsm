@@ -151,7 +151,7 @@ src_configure() {
 	#elog "	-DCMAKE_INSTALL_PREFIX="${EPREFIX}/usr"
 	#elog "	-DEXPAT_INCLUDE_DIR=${EPREFIX}/usr/include"
 	#elog "	-DEXPAT_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libexpat.so"
-	#elog "	-DOPENGL_gl_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGL.so"
+	#elog "	-DopengL_gl_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGL.so"
 	#elog "	-DOPENGL_glu_LIBRARY=${EPREFIX}/usr/$(get_libdir)/libGLU.so"
 	#elog "	-DBUILD_SHARED_LIBS=ON"
 	#CMAKE_INSTALL_RPATH_USE_LINK_PATH
@@ -178,7 +178,8 @@ src_configure() {
 		#-Dlibdir="${EPREFIX}/usr/$(get_libdir)"
 		-DQtTesting_INSTALL_LIB_DIR="$(get_libdir)"
 		-DQtTesting_INSTALL_CMAKE_DIR="$(get_libdir)/cmake/qttesting"
-		-DBUILD_SHARED_LIBS=ON
+		-DPARAVIEW_BUILD_SHARED_LIBS=ON
+		#-DBUILD_SHARED_LIBS=ON
 		#-DCMAKE_COLOR_MAKEFILE=TRUE
 		-utils DCMAKE_VERBOSE_MAKEFILE=ON
 		#-DVTK_Group_StandAlone=ON
@@ -257,7 +258,7 @@ src_configure() {
 		if use ospray ; then
 			#local ospray=$(best_version media-gfx/ospray-bin)
 			#ospray=${ospray#media-gfx/}
-			ospray=$(ver_cut 3-4 ${ospray})
+			#ospray=$(ver_cut 3-4 ${ospray})
 			mycmakeargs+=( 
 			-DPARAVIEW_USE_RAYTRACING=ON
 			#-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
@@ -272,6 +273,7 @@ src_configure() {
 		)
 		elog "OSmesa"
 		fi
+		#mycmakeargs+=( -DVTK_OPENGL_USE_GLES=ON )
 		#if use python ; then
 		#	if use mpi ; then
 		#		mycmakeargs+=( -DVTK_USE_SYSTEM_MPI4PY=ON )
@@ -286,11 +288,15 @@ src_configure() {
 		if use qt5 ; then
 			#mycmakeargs+=( -DPARAVIEW_QT_VERSION=5 )
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
+			mycmakeargs+=( -DPARAVIEW_ENABLE_QT_SUPPORT=ON)
+			mycmakeargs+=( -DPARAVIEW_USE_QTHELP=ON)
 
 			#mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/qmake )
 			#mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/xmlpatterns )
 			#mycmakeargs+=( -DQT_HELP_GENERATOR:FILEPATH=/usr/$(get_libdir)/qt5/bin/qhelpgenerator)
 		fi
+		mycmakeargs+=( -DPARAVIEW_ENABLE_COMMANDLINE_TOOLS=ON )
+		#mycmakeargs+=( -DPARAVIEW_USE_EXTERNAL=ON )
 		#Module_vtkParallelMPI4Py 
 		#PARAVIEW_USE_MPI
 		# TODO: XDMF_USE_MYSQL?
