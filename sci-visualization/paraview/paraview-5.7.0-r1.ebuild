@@ -293,6 +293,7 @@ src_configure() {
 			mycmakeargs+=( -DPARAVIEW_BUILD_QT_GUI=ON )
 			mycmakeargs+=( -DPARAVIEW_ENABLE_QT_SUPPORT=ON)
 			mycmakeargs+=( -DPARAVIEW_USE_QTHELP=ON)
+			mycmakeargs+=( -DVTK_BUILD_QT_DESIGNER_PLUGIN=ON )
 
 			#mycmakeargs+=( -DQT_QMAKE_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/qmake )
 			#mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/xmlpatterns )
