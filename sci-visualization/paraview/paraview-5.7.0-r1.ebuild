@@ -93,7 +93,7 @@ pkg_setup() {
 }
 
 src_prepare() {
-	default
+	#default
 	cmake-utils_src_prepare
 	#epatch "${FILESDIR}/${P}_all_protected.patch"
 	# no proper switch
@@ -273,8 +273,8 @@ src_configure() {
 			-DOPENGL_gl_LIBRARY="/usr/lib64/libOSMesa.so"
 			)
 			elog "OSmesa"
-		else
-			mycmakeargs+=(-DPARAVIEW_ENABLE_NVPIPE)
+		#else
+		#	mycmakeargs+=( -DPARAVIEW_ENABLE_NVPIPE=ON )
 		fi
 		#mycmakeargs+=( -DVTK_OPENGL_USE_GLES=ON )
 		#if use python ; then
