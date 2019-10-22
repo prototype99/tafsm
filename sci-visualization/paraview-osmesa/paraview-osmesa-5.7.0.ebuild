@@ -25,6 +25,13 @@ https://www.paraview.org/files/dependencies/llvm-7.0.0.src.tar.xz
 https://www.paraview.org/files/dependencies/Mako-1.0.7.tar.gz
 https://www.paraview.org/files/dependencies/szip-2.1.1.tar.gz
 https://www.paraview.org/files/dependencies/setuptools-23.0.0.tar.gz
+ospray? (
+	https://www.paraview.org/files/data/OSPRayMaterials-0.2.tar.gz
+	https://www.paraview.org/files/dependencies/ispc-v1.9.2-linux.tar.gz
+	https://www.paraview.org/files/dependencies/ospray-1.8.4.tar.gz
+	https://www.paraview.org/files/dependencies/embree-3.2.0.tar.gz
+)
+
 "
 #https://www.paraview.org/files/dependencies/scipy-1.2.2.tar.xz
 
@@ -78,6 +85,7 @@ src_configure() {
 		-DENABLE_cxx11:BOOL=ON
 		-DUSE_SYSTEM_zlib:BOOL=ON
 		-DUSE_SYSTEM_expat:BOOL=ON
+		-DUSE_SYSTEM_png:BOOL=ON
 		-DENABLE_mpi:BOOL=$(usex mpi)
 		-DUSE_SYSTEM_mpi:BOOL=$(usex mpi)
 		-DENABLE_xdmf3:BOOL=$(usex xdmf3)

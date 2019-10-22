@@ -26,6 +26,13 @@ https://www.paraview.org/files/dependencies/szip-2.1.1.tar.gz
 https://www.paraview.org/files/dependencies/setuptools-23.0.0.tar.gz
 https://www.paraview.org/files/dependencies/qt-everywhere-opensource-src-5.9.2.tar.xz
 https://www.paraview.org/files/dependencies/fontconfig-2.12.6.tar.bz2
+https://www.paraview.org/files/dependencies/freetype-2.10.0.tar.bz2
+ospray? (
+	https://www.paraview.org/files/data/OSPRayMaterials-0.2.tar.gz
+	https://www.paraview.org/files/dependencies/ispc-v1.9.2-linux.tar.gz
+	https://www.paraview.org/files/dependencies/ospray-1.8.4.tar.gz
+	https://www.paraview.org/files/dependencies/embree-3.2.0.tar.gz
+)
 "
 #https://www.paraview.org/files/dependencies/mesa-18.2.2.tar.xz
 #https://www.paraview.org/files/dependencies/scipy-1.2.2.tar.xz
@@ -42,6 +49,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} ) "
 
 RDEPEND="
 	dev-libs/expat
+	media-libs/libpng:0
 	mpi? ( virtual/mpi[cxx,romio] )
 	python? (
 		${PYTHON_DEPS}
@@ -80,6 +88,7 @@ src_configure() {
 		-DENABLE_cxx11:BOOL=ON
 		-DUSE_SYSTEM_zlib:BOOL=ON
 		-DUSE_SYSTEM_expat:BOOL=ON
+		-DUSE_SYSTEM_png:BOOL=ON
 		-DENABLE_mpi:BOOL=$(usex mpi)
 		-DUSE_SYSTEM_mpi:BOOL=$(usex mpi)
 		-DENABLE_xdmf3:BOOL=$(usex xdmf3)
