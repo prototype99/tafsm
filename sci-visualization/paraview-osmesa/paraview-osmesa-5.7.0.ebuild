@@ -30,6 +30,7 @@ ospray? (
 	https://www.paraview.org/files/dependencies/ispc-v1.9.2-linux.tar.gz
 	https://www.paraview.org/files/dependencies/ospray-1.8.4.tar.gz
 	https://www.paraview.org/files/dependencies/embree-3.2.0.tar.gz
+	https://www.paraview.org/files/dependencies/tbb2019_20190410oss_lin.tgz
 )
 
 "
