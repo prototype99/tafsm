@@ -1,0 +1,55 @@
+diff -ur vmtk-1.2.0/PypeS/pyperun.py vmtk-1.2.0.mod/PypeS/pyperun.py
+--- vmtk-1.2.0/PypeS/pyperun.py	2015-06-20 09:41:06.000000000 +0900
++++ vmtk-1.2.0.mod/PypeS/pyperun.py	2015-06-20 09:53:35.000000000 +0900
+@@ -44,12 +44,12 @@
+ 
+     newEnviron = {}
+ 
+-    vmtkhome = os.path.dirname(os.path.abspath(__file__))
++    vmtkhome = os.path.dirname(os.path.realpath(os.path.abspath(__file__)))
+ 
+     if vmtkhome.endswith('bin'):
+-        vmtkhome = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..")
++        vmtkhome = os.path.join(vmtkhome,"..")
+     else:
+-        vmtkhome = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","..","..")
++        vmtkhome = os.path.join(vmtkhome,"..","..","..")
+ 	
+     vtkdir = [el for el in os.listdir(os.path.join(vmtkhome,"lib")) if el.startswith('vtk')][0]
+ 
+diff -ur vmtk-1.2.0/vmtk.py vmtk-1.2.0.mod/vmtk.py
+--- vmtk-1.2.0/vmtk.py	2015-06-20 09:41:06.000000000 +0900
++++ vmtk-1.2.0.mod/vmtk.py	2015-06-20 09:53:15.000000000 +0900
+@@ -26,12 +26,12 @@
+     
+     newEnviron = {}
+     
+-    vmtkhome = os.path.dirname(os.path.abspath(__file__))
++    vmtkhome = os.path.dirname(os.path.realpath(os.path.abspath(__file__)))
+     
+     if vmtkhome.endswith('bin'):
+-        vmtkhome = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..")
++        vmtkhome = os.path.join(vmtkhome,"..")
+     else:
+-        vmtkhome = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","..","..")
++        vmtkhome = os.path.join(vmtkhome,"..","..","..")
+     
+     vtkdir = [el for el in os.listdir(os.path.join(vmtkhome,"lib")) if el.startswith('vtk')][0]
+     
+@@ -46,6 +46,16 @@
+     sys.path.append(os.path.join(vmtkhome,"lib",vtkdir))
+     sys.path.append(os.path.join(vmtkhome,"lib","vmtk"))
+     
++    if not sys.argv[-1]=="----":
++      try:
++        sys.argv.append("----")
++        os.execv(sys.argv[0], sys.argv)
++      except Exception, exc:
++        print 'Failed re-exec:', exc
++        sys.exit(1)
++    else:
++      sys.argv = sys.argv[:-1]
++
+     from vmtk import pypes
+     
+     vmtkOptions = ['--help', '--ui', '--file']

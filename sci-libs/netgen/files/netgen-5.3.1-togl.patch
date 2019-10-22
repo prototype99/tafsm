@@ -1,0 +1,20 @@
+--- netgen-5.3.1/ng/Makefile.am	2014-08-29 18:54:01.000000000 +0900
++++ Makefile.am	2019-10-06 00:30:10.260090649 +0900
+@@ -22,7 +22,7 @@ netgen_LDADD = $(top_builddir)/libsrc/vi
+ 	$(top_builddir)/libsrc/csg/libcsg.la \
+ 	$(top_builddir)/libsrc/interface/libinterface.la \
+ 	$(top_builddir)/libsrc/meshing/libmesh.la \
+-	-L$(TK_BIN_DIR)/Togl1.7 $(TOGLLIBDIR) -lTogl $(LIBGLU) $(TK_LIB_SPEC) $(TCL_LIB_SPEC) $(MPI_LIBS) $(FFMPEG_LIBS) $(JPEGLIB_LIBS) $(PKG_LIBS) $(MKL_LIBS) 
++	-L$(TK_BIN_DIR)/Togl1.7 $(TOGLLIBDIR) -L/usr/lib64 -lTogl1.7 $(LIBGLU) $(TK_LIB_SPEC) $(TCL_LIB_SPEC) $(MPI_LIBS) $(FFMPEG_LIBS) $(JPEGLIB_LIBS) $(PKG_LIBS) $(MKL_LIBS) 
+ 
+ 
+ #
+--- netgen-5.3.1/ng/Makefile.in	2019-10-06 00:36:13.578622187 +0900
++++ Makefile.in	2019-10-06 00:42:01.590765974 +0900
+@@ -312,7 +312,7 @@ netgen_LDADD = $(top_builddir)/libsrc/vi
+ 	$(top_builddir)/libsrc/csg/libcsg.la \
+ 	$(top_builddir)/libsrc/interface/libinterface.la \
+ 	$(top_builddir)/libsrc/meshing/libmesh.la \
+-	-L$(TK_BIN_DIR)/Togl1.7 $(TOGLLIBDIR) -lTogl $(LIBGLU) $(TK_LIB_SPEC) $(TCL_LIB_SPEC) $(MPI_LIBS) $(FFMPEG_LIBS) $(JPEGLIB_LIBS) $(PKG_LIBS) $(MKL_LIBS) 
++	-L$(TK_BIN_DIR)/Togl1.7 $(TOGLLIBDIR) -L/usr/lib64 -lTogl1.7 $(LIBGLU) $(TK_LIB_SPEC) $(TCL_LIB_SPEC) $(MPI_LIBS) $(FFMPEG_LIBS) $(JPEGLIB_LIBS) $(PKG_LIBS) $(MKL_LIBS) 
+ 

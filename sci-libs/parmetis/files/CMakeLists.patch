@@ -1,0 +1,13 @@
+--- parmetis-4.0.3/CMakeLists.txt	2013-03-31 01:24:50.000000000 +0900
++++ /tmp/CMakeLists.txt	2019-06-09 10:51:51.712315543 +0900
+@@ -1,8 +1,8 @@
+ cmake_minimum_required(VERSION 2.8)
+ project(ParMETIS)
+ 
+-set(GKLIB_PATH METIS/GKlib CACHE PATH "path to GKlib")
+-set(METIS_PATH METIS CACHE PATH "path to METIS")
++set(GKLIB_PATH ../parmetis-4.0.3/metis/GKlib CACHE PATH "path to GKlib")
++set(METIS_PATH ../parmetis-4.0.3/metis CACHE PATH "path to METIS")
+ 
+ # Symlink ./metis to wherever metis is. This allows files to be
+ # included from metis/libmetis/.
