@@ -87,6 +87,8 @@ src_configure() {
 	CMAKE_BUILD_TYPE=Release
 	local mycmakeargs=(
 		-Dsuperbuild_download_location:PATH=${DISTDIR}
+		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
+		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
 		-DBUILD_SHARED_LIBS:BOOL=ON
 		-DENABLE_paraview:BOOL=ON
 		-DENABLE_cxx11:BOOL=ON
