@@ -111,6 +111,23 @@ src_configure() {
 		#-DENABLE_osmesa:BOOL=$(usex osmesa)
 		#-Dmesa_USE_SWR:BOOL=$(usex osmesa)
 		-DENABLE_qt5:BOOL=ON
+
+		-DSUPPRESS_embree_OUTPUT:BOOL=ON
+		-DSUPPRESS_hdf5_OUTPUT:BOOL=ON
+		-DSUPPRESS_ispc_OUTPUT:BOOL=ON
+		-DSUPPRESS_lapack_OUTPUT:BOOL=ON
+		-DSUPPRESS_llvm_OUTPUT:BOOL=ON
+		-DSUPPRESS_nlohmannjson_OUTPUT:BOOL=ON
+		-DSUPPRESS_openimagedenoise_OUTPUT:BOOL=ON
+		-DSUPPRESS_osmesa_OUTPUT:BOOL=ON
+		-DSUPPRESS_ospray_OUTPUT:BOOL=ON
+		-DSUPPRESS_ospraymaterials_OUTPUT:BOOL=ON
+		-DSUPPRESS_paraview_OUTPUT:BOOL=ON
+		-DSUPPRESS_pythonmako_OUTPUT:BOOL=ON
+		-DSUPPRESS_pythonsetuptools_OUTPUT:BOOL=ON
+		-DSUPPRESS_szip_OUTPUT:BOOL=ON
+		-DSUPPRESS_tbb_OUTPUT:BOOL=ON
+
 	)
 	cmake-utils_src_configure
 }
