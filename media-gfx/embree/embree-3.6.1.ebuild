@@ -15,12 +15,13 @@ IUSE=""
 
 DEPEND="
 	dev-cpp/tbb
+	=dev-lang/ispc-1.9.2
 "
 RDEPEND="${DEPEND}"
 
 src_configure() {
 	local mycmakeargs=(
-	-DEMBREE_ISPC_SUPPORT=OFF
+	-DEMBREE_ISPC_SUPPORT=ON
 	#-DEMBREE_MAX_ISA=NONE
 	#-EMBREE_IGNORE_CMAKE_CXX_FLAGS=OFF
 	)
