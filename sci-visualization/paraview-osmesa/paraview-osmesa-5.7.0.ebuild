@@ -5,7 +5,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{5,6,7} )
-inherit eutils python-single-r1 cmake-utils git-r3
+inherit eutils python-single-r1 cmake-multilib git-r3
 
 MAIN_PV=$(ver_cut 1)
 MAJOR_PV=$(ver_cut 1-2)
