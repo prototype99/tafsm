@@ -16,6 +16,7 @@ IUSE=""
 DEPEND="
 	dev-cpp/tbb
 	media-libs/glfw
+	media-libs/openimageio
 "
 RDEPEND="${DEPEND}"
 
