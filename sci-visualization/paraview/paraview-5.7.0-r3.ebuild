@@ -19,7 +19,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="doc examples mpi xdmf3 ospray openmp python qt5 osmesa debug"
+IUSE="doc examples mpi xdmf3 ospray openmp python qt5 debug nvcontrol"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -160,9 +160,7 @@ src_configure() {
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		#-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
 		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
-		#-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
-		#-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
-		#-DCMAKE_SKIP_RPATH=ON
+				#-DCMAKE_SKIP_RPATH=ON
 		#-DCMAKE_SKIP_INSLL_RPATH=OFF
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
@@ -179,7 +177,7 @@ src_configure() {
 		-DPARAVIEW_BUILD_SHARED_LIBS=ON
 		#-DBUILD_SHARED_LIBS=ON
 		#-DCMAKE_COLOR_MAKEFILE=TRUE
-		-utils DCMAKE_VERBOSE_MAKEFILE=ON
+		-DCMAKE_VERBOSE_MAKEFILE=ON
 		#-DVTK_Group_StandAlone=ON
 		#-DVTK_RENDERING_BACKEND=OpenGL2
 		#-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF
@@ -225,7 +223,7 @@ src_configure() {
 		#-DVTK_USE_SYSTEM_XDMF3=OFF
 		#-DBUILD_TESTING=ON
 		-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON
-			# force this module due to incorrect build system deps
+		# force this module due to incorrect build system deps
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
 		-DVTK_PYTHON_VERSION="${PYTHON_VERSION}"
@@ -244,8 +242,10 @@ src_configure() {
 		#-DModule_vtkFiltersImaging:BOOL=ON
 		#-DModule_vtkFiltersSMP:BOOL=ON
 		#-DModule_vtkGUISupportQtOpenGL:BOOL=ON
-		-DVTK_USE_X=$(usex osmesa OFF ON)
-		-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
+		#-DVTK_USE_X=$(usex osmesa OFF ON)
+		-DVTK_USE_X=ON
+		#-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
+		-DVTK_OPENGL_HAS_OSMESA=ON
 		-DPARAVIEW_USE_VTKM=ON
 		#-DPI4PY_INSTALL_PACKAGE_DIR="$(get_libdir)/site-packages"
 		#-DVTKm_INSTALL_CONFIG_DIR
@@ -253,6 +253,18 @@ src_configure() {
 		#-DVTKm_ENABLE_OSMESA=$(usex osmesa ON OFF)
 		#-DModule_vtkUtilitiesProcessXML=ON
 		)
+		if use nvcontrol; then
+			mycmakeargs+=( 
+			-DPARAVIEW_ENABLE_NVPIPE=ON
+			-DOPENGL_egl_LIBRARY:FILEPATH=/usr/$(get_libdir)/opengl/nvidia/lib/libEGL.so
+			-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGL.so
+			-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLU.so
+			-DOPENGL_opengl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libOpenGL.so
+			-DOPENGL_glx_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLX.so
+			-DOPENGL_gles2_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLESv2
+		)
+		fi
+
 		if use ospray ; then
 			#local ospray=$(best_version media-gfx/ospray-bin)
 			#ospray=${ospray#media-gfx/}
@@ -265,15 +277,15 @@ src_configure() {
 			)
 			#elog "OSPRay path: /opt/ospray-${ospray}"
 		fi
-		if use osmesa ; then
-			mycmakeargs+=( 
-			-DOSMESA_LIBRARY="/usr/lib64/libOSMesa.so"
-			-DOPENGL_gl_LIBRARY="/usr/lib64/libOSMesa.so"
-			)
-			elog "OSmesa"
-		#else
-		#	mycmakeargs+=( -DPARAVIEW_ENABLE_NVPIPE=ON )
-		fi
+		##if use osmesa ; then
+		##	mycmakeargs+=( 
+		##	-DOSMESA_LIBRARY="/usr/lib64/libOSMesa.so"
+		##	-DOPENGL_gl_LIBRARY="/usr/lib64/libOSMesa.so"
+		##	)
+		##	elog "OSmesa"
+		###else
+		###	mycmakeargs+=( -DPARAVIEW_ENABLE_NVPIPE=ON )
+		##fi
 		#mycmakeargs+=( -DVTK_OPENGL_USE_GLES=ON )
 		#if use python ; then
 		#	if use mpi ; then
