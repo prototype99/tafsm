@@ -160,8 +160,8 @@ src_configure() {
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		#-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
 		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
-		-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
-		-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
+		#-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
+		#-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
 		#-DCMAKE_SKIP_RPATH=ON
 		#-DCMAKE_SKIP_INSLL_RPATH=OFF
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
