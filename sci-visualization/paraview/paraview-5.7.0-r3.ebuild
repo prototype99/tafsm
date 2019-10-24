@@ -255,7 +255,7 @@ src_configure() {
 		)
 		if use nvcontrol; then
 			mycmakeargs+=( 
-			-DPARAVIEW_ENABLE_NVPIPE=ON
+			#-DPARAVIEW_ENABLE_NVPIPE=ON
 			-DOPENGL_egl_LIBRARY:FILEPATH=/usr/$(get_libdir)/opengl/nvidia/lib/libEGL.so
 			-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGL.so
 			-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLU.so
