@@ -29,6 +29,7 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
 #ospray? (
 #	media-gfx/ospray-bin
 #	)
+#nvcontrol? ( dev-util/nvidia-cuda-sdk)
 
 RDEPEND="
 	!sci-visualization/paraview-osmesa
@@ -245,7 +246,6 @@ src_configure() {
 		#-DVTK_USE_X=$(usex osmesa OFF ON)
 		-DVTK_USE_X=ON
 		#-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
-		-DVTK_OPENGL_HAS_OSMESA=ON
 		-DPARAVIEW_USE_VTKM=ON
 		#-DPI4PY_INSTALL_PACKAGE_DIR="$(get_libdir)/site-packages"
 		#-DVTKm_INSTALL_CONFIG_DIR
@@ -257,11 +257,12 @@ src_configure() {
 			mycmakeargs+=( 
 			#-DPARAVIEW_ENABLE_NVPIPE=ON
 			-DOPENGL_egl_LIBRARY:FILEPATH=/usr/$(get_libdir)/opengl/nvidia/lib/libEGL.so
+			-DOPENGL_gles2_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLESv2
 			-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGL.so
 			-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLU.so
 			-DOPENGL_opengl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libOpenGL.so
 			-DOPENGL_glx_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLX.so
-			-DOPENGL_gles2_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLESv2
+			-DVTK_OPENGL_HAS_OSMESA=OFF
 		)
 		fi
 
