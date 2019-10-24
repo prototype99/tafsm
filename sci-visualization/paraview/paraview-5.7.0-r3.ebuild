@@ -5,7 +5,7 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_4 python3_5 python3_6 python3_7)
-inherit eutils python-single-r1 cmake-utils
+inherit eutils python-single-r1 cmake-utils xdg-utils
 
 MAIN_PV=$(ver_cut 1)
 MAJOR_PV=$(ver_cut 1-2)
@@ -392,7 +392,14 @@ src_install() {
 	use python && python_optimize "${D}"/usr/$(get_libdir)/${PN}-${MAJOR_PV}
 	#	gnome2_icon_cache_update
 }
-#pkg_postinst() {
-#	gnome2_icon_cache_update
-#}
+
+pkg_postinst() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
+}
+
+pkg_postrm() {
+	xdg_icon_cache_update
+	xdg_desktop_database_update
+}
 
