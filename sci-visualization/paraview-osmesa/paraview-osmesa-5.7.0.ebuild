@@ -5,7 +5,8 @@
 EAPI=7
 
 PYTHON_COMPAT=( python3_{5,6,7} )
-inherit eutils python-single-r1 cmake-multilib git-r3
+#inherit eutils python-single-r1 cmake-multilib git-r3
+inherit eutils python-single-r1 cmake-utils git-r3
 
 MAIN_PV=$(ver_cut 1)
 MAJOR_PV=$(ver_cut 1-2)
@@ -67,9 +68,10 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-#PATCHES=(
-#	"${FILESDIR}/${P}_all_protected.patch"
-#)
+PATCHES=(
+	"${FILESDIR}/${P}-lib.patch"
+)
+
 pkg_setup() {
 	python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
@@ -79,17 +81,99 @@ pkg_setup() {
 
 src_prepare() {
 	cmake-utils_src_prepare
-}
+	elog ${PWD}
+	for i in  \
+			projects/paraview.cmake \
+			tests/scripts/paraview.test.install.cmake \
+			projects/unix/paraview.bundle.cmake \
+			projects/unix/catalyst.bundle.cmake \
+			projects/unix/paraviewsdk.bundle.cmake \
+			projects/unix/paraview.bundle.unix.cmake \
+			projects/unix/osmesa.cmake \
+			projects/unix/mesa.cmake \
+			projects/unix/mesa.common.cmake \
+			projects/scripts/paraview.plugin.install.cmake \
+			projects/scripts/paraview.fixupcmakepaths.cmake \
+			projects/ospray.cmake \
+			projects/embree.cmake \
+			projects/las.cmake \
+			projects/apple-unix/silo.cmake \
+			superbuild/cmake/SuperbuildUtils.cmake \
+			superbuild/cmake/SuperbuildMacros.cmake \
+			superbuild/projects/nlohmannjson.cmake \
+			superbuild/projects/matplotlib.cmake \
+			superbuild/projects/apple-unix/scipy.cmake \
+			superbuild/projects/apple-unix/boost.cmake \
+			superbuild/projects/apple-unix/fontconfig.cmake \
+			superbuild/projects/bzip2.cmake \
+			superbuild/projects/scripts/matplotlib.build.cmake \
+			superbuild/projects/scripts/matplotlib.patch.cmake \
+			superbuild/projects/scripts/pythonzope.install.cmake \
+			superbuild/projects/scripts/tbb.install.cmake \
+			superbuild/projects/python3.functions.cmake \
+			superbuild/projects/unix/python3.cmake \
+			superbuild/projects/unix/tbb.cmake \
+			; do
+		elog "|$i|"
+		sed -i \
+			-e "s:install/lib(?!64):install/$(get_libdir):g" \
+			$i || die
+		sed -i \
+			-e "s|DCMAKE_INSTALL_LIBDIR:STRING=lib(?!64)|DCMAKE_INSTALL_LIBDIR:STRING=$(get_libdir)|g" \
+			$i || die
+		sed -i \
+			-e "s|INSTALL_DIR>/lib(?!64)|INSTALL_DIR>/$(get_libdir)|g" \
+			$i || die
+		sed -i \
+			-e "s|INSTALL_DIR>/lib/|INSTALL_DIR>/$(get_libdir)/|g" \
+			$i || die
+		sed -i \
+			-e "s|INSTALL_DIR>/lib\"|INSTALL_DIR>/$(get_libdir)\"|g" \
+			$i || die
+		sed -i \
+			-e "s:install_location}/lib(?!64):install_location}/$(get_libdir):g" \
+			$i || die
+		sed -i \
+			-e "s:install_location}/lib\":install_location}/$(get_libdir)\":g" \
+			$i || die
+		sed -i \
+			-e "s:_IMPORT_PREFIX}/lib/:_IMPORT_PREFIX}/$(get_libdir)/:g" \
+			$i || die
+		sed -i \
+			-e "s:lib/paraview:$(get_libdir)/paraview:g" \
+			$i || die
+		sed -i \
+			-e "s:lib/cmake:$(get_libdir)/cmake:g" \
+			$i || die
+		sed -i \
+			-e "s:lib/python\\\$:$(get_libdir)/python\\\$:g" \
+			$i || die
+		sed -i \
+			-e "s:/lib/\\\$:/$(get_libdir)/\\\$:g" \
+			$i || die
+		sed -i \
+			-e "s:\"lib/\\\$:\"$(get_libdir)/\\\$:g" \
+			$i || die
+
+		sed -i \
+			-e "s:/lib/python:/$(get_libdir)/python:g" \
+			$i || die
+		sed -i \
+			-e "s:\"lib/python:\"$(get_libdir)/python:g" \
+			$i || die
+		done
+	}
 
 src_configure() {
+	elog ${PWD}
 	CMAKE_BUILD_TYPE=Release
 	local mycmakeargs=(
 		-DCMAKE_BUILD_TYPE_paraview=Release
-		-DPARAVIEW_EXTRA_CMAKE_ARGUMENTS="-DPARAVIEW_ENABLE_PYTHON=ON;-DPARAVIEW_ENABLE_XDMF2:BOOL=ON;-DPARAVIEW_ENABLE_XDMF3:BOOL=OFF;-DPARAVIEW_PYTHON_VERSION:STRING=3"
-		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
+		-DPARAVIEW_EXTRA_CMAKE_ARGUMENTS="-DPARAVIEW_ENABLE_PYTHON=ON;-DPARAVIEW_ENABLE_XDMF2:BOOL=ON;-DPARAVIEW_ENABLE_XDMF3:BOOL=OFF;-DPARAVIEW_PYTHON_VERSION:STRING=3;-DCMAKE_INSTALL_LIBDIR=${PVLIBDIR}"
 		-Dsuperbuild_download_location:PATH=${DISTDIR}
+		-DSUPERBUILD_OFFLINE_BUILD=ON
+		-DCMAKE_INSTALL_LIBDIR=${PVLIBDIR}
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
-		-DCMAKE_INSTALL_LIBDIR="${PVLIBDIR}"
 		-DSUPERBUILD_DEBUG_CONFIGURE_STEPS=ON
 		-DBUILD_SHARED_LIBS:BOOL=ON
 		-DENABLE_paraview:BOOL=ON
@@ -149,6 +233,21 @@ src_configure() {
 
 	)
 	cmake-utils_src_configure
+	cd ${WORKDIR}/${P}_build
+	for i in  \
+		superbuild/sb-hdf5-configure.cmake \
+	; do
+		elog "|$i|"
+		sed -i \
+			-e "s:install/lib/:install/$(get_libdir)/:g" \
+			$i || die
+		sed -i \
+			-e "s:install/lib;:install/$(get_libdir);:g" \
+			$i || die
+		sed -i \
+			-e "s|DCMAKE_INSTALL_LIBDIR:STRING=lib(?!64)|DCMAKE_INSTALL_LIBDIR:STRING=$(get_libdir)|g" \
+			$i || die
+	done
 }
 
 src_compile() {
@@ -156,18 +255,18 @@ src_compile() {
 }
 src_install() {
 	cmake-utils_src_install
-	# remove wrapper binaries and put the actual executable in place
-	for i in {paraview-config,pvserver,pvdataserver,pvrenderserver,pvbatch,pvpython,paraview}; do
-		if [ -f "${ED}"/usr/lib/"$i" ]; then
-			mv "${ED}"/usr/lib/"$i" "${ED}"/usr/bin/"$i" || die
-		fi
-	done
+	## # remove wrapper binaries and put the actual executable in place
+	## for i in {paraview-config,pvserver,pvdataserver,pvrenderserver,pvbatch,pvpython,paraview}; do
+	## 	if [ -f "${ED}"/usr/lib/"$i" ]; then
+	## 		mv "${ED}"/usr/lib/"$i" "${ED}"/usr/bin/"$i" || die
+	## 	fi
+	## done
 
-	# install libraries into correct directory respecting get_libdir:
-	mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
-	mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
-	mv "${ED}"/usr/lib_tmp/* "${ED}"/usr/"${PVLIBDIR}" || die
-	rmdir "${ED}"/usr/lib_tmp || die
+	## # install libraries into correct directory respecting get_libdir:
+	## mv "${ED}"/usr/lib "${ED}"/usr/lib_tmp || die
+	## mkdir -p "${ED}"/usr/"${PVLIBDIR}" || die
+	## mv "${ED}"/usr/lib_tmp/* "${ED}"/usr/"${PVLIBDIR}" || die
+	## rmdir "${ED}"/usr/lib_tmp || die
 
 	# set up the environment
 	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
