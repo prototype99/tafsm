@@ -4,7 +4,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_4 python3_5 python3_6 python3_7)
+PYTHON_COMPAT=( python3_6)
 inherit eutils python-single-r1 cmake-utils xdg-utils
 
 MAIN_PV=$(ver_cut 1)
