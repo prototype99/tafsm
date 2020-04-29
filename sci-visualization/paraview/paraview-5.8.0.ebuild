@@ -48,7 +48,7 @@ RDEPEND="
 	x11-libs/libXt
 	>=dev-util/ninja-1.9.0
 	ospray? (
-		>=media-gfx/ospray-bin-1.8.4
+		>=media-gfx/ospray-bin-2.1.0
 		=media-gfx/oidn-1.2.0
 	)
 	mpi? ( virtual/mpi[cxx,romio] )
@@ -271,16 +271,16 @@ src_configure() {
 		fi
 
 		if use ospray ; then
-			#local ospray=$(best_version media-gfx/ospray-bin)
-			#ospray=${ospray#media-gfx/}
-			#ospray=$(ver_cut 3-4 ${ospray})
+			local ospray=$(best_version media-gfx/ospray-bin)
+			ospray=${ospray#media-gfx/}
+			ospray=$(ver_cut 3-4 ${ospray})
 			mycmakeargs+=( 
 			-DPARAVIEW_ENABLE_RAYTRACING=ON
-			#-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
+			-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
 			-DVTKOSPRAY_ENABLE_DENOISER=ON
 			-DVTK_ENABLE_OSPRAY=ON
 			)
-			#elog "OSPRay path: /opt/ospray-${ospray}"
+			elog "OSPRay path: /opt/ospray-${ospray}"
 		fi
 		##if use osmesa ; then
 		##	mycmakeargs+=( 
@@ -338,7 +338,7 @@ src_configure() {
 		-DVTKm_ENABLE_MPI=$(usex mpi)
 		
 		#-DVTK_XDMF_USE_MPI=$(usex mpi)
-		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
+		-DPARAVIEW_USE_PYTHON=$(usex python)
 		#-DModule_vtkPython=$(usex python)
 		#-DModule_pqPython="$(usex qt5 "$(usex python)" "off")"
 		#-DModule_vtkWrappingPythonCore=$(usex python)
