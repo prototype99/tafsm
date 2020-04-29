@@ -179,8 +179,8 @@ src_configure() {
 		#-Dlibdir="${EPREFIX}/usr/$(get_libdir)"
 		-DQtTesting_INSTALL_LIB_DIR="$(get_libdir)"
 		-DQtTesting_INSTALL_CMAKE_DIR="$(get_libdir)/cmake/qttesting"
-		-DPARAVIEW_BUILD_SHARED_LIBS=ON
 		-UBUILD_SHARED_LIBS
+		-DPARAVIEW_BUILD_SHARED_LIBS=ON
 		#-DBUILD_SHARED_LIBS=ON
 		#-DCMAKE_COLOR_MAKEFILE=TRUE
 		-DCMAKE_VERBOSE_MAKEFILE=ON
@@ -251,7 +251,7 @@ src_configure() {
 		#-DVTK_USE_X=$(usex osmesa OFF ON)
 		-DVTK_USE_X=ON
 		#-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
-		-DPARAVIEW_USE_VTKM=ON
+		#-DPARAVIEW_USE_VTKM=ON
 		#-DPI4PY_INSTALL_PACKAGE_DIR="$(get_libdir)/site-packages"
 		#-DVTKm_INSTALL_CONFIG_DIR
 		#-DVTKm_ENABLE_OSMESA=ON
@@ -350,10 +350,15 @@ src_configure() {
 		-DBUILD_EXAMPLES=$(usex examples)
 	)
 		if use openmp; then
-			mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP )
+			mycmakeargs+=( 
+			-DPARAVIEW_USE_VTKM=ON
+			-DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP 
+			)
 		else
-			mycmakeargs+=( -DVTKm_ENABLE_OPENMP=OFF)
-
+			mycmakeargs+=( 
+			-DVTKm_ENABLE_OPENMP=OFF
+			-DPARAVIEW_USE_VTKM:BOOL=ON
+			)
 		fi
 
 	use debug && CMAKE_BUILD_TYPE=Debug;
