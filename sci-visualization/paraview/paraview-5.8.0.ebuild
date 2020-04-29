@@ -274,16 +274,16 @@ src_configure() {
 		fi
 
 		if use ospray ; then
-			local ospray=$(best_version media-gfx/ospray-bin)
-			ospray=${ospray#media-gfx/}
-			ospray=$(ver_cut 3-4 ${ospray})
+			#local ospray=$(best_version media-gfx/ospray-bin)
+			#ospray=${ospray#media-gfx/}
+			#ospray=$(ver_cut 3-4 ${ospray})
 			mycmakeargs+=( 
 			-DPARAVIEW_ENABLE_RAYTRACING=ON
 			#-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
 			-DVTKOSPRAY_ENABLE_DENOISER=ON
 			-DVTK_ENABLE_OSPRAY=ON
 			)
-			elog "OSPRay path: /opt/ospray-${ospray}"
+			#elog "OSPRay path: /opt/ospray-${ospray}"
 		fi
 		##if use osmesa ; then
 		##	mycmakeargs+=( 
