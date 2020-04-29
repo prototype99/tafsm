@@ -53,15 +53,19 @@ RDEPEND="
 		=media-gfx/oidn-1.1.0
 	)
 	mpi? ( virtual/mpi[cxx,romio] )
-	dev-python/pygments[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep \
+		'dev-python/pygments[${PYTHON_USEDEP}]' )
 	python? (
 		${PYTHON_DEPS}
-		dev-python/matplotlib[${PYTHON_SINGLE_USEDEP}]
-		dev-python/numpy[${PYTHON_SINGLE_USEDEP}]
-		dev-python/sip[${PYTHON_SINGLE_USEDEP}]
-		dev-python/six[${PYTHON_SINGLE_USEDEP}]
-		mpi? ( dev-python/mpi4py[${PYTHON_SINGLE_USEDEP}] )
-		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_SINGLE_USEDEP}] )
+	$(python_gen_cond_dep '
+		dev-python/matplotlib[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/sip[${PYTHON_USEDEP}]
+		dev-python/six[${PYTHON_USEDEP}]
+		')
+			mpi? ( $(python_gen_cond_dep 'dev-python/mpi4py[${PYTHON_USEDEP}]' ) )
+			qt5? ( $(python_gen_cond_dep 'dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}]' ) )
+
 	)
 	qt5? (
 		dev-qt/designer:5
@@ -175,6 +179,7 @@ src_configure() {
 		#-Dlibdir="${EPREFIX}/usr/$(get_libdir)"
 		-DQtTesting_INSTALL_LIB_DIR="$(get_libdir)"
 		-DQtTesting_INSTALL_CMAKE_DIR="$(get_libdir)/cmake/qttesting"
+		-UBUILD_SHARED_LIBS
 		-DPARAVIEW_BUILD_SHARED_LIBS=ON
 		#-DBUILD_SHARED_LIBS=ON
 		#-DCMAKE_COLOR_MAKEFILE=TRUE
@@ -246,7 +251,7 @@ src_configure() {
 		#-DVTK_USE_X=$(usex osmesa OFF ON)
 		-DVTK_USE_X=ON
 		#-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
-		-DPARAVIEW_USE_VTKM=ON
+		#-DPARAVIEW_USE_VTKM=ON
 		#-DPI4PY_INSTALL_PACKAGE_DIR="$(get_libdir)/site-packages"
 		#-DVTKm_INSTALL_CONFIG_DIR
 		#-DVTKm_ENABLE_OSMESA=ON
@@ -332,6 +337,7 @@ src_configure() {
 		#-DModule_vtkIOMPIImage=$(usex mpi)
 		-DXDMF_BUILD_MPI=$(usex mpi)
 		-DVTKm_ENABLE_MPI=$(usex mpi)
+		
 		#-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
 		#-DModule_vtkPython=$(usex python)
@@ -341,8 +347,10 @@ src_configure() {
 		#-DXDMF_WRAP_PYTHON="$(usex python)"
 		#-DBUILD_DOCUMENTATION=$(usex doc)
 		#-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
+		-DPARAVIEW_USE_VTKM=ON
 		-DBUILD_EXAMPLES=$(usex examples)
 	)
+
 	use debug && CMAKE_BUILD_TYPE=Debug;
 	use debug || elog "NoDEBUG";
 
@@ -368,6 +376,8 @@ src_configure() {
 		fi
 		if use openmp; then
 			mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP )
+		else
+			mycmakeargs+=( -DVTKm_ENABLE_OPENMP=OFF)
 		fi
 
 		cmake-utils_src_configure
@@ -380,6 +390,7 @@ src_install() {
 	cmake-utils_src_install
 	# set up the environment
 	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
+	doenvd "${T}"/40${PN}
 	# remove wrapper binaries and put the actual executable in place
 	#for i in "${ED}"/usr/bin/*; do
 	#	file="${ED}"/usr/lib/"$(basename $i)" 
@@ -408,11 +419,9 @@ src_install() {
 
 pkg_postinst() {
 	xdg_icon_cache_update
-	xdg_desktop_database_update
 }
 
 pkg_postrm() {
 	xdg_icon_cache_update
-	xdg_desktop_database_update
 }
 
