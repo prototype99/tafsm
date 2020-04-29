@@ -84,9 +84,9 @@ DEPEND="${RDEPEND}
 
 S="${WORKDIR}/${MY_P}"
 
-PATCHES=(
-	"${FILESDIR}/${P}-OpenImageDenoise.patch"
-)
+#PATCHES=(
+#	"${FILESDIR}/${P}-OpenImageDenoise.patch"
+#)
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
 	PVLIBDIR=$(get_libdir)/${PN}-${MAJOR_PV}
