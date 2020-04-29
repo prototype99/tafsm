@@ -48,8 +48,11 @@ RDEPEND="
 	x11-libs/libXt
 	>=dev-util/ninja-1.9.0
 	ospray? (
-		>=media-gfx/ospray-bin-1.8.4
-		=media-gfx/oidn-1.1.0
+	|| (
+	 =media-gfx/ospray-bin-1.8.0
+	 =media-gfx/ospray-1.8.0
+	 )
+		=media-gfx/oidn-1.2.0
 	)
 	mpi? ( virtual/mpi[cxx,romio] )
 	$(python_gen_cond_dep \
@@ -271,16 +274,16 @@ src_configure() {
 		fi
 
 		if use ospray ; then
-			#local ospray=$(best_version media-gfx/ospray-bin)
-			#ospray=${ospray#media-gfx/}
-			#ospray=$(ver_cut 3-4 ${ospray})
+			local ospray=$(best_version media-gfx/ospray-bin)
+			ospray=${ospray#media-gfx/}
+			ospray=$(ver_cut 3-4 ${ospray})
 			mycmakeargs+=( 
 			-DPARAVIEW_ENABLE_RAYTRACING=ON
 			#-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
 			-DVTKOSPRAY_ENABLE_DENOISER=ON
 			-DVTK_ENABLE_OSPRAY=ON
 			)
-			#elog "OSPRay path: /opt/ospray-${ospray}"
+			elog "OSPRay path: /opt/ospray-${ospray}"
 		fi
 		##if use osmesa ; then
 		##	mycmakeargs+=( 
@@ -305,7 +308,8 @@ src_configure() {
 		#fi
 		if use qt5 ; then
 			#mycmakeargs+=( -DPARAVIEW_QT_VERSION=5 )
-			mycmakeargs+=( -DPARAVIEW_USE_QT_GUI=ON )
+			mycmakeargs+=( -DPARAVIEW_USE_QT=ON )
+			#mycmakeargs+=( -DPARAVIEW_ENABLE_QT_SUPPORT=ON)
 			mycmakeargs+=( -DPARAVIEW_USE_QTHELP=ON)
 			mycmakeargs+=( -DVTK_BUILD_QT_DESIGNER_PLUGIN=ON )
 
@@ -313,6 +317,7 @@ src_configure() {
 			#mycmakeargs+=( -DQT_XMLPATTERNS_EXECUTABLE:FILEPATH=/usr/$(get_libdir)/qt5/bin/xmlpatterns )
 			#mycmakeargs+=( -DQT_HELP_GENERATOR:FILEPATH=/usr/$(get_libdir)/qt5/bin/qhelpgenerator)
 		fi
+		#mycmakeargs+=( -DPARAVIEW_ENABLE_COMMANDLINE_TOOLS=ON )
 		#mycmakeargs+=( -DPARAVIEW_USE_EXTERNAL=ON )
 		#Module_vtkParallelMPI4Py 
 		#PARAVIEW_USE_MPI
