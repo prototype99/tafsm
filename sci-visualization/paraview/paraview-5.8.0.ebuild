@@ -276,7 +276,7 @@ src_configure() {
 			ospray=$(ver_cut 3-4 ${ospray})
 			mycmakeargs+=( 
 			-DPARAVIEW_ENABLE_RAYTRACING=ON
-			-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
+			#-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
 			-DVTKOSPRAY_ENABLE_DENOISER=ON
 			-DVTK_ENABLE_OSPRAY=ON
 			)
