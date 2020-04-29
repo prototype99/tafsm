@@ -336,6 +336,7 @@ src_configure() {
 		#-DModule_vtkIOMPIImage=$(usex mpi)
 		-DXDMF_BUILD_MPI=$(usex mpi)
 		-DVTKm_ENABLE_MPI=$(usex mpi)
+		-DVTKm_ENABLE_OPENMP=OFF
 		#-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
 		#-DModule_vtkPython=$(usex python)
