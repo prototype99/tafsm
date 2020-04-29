@@ -347,19 +347,9 @@ src_configure() {
 		#-DXDMF_WRAP_PYTHON="$(usex python)"
 		#-DBUILD_DOCUMENTATION=$(usex doc)
 		#-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
+		-DPARAVIEW_USE_VTKM=ON
 		-DBUILD_EXAMPLES=$(usex examples)
 	)
-		if use openmp; then
-			mycmakeargs+=( 
-			-DPARAVIEW_USE_VTKM=ON
-			-DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP 
-			)
-		else
-			mycmakeargs+=( 
-			-DVTKm_ENABLE_OPENMP=OFF
-			-DPARAVIEW_USE_VTKM:BOOL=ON
-			)
-		fi
 
 	use debug && CMAKE_BUILD_TYPE=Debug;
 	use debug || elog "NoDEBUG";
@@ -386,6 +376,8 @@ src_configure() {
 		fi
 		if use openmp; then
 			mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP )
+		else
+			mycmakeargs+=( -DVTKm_ENABLE_OPENMP=OFF)
 		fi
 
 		cmake-utils_src_configure
@@ -398,6 +390,7 @@ src_install() {
 	cmake-utils_src_install
 	# set up the environment
 	echo "LDPATH=${EPREFIX}/usr/${PVLIBDIR}" > "${T}"/40${PN} || die
+	doenvd "${T}"/40${PN}
 	# remove wrapper binaries and put the actual executable in place
 	#for i in "${ED}"/usr/bin/*; do
 	#	file="${ED}"/usr/lib/"$(basename $i)" 
@@ -426,11 +419,9 @@ src_install() {
 
 pkg_postinst() {
 	xdg_icon_cache_update
-	xdg_desktop_database_update
 }
 
 pkg_postrm() {
 	xdg_icon_cache_update
-	xdg_desktop_database_update
 }
 
