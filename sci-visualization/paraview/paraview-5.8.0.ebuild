@@ -48,10 +48,7 @@ RDEPEND="
 	x11-libs/libXt
 	>=dev-util/ninja-1.9.0
 	ospray? (
-	|| (
-	 =media-gfx/ospray-bin-1.8.0
-	 =media-gfx/ospray-1.8.0
-	 )
+		 =media-gfx/ospray-1.8.0
 		=media-gfx/oidn-1.2.0
 	)
 	mpi? ( virtual/mpi[cxx,romio] )
