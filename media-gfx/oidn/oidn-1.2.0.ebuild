@@ -16,13 +16,18 @@ IUSE=""
 
 DEPEND="
 	dev-cpp/tbb
+	=dev-lang/ipsc-bin-1.12.0
 "
 RDEPEND="${DEPEND}"
 
 src_configure() {
 	#OIDN_STATIC_LIB
-	#local mycmakeargs=(
+	local mycmakeargs=(
 	#-DEMBREE_ISPC_SUPPORT=OFF
-	#)
+	-DOIDN_APPS:BOOL=OFF
+	)
 	cmake-utils_src_configure
 }
+#src_install() {
+#:
+#}
