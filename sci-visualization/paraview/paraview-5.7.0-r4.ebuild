@@ -57,14 +57,12 @@ RDEPEND="
 		'dev-python/pygments[${PYTHON_USEDEP}]' )
 	python? (
 		${PYTHON_DEPS}
-	$(python_gen_cond_dep \
-		'dev-python/matplotlib[${PYTHON_USEDEP}]' )
-	$(python_gen_cond_dep \
-		'dev-python/numpy[${PYTHON_USEDEP}]' )
-	$(python_gen_cond_dep \
-		'dev-python/sip[${PYTHON_USEDEP}]' )
-	$(python_gen_cond_dep \
-		'dev-python/six[${PYTHON_USEDEP}]' )
+	$(python_gen_cond_dep '
+		dev-python/matplotlib[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+		dev-python/sip[${PYTHON_USEDEP}]
+		dev-python/six[${PYTHON_USEDEP}]
+		')
 			mpi? ( $(python_gen_cond_dep 'dev-python/mpi4py[${PYTHON_USEDEP}]' ) )
 			qt5? ( $(python_gen_cond_dep 'dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}]' ) )
 
