@@ -15,7 +15,7 @@ IUSE=""
 DEPEND="
 	dev-cpp/tbb
 	!media-gfx/ospray-bin
-	media-gfx/embree
+	>=media-gfx/embree-3.9.0
 "
 RDEPEND="${DEPEND}"
 
