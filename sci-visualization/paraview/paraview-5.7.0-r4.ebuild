@@ -180,6 +180,7 @@ src_configure() {
 		-DQtTesting_INSTALL_LIB_DIR="$(get_libdir)"
 		-DQtTesting_INSTALL_CMAKE_DIR="$(get_libdir)/cmake/qttesting"
 		-DPARAVIEW_BUILD_SHARED_LIBS=ON
+		-UBUILD_SHARED_LIBS
 		#-DBUILD_SHARED_LIBS=ON
 		#-DCMAKE_COLOR_MAKEFILE=TRUE
 		-DCMAKE_VERBOSE_MAKEFILE=ON
@@ -336,7 +337,7 @@ src_configure() {
 		#-DModule_vtkIOMPIImage=$(usex mpi)
 		-DXDMF_BUILD_MPI=$(usex mpi)
 		-DVTKm_ENABLE_MPI=$(usex mpi)
-		-DVTKm_ENABLE_OPENMP=OFF
+		
 		#-DVTK_XDMF_USE_MPI=$(usex mpi)
 		-DPARAVIEW_ENABLE_PYTHON=$(usex python)
 		#-DModule_vtkPython=$(usex python)
@@ -348,6 +349,13 @@ src_configure() {
 		#-DPARAVIEW_BUILD_WEB_DOCUMENTATION=$(usex doc)
 		-DBUILD_EXAMPLES=$(usex examples)
 	)
+		if use openmp; then
+			mycmakeargs+=( -DVTK_SMP_IMPLEMENTATION_TYPE=OpenMP )
+		else
+			mycmakeargs+=( -DVTKm_ENABLE_OPENMP=OFF)
+
+		fi
+
 	use debug && CMAKE_BUILD_TYPE=Debug;
 	use debug || elog "NoDEBUG";
 
