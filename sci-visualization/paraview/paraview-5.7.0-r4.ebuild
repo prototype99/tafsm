@@ -53,15 +53,21 @@ RDEPEND="
 		=media-gfx/oidn-1.1.0
 	)
 	mpi? ( virtual/mpi[cxx,romio] )
-	dev-python/pygments[${PYTHON_SINGLE_USEDEP}]
+	$(python_gen_cond_dep \
+		'dev-python/pygments[${PYTHON_USEDEP}]' )
 	python? (
 		${PYTHON_DEPS}
-		dev-python/matplotlib[${PYTHON_SINGLE_USEDEP}]
-		dev-python/numpy[${PYTHON_SINGLE_USEDEP}]
-		dev-python/sip[${PYTHON_SINGLE_USEDEP}]
-		dev-python/six[${PYTHON_SINGLE_USEDEP}]
-		mpi? ( dev-python/mpi4py[${PYTHON_SINGLE_USEDEP}] )
-		qt5? ( dev-python/PyQt5[opengl,webkit,${PYTHON_SINGLE_USEDEP}] )
+	$(python_gen_cond_dep \
+		'dev-python/matplotlib[${PYTHON_USEDEP}]' )
+	$(python_gen_cond_dep \
+		'dev-python/numpy[${PYTHON_USEDEP}]' )
+	$(python_gen_cond_dep \
+		'dev-python/sip[${PYTHON_USEDEP}]' )
+	$(python_gen_cond_dep \
+		'dev-python/six[${PYTHON_USEDEP}]' )
+			mpi? ( $(python_gen_cond_dep 'dev-python/mpi4py[${PYTHON_USEDEP}]' ) )
+			qt5? ( $(python_gen_cond_dep 'dev-python/PyQt5[opengl,webkit,${PYTHON_USEDEP}]' ) )
+
 	)
 	qt5? (
 		dev-qt/designer:5
