@@ -1,4 +1,4 @@
-# Copyright 2020 Gentoo Authors
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
@@ -18,7 +18,7 @@ RESTRICT="mirror"
 LICENSE="paraview GPL-2"
 KEYWORDS="~amd64 ~x86"
 SLOT="0"
-IUSE="doc examples mpi xdmf3 ospray openmp python qt5 debug nvcontrol"
+IUSE="doc examples mpi xdmf3 ospray openmp python qt5 osmesa debug"
 RESTRICT="test"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
@@ -28,10 +28,9 @@ REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )
 #ospray? (
 #	media-gfx/ospray-bin
 #	)
-#nvcontrol? ( dev-util/nvidia-cuda-sdk)
 
 RDEPEND="
-	!sci-visualization/paraview-osmesa
+	!sci-visualization/paraview
 	dev-libs/expat
 	dev-libs/libxml2:2
 	dev-libs/protobuf
@@ -85,7 +84,7 @@ DEPEND="${RDEPEND}
 S="${WORKDIR}/${MY_P}"
 
 #PATCHES=(
-#	"${FILESDIR}/${P}-OpenImageDenoise.patch"
+#	"${FILESDIR}/paraview-${PV}-OpenImageDenoise.patch"
 #)
 pkg_setup() {
 	use python && python-single-r1_pkg_setup
@@ -174,7 +173,9 @@ src_configure() {
 		-DCMAKE_INSTALL_PREFIX="${EPREFIX}"/usr
 		#-DEXPAT_INCLUDE_DIR="${EPREFIX}"/usr/include
 		#-DEXPAT_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libexpat.so
-				#-DCMAKE_SKIP_RPATH=ON
+		#-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGL.so
+		#-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/libGLU.so
+		#-DCMAKE_SKIP_RPATH=ON
 		#-DCMAKE_SKIP_INSLL_RPATH=OFF
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
 		#-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=ON
@@ -238,7 +239,7 @@ src_configure() {
 		#-DVTK_USE_SYSTEM_XDMF3=OFF
 		#-DBUILD_TESTING=ON
 		-DPARAVIEW_INSTALL_DEVELOPMENT_FILES=ON
-		# force this module due to incorrect build system deps
+			# force this module due to incorrect build system deps
 		# wrt bug 460528
 		#-DModule_vtkUtilitiesProcessXML=ON
 		-DVTK_PYTHON_VERSION="${PYTHON_VERSION}"
@@ -257,50 +258,36 @@ src_configure() {
 		#-DModule_vtkFiltersImaging:BOOL=ON
 		#-DModule_vtkFiltersSMP:BOOL=ON
 		#-DModule_vtkGUISupportQtOpenGL:BOOL=ON
-		#-DVTK_USE_X=$(usex osmesa OFF ON)
-		-DVTK_USE_X=ON
-		#-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
-		#-DPARAVIEW_USE_VTKM=ON
+		-DVTK_USE_X=$(usex osmesa OFF ON)
+		-DVTK_OPENGL_HAS_OSMESA=$(usex osmesa ON OFF)
+		-DPARAVIEW_USE_VTKM=ON
 		#-DPI4PY_INSTALL_PACKAGE_DIR="$(get_libdir)/site-packages"
 		#-DVTKm_INSTALL_CONFIG_DIR
 		#-DVTKm_ENABLE_OSMESA=ON
 		#-DVTKm_ENABLE_OSMESA=$(usex osmesa ON OFF)
 		#-DModule_vtkUtilitiesProcessXML=ON
 		)
-		if use nvcontrol; then
-			mycmakeargs+=( 
-			#-DPARAVIEW_ENABLE_NVPIPE=ON
-			-DOPENGL_egl_LIBRARY:FILEPATH=/usr/$(get_libdir)/opengl/nvidia/lib/libEGL.so
-			-DOPENGL_gles2_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLESv2
-			-DOPENGL_gl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGL.so
-			-DOPENGL_glu_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLU.so
-			-DOPENGL_opengl_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libOpenGL.so
-			-DOPENGL_glx_LIBRARY="${EPREFIX}"/usr/$(get_libdir)/opengl/nvidia/lib/libGLX.so
-			-DVTK_OPENGL_HAS_OSMESA=OFF
-		)
-		fi
-
 		if use ospray ; then
 			#local ospray=$(best_version media-gfx/ospray-bin)
 			#ospray=${ospray#media-gfx/}
 			#ospray=$(ver_cut 3-4 ${ospray})
 			mycmakeargs+=( 
-			-DPARAVIEW_ENABLE_RAYTRACING=ON
+			-DPARAVIEW_USE_RAYTRACING=ON
 			#-DOSPRAY_INSTALL_DIR:PATH="/opt/ospray-${ospray}"
 			-DVTKOSPRAY_ENABLE_DENOISER=ON
 			-DVTK_ENABLE_OSPRAY=ON
 			)
 			#elog "OSPRay path: /opt/ospray-${ospray}"
 		fi
-		##if use osmesa ; then
-		##	mycmakeargs+=( 
-		##	-DOSMESA_LIBRARY="/usr/lib64/libOSMesa.so"
-		##	-DOPENGL_gl_LIBRARY="/usr/lib64/libOSMesa.so"
-		##	)
-		##	elog "OSmesa"
-		###else
-		###	mycmakeargs+=( -DPARAVIEW_ENABLE_NVPIPE=ON )
-		##fi
+		if use osmesa ; then
+			mycmakeargs+=( 
+			-DOSMESA_LIBRARY="/usr/lib64/libOSMesa.so"
+			-DOPENGL_gl_LIBRARY="/usr/lib64/libOSMesa.so"
+			)
+			elog "OSmesa"
+		#else
+		#	mycmakeargs+=( -DPARAVIEW_ENABLE_NVPIPE=ON )
+		fi
 		#mycmakeargs+=( -DVTK_OPENGL_USE_GLES=ON )
 		#if use python ; then
 		#	if use mpi ; then
