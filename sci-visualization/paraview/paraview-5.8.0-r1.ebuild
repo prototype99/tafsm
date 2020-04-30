@@ -117,7 +117,8 @@ src_prepare() {
 	if use ospray ; then
 		local ospray=$(best_version media-gfx/ospray)
 		ospray=${ospray#media-gfx/}
-		ospray=$(ver_cut 3-4 ${ospray})
+		elog "OSPRay version: ospray-${ospray}"
+		ospray=$(ver_cut 2-3 ${ospray})
 		elog "OSPRay version: ospray-${ospray}"
 		sed -i \
 		-e "s/    VERSION 1.8)/    VERSION ${ospray})/"\
