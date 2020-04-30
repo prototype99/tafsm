@@ -115,9 +115,10 @@ src_prepare() {
 		-e "s:ParaView_BINARY_DIR}/lib:ParaView_BINARY_DIR}/$(get_libdir):g"\
 		CMakeLists.txt || die
 	if use ospray ; then
-		local ospray=$(best_version media-gfx/ospray-bin)
+		local ospray=$(best_version media-gfx/ospray)
 		ospray=${ospray#media-gfx/}
 		ospray=$(ver_cut 3-4 ${ospray})
+		elog "OSPRay version: ospray-${ospray}"
 		sed -i \
 		-e "s/    VERSION 1.8)/    VERSION ${ospray})/"\
 		VTK/Rendering/RayTracing/CMakeLists.txt || die
