@@ -91,7 +91,6 @@ RDEPEND="
 			dev-python/zope-interface[${PYTHON_MULTI_USEDEP}]
 		')
 	)
-	xdmf2? ( sci-libs/xdmf2 )
 	$(python_gen_cond_dep "
 		mpi? (
 			virtual/mpi[cxx,romio]
