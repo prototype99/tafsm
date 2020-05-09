@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_6 python3_7 )
 
-inherit cmake-utils flag-o-matic python-single-r1
+inherit python-single-r1 cmake-utils
 
 DESCRIPTION="eXtensible Data Model and Format"
 HOMEPAGE="http://xdmf.org/index.php/Main_Page"
@@ -38,15 +38,20 @@ PATCHES=(
 	"${FILESDIR}"/${P}-libpath.patch
 )
 
-pkg_setup() {
-	use python && python-single-r1_pkg_setup && python_export
-}
 
 src_prepare() {
 	#eapply -p2 "${FILESDIR}"/${P}-lib.patch
 	#eapply -p2 "${FILESDIR}"/${P}-swig.patch
-
 	cmake-utils_src_prepare
+	if use python; then
+		local _site=$(python_get_sitedir)
+		local _site=${_site##${EPREFIX}/usr/lib/}
+		elog ${_site}
+		sed \
+			-e "s:/python:/${_site}:g" \
+			-i CMakeLists.txt || die
+	fi
+
 }
 
 src_configure() {
@@ -66,8 +71,9 @@ src_configure() {
 src_install() {
 	cmake-utils_src_install
 	dosym XdmfConfig.cmake /usr/share/cmake/Modules/${PN}Config.cmake
-
 	# need to byte-compile 'XdmfCore.py' and 'Xdmf.py'
 	# as the CMake build system does not compile them itself
-	use python && python_optimize "${D%/}$(python_get_sitedir)"
+	#python_domodule "${D}/usr/$(get_libdir)/"
+
+	use python && python_optimize "${D}/usr/$(get_libdir)"
 }

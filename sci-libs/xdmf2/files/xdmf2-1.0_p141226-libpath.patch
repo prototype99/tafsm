@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 5f26e71..b4c389a 100644
+index 5f26e71..e7dbe4f 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -34,7 +34,7 @@ get_filename_component(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" ABSOLUTE)
@@ -41,6 +41,33 @@ index 5f26e71..b4c389a 100644
        set(separator ":")
      endif(WIN32)
  
+@@ -239,7 +239,7 @@ if(XDMF_WRAP_JAVA)
+     set(java_cp_jars "${java_cp_jars}${separator}${${java_name}_JAVA_JAR}")
+     string(TOUPPER ${java_name} java_name_upper)
+     set(${java_name_upper}_JAVA_JAR
+-      ${CMAKE_INSTALL_PREFIX}/lib/java/${java_name}.jar)
++			${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/java/${java_name}.jar)
+     get_directory_property(${java_name}Parent PARENT_DIRECTORY)
+     if(NOT "${${java_name}Parent}" STREQUAL "")
+       set(${java_name_upper}_JAVA_JAR ${${java_name_upper}_JAVA_JAR}
+@@ -248,7 +248,7 @@ if(XDMF_WRAP_JAVA)
+     endif(NOT "${${java_name}Parent}" STREQUAL "")
+ 
+     install(FILES ${CMAKE_BINARY_DIR}/${java_name}.jar
+-      DESTINATION lib/java)
++			DESTINATION ${CMAKE_INSTALL_LIBDIR}/java)
+     install(TARGETS ${SWIG_MODULE_${java_name}Java_REAL_NAME}
+       DESTINATION ${java_dest})
+   endmacro(XDMF_SWIG_JAVA)
+@@ -314,7 +314,7 @@ if(NOT XDMF_BUILD_CORE_ONLY)
+     else()
+       XDMF_SWIG_PYTHON(Xdmf XdmfCore)
+     endif()
+-    set(XDMF_PYTHON_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/python/)
++  set(XDMF_PYTHON_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/python/)
+   endif(XDMF_WRAP_PYTHON)
+ 
+   if(BUILD_TESTING)
 @@ -331,7 +331,7 @@ if(NOT XDMF_BUILD_CORE_ONLY)
    endif(WIN32)
    
