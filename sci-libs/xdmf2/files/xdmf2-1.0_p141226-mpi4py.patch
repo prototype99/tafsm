@@ -1,0 +1,63 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4df0a00..5f26e71 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -72,24 +72,23 @@ if(XDMF_BUILD_DSM)
+   endif(MPI_FOUND)
+   option(XDMF_BUILD_DSM_THREADS ON)
+   if (XDMF_WRAP_PYTHON)
+-    mark_as_advanced(FORCE PYTHON_INCLUDE_MPI4PY_DIR)
+-    set(PYTHON_INCLUDE_MPI4PY_DIR "" CACHE STRING "Directory containing mpi4py/mpi4py.i")
++    find_path(PYTHON_INCLUDE_MPI4PY_DIR
++      NAMES mpi4py/mpi4py.i
++      DOC   "Directory containing the mpi4py/mpi4py.i file")
+   endif (XDMF_WRAP_PYTHON)
++  add_definitions(-DXDMF_BUILD_DSM)
+ endif(XDMF_BUILD_DSM)
+ 
+ # If we are wrapping either, we need swig
+ if(XDMF_WRAP_PYTHON OR XDMF_WRAP_JAVA)
+-  find_package(SWIG REQUIRED)
++  find_package(SWIG 2.0.0 REQUIRED)
+   include(${SWIG_USE_FILE})
+-  if(${SWIG_VERSION} LESS 2.0.0)
+-    message(SEND_ERROR "Swig must be version 2.0.0 or greater")
+-  endif(${SWIG_VERSION} LESS 2.0.0)
+ endif(XDMF_WRAP_PYTHON OR XDMF_WRAP_JAVA)
+ 
+ # If we are wrapping python, let's include it in the top level
+ if(XDMF_WRAP_PYTHON)
+-  find_package(PythonInterp REQUIRED)
+-  find_package(PythonLibs REQUIRED)
++  find_package(PythonInterp ${REQUESTED_PYTHON_VERSION} REQUIRED)
++  find_package(PythonLibs ${REQUESTED_PYTHON_VERSION} REQUIRED)
+   if (XDMF_BUILD_DSM)
+     find_package (MPI4PY REQUIRED)
+     if (MPI4PY_FOUND)
+@@ -310,7 +309,11 @@ if(NOT XDMF_BUILD_CORE_ONLY)
+   endif(XDMF_WRAP_JAVA)
+ 
+   if(XDMF_WRAP_PYTHON)
+-    XDMF_SWIG_PYTHON(Xdmf XdmfCore XdmfDSM)
++    if (XDMF_BUILD_DSM)
++      XDMF_SWIG_PYTHON(Xdmf XdmfCore XdmfDSM)
++    else()
++      XDMF_SWIG_PYTHON(Xdmf XdmfCore)
++    endif()
+     set(XDMF_PYTHON_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/python/)
+   endif(XDMF_WRAP_PYTHON)
+ 
+diff --git a/core/XdmfCore.i b/core/XdmfCore.i
+index a1c82d9..443befb 100644
+--- a/core/XdmfCore.i
++++ b/core/XdmfCore.i
+@@ -211,7 +211,8 @@ swig -v -c++ -python -o XdmfCorePython.cpp XdmfCore.i
+         void *vp = $self->getValuesInternal();
+         Py_ssize_t sz =
+             $self->getSize() * $self->getArrayType()->getElementSize();
+-        PyObject * c = PyBuffer_FromMemory(vp, sz);
++        //PyObject * c = PyBuffer_FromMemory(vp, sz);
++        PyObject * c = PyMemoryView_FromMemory(reinterpret_cast<char *>(vp), sz,PyBUF_READ);
+         return(c);
+     }
+ 
