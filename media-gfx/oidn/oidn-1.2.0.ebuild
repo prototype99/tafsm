@@ -16,7 +16,7 @@ IUSE=""
 
 DEPEND="
 	dev-cpp/tbb
-	=dev-lang/ispc-bin-1.12.0
+	>=dev-lang/ispc-bin-1.12.0
 "
 RDEPEND="${DEPEND}"
 
