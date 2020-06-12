@@ -34,7 +34,7 @@ RESTRICT="strip binchecks"
 
 src_install() {
 	font_src_install
-	insinto /usr/share/texmf/fonts/map/dvipdfmx
+	insinto /usr/share/texmf-site/fonts/map/dvipdfmx
 	doins ${FILESDIR}/ptex-otf-hiragino.map
 }
 
