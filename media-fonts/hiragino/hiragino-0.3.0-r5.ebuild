@@ -8,7 +8,7 @@ inherit font
 DESCRIPTION="Japanese TrueType fonts Hiragino"
 HOMEPAGE="http://ossipedia.ipa.go.jp/ipafont/"
 #SRC_URI="http://info.openlab.ipa.go.jp/ipafont/fontdata/${MY_P}.zip"
-SRC_URI="http://x.tafsm.org/gentoo/distfiles/${P}.tar.gz"
+SRC_URI="https://gentoo.tafsm.org/distfiles/${P}.tar.gz"
 
 LICENSE="Hiragino"
 SLOT="0"
@@ -34,12 +34,12 @@ RESTRICT="strip binchecks"
 
 src_install() {
 	font_src_install
-	insinto /usr/share/texmf-dist/fonts/map/dvipdfmx/ptex-fontmaps/hiragino/
+	insinto /usr/share/texmf/fonts/map/dvipdfmx
 	doins ${FILESDIR}/ptex-otf-hiragino.map
 }
 
 pkg_config() {
 	sed -i "/etc/texmf/web2c/texmf.cnf" -re "s#^OSFONTDIR.+#OSFONTDIR = /usr/share/fonts#"
-	kanji-config-updmap-sys --jis2004 otf-hiragino
+#kanji-config-updmap-sys --jis2004 otf-hiragino
 #	updmap-setup-kanji auto
 }
