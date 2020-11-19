@@ -1,9 +1,9 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
-inherit eutils versionator
+inherit eutils
 DESCRIPTION="A Ray Tracing Based Rendering Engine for High-Fidelity Visualization"
 HOMEPAGE="http://www.ospray.org"
 SRC_URI="https://github.com/ospray/OSPRay/releases/download/v${PV}/ospray-${PV}.x86_64.linux.tar.gz"
@@ -22,7 +22,7 @@ src_compile() {
 	:
 }
 src_install() {
-	dodir /opt/ospray-2.4
-	cp -aR "${S}"/ospray-${PV}.x86_64.linux/* "${ED}"/opt/ospray-2.4
+	dodir /opt/ospray-$(ver_cut 1-2)
+	cp -aR "${S}"/ospray-${PV}.x86_64.linux/* "${ED}"/opt/ospray-$(ver_cut 1-2)
 }
 
