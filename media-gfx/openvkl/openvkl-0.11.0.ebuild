@@ -20,7 +20,7 @@ DEPEND="
 		dev-lang/ispc-bin
 	)
 	media-gfx/embree
-	media-gfx/ospcommon
+	media-gfx/rkcommon
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
